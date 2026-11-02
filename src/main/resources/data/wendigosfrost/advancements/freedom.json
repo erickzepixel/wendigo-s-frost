@@ -1,0 +1,23 @@
+{
+  "parent": "wendigosfrost:curse",
+  "display": {
+    "icon": {
+      "item": "wendigosfrost:deep_glacier_pedestal"
+    },
+    "title": {
+      "text": "Quebre o Inverno"
+    },
+    "description": {
+      "text": "Complete o ritual no Pedestal das Geleiras Profundas."
+    },
+    "frame": "challenge"
+  },
+  "criteria": {
+    "cleansed": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 150
+  }
+}

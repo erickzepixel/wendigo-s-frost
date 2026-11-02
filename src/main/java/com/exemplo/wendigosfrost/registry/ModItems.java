@@ -28,5 +28,7 @@ public final class ModItems {
             ()->new BlockItem(ModBlocks.PEDESTAL.get(),new Item.Properties()));
     public static final RegistryObject<Item> GUIDE_BOOK = ITEMS.register("guide_book",
             () -> new com.exemplo.wendigosfrost.item.GuideBookItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> FROST_WARD = ITEMS.register("frost_ward",
+            () -> new com.exemplo.wendigosfrost.item.FrostWardItem(new Item.Properties().durability(6).rarity(net.minecraft.world.item.Rarity.RARE)));
     private ModItems() {}
 }

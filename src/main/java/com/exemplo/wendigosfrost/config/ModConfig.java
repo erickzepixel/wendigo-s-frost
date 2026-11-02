@@ -13,6 +13,9 @@ public final class ModConfig {
     public static final ForgeConfigSpec.IntValue DELIRIUM_SECONDS;
     public static final ForgeConfigSpec.IntValue GROWTH_DIVISOR;
     public static final ForgeConfigSpec.BooleanValue ENABLE_HALLUCINATIONS;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_BOSS_SKILLS;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_AMBIENT_TERROR;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_FROST_WARD;
     public static final ForgeConfigSpec.BooleanValue ENABLE_JUMPSCARES;
     public static final ForgeConfigSpec.BooleanValue ENABLE_FOG;
     public static final ForgeConfigSpec.DoubleValue VISUAL_INTENSITY;
@@ -22,8 +25,11 @@ public final class ModConfig {
         b.push("wendigo");
         DAYS_TO_AWAKEN = b.defineInRange("daysToAwaken", 3, 1, 30);
         PERCEPTION_RANGE = b.defineInRange("perceptionRange", 10, 1, 64);
-        WENDIGO_HEALTH = b.defineInRange("health", 100, 1, 1000);
-        WENDIGO_DAMAGE = b.defineInRange("damage", 10.0, 1.0, 100.0);
+        WENDIGO_HEALTH = b.defineInRange("health", 260, 1, 1000);
+        WENDIGO_DAMAGE = b.defineInRange("damage", 16.0, 1.0, 100.0);
+        ENABLE_BOSS_SKILLS = b.define("enablePhaseAbilities", true);
+        ENABLE_AMBIENT_TERROR = b.define("enableDynamicAtmosphere", true);
+        ENABLE_FROST_WARD = b.define("enableFrostWard", true);
         b.pop();
         b.push("ritual");
         RITUAL_SECONDS = b.defineInRange("durationSeconds", 15, 1, 300);

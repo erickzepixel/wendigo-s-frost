@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.3.2 (modelos corrigidos e guia)
+name: Publicar Wendigo's Frost 0.4.0 (Nightfall)
 on:
   push:
-    branches: [fix-modelos-guia-v0.3.2]
+    branches: [overhaul-nightfall-v0.4.0]
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,20 +17,22 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.1.1'
+      - name: Verificar modelos e JSONs
+        run: python3 scripts/validate_assets.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.3.2.jar
+        run: test -f build/libs/wendigosfrost-0.4.0.jar
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.3.2-modelos-guia
-          JAR=build/libs/wendigosfrost-0.3.2.jar
+          TAG=v0.4.0-nightfall-preview
+          JAR=build/libs/wendigosfrost-0.4.0.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.3.2 — Modelos e Guia (prévia)" \
-              --notes "Reconstrucao dos modelos 3D, textura do Wendigo 128x128 gerada no build, livro de instrucoes entregue no primeiro login e site de documentacao. Minecraft Forge 1.20.1, GeckoLib e TerraBlender. Compilado pelo GitHub Actions; teste de renderizacao no jogo ainda necessario."
+              --title "Wendigo's Frost 0.4.0 — Nightfall - Boss e Progressão (prévia)" \
+              --notes "Nightfall 0.4.0: batalha de chefe com 3 fases, habilidades telegrafadas (rugido e pisada gelada), HUD de perigo, atmosfera dinâmica, amuleto defensivo craftável, livro expandido, conquistas e ritual cinematográfico. Forge 1.20.1 + GeckoLib + TerraBlender. Compilado em CI; ainda não testado visualmente no Minecraft."
           fi

@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "wendigosfrost:guide_book"
+    },
+    "title": {
+      "text": "Wendigo's Frost"
+    },
+    "description": {
+      "text": "O inverno guarda segredos."
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "joined": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

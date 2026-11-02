@@ -23,7 +23,11 @@ public class GuideBookItem extends WrittenBookItem {
         "5. RITUAL\n\nEncontre ou fabrique o Pedestal das Geleiras Profundas. Coloque nele: 1 Coracao Congelado, 1 Chifre de Wendigo e 1 Cristal Frostbloom.",
         "6. LIBERTACAO\n\nCom os tres ingredientes no pedestal, use a mao vazia para comecar. Permaneça a ate 3 blocos por 15 segundos e evite receber dano. Isso remove a marca.",
         "7. COMANDOS\n\n/summon wendigosfrost:wendigo\n\n/wendigofrost status\n/wendigofrost testmark\n/wendigofrost testspawn\n/wendigofrost diagnostico",
-        "8. INFORMACOES\n\nRequer Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4 e TerraBlender. Atualizacoes e instrucao: github.com/erickzepixel/wendigo-s-frost"
+        "8. PROTECAO GELIDA\n\nCrie o Amuleto de Protecao Gelida. Ele concede defesa, remove fraqueza e lentidao e atrasa o Wendigo por alguns segundos. Tem 6 cargas e recarga de 30 segundos.",
+        "9. BATALHA EM 3 FASES\n\nFase 1: perseguicao e rugido. Fase 2: o Wendigo acelera e usa pisada de gelo. Fase 3: furia final. Ao ouvir o grito, fuja da area marcada por particulas.",
+        "10. NUNCA IGNORE O SOM\n\nBatimentos e neve surgem quando o Wendigo esta perto. O fogo ainda e uma fraqueza importante, interrompendo suas habilidades especiais.",
+        "11. COMANDOS\n\n/wendigofrost status\n/wendigofrost testmark\n/wendigofrost testspawn\n/wendigofrost diagnostico\n/summon wendigosfrost:wendigo",
+        "12. INFORMACOES\n\nRequer Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4 e TerraBlender. Atualizacoes e instrucao: github.com/erickzepixel/wendigo-s-frost"
     };
     public GuideBookItem(Item.Properties props) {
         super(props);

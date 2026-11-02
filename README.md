@@ -1,14 +1,24 @@
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
-Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.3.2**.
+Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.4.0**.
 
 ## Guia e página do mod
 
 - **Guia dentro do jogo:** item `wendigofrost:guide_book` em português, concedido no primeiro login. Clique com o botão direito para abrir o manual com páginas sobre a Flor-Gelo, o cristal, a maldição, o ritual e comandos.
 - **Site do projeto:** [Página do Wendigo's Frost](docs/index.html). Quando GitHub Pages estiver ativado, o endereço previsto é `https://erickzepixel.github.io/wendigo-s-frost/`.
 - **Download das versões:** https://github.com/erickzepixel/wendigo-s-frost/releases
-- **Correções 0.3.2:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
-- **Versão de teste:** as atualizações são publicadas pela branch `fix-modelos-guia-v0.3.2`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
+- **Correções 0.4.0:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
+- **Versão de teste:** as atualizações são publicadas pela branch `overhaul-nightfall-v0.4.0`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
+
+## Nightfall 0.4.0 — atualização de combate e atmosfera
+
+- Wendigo em **três fases** e animações especiais para **rugido** e **pisada glacial**, com aviso visual e tempo de reação.
+- HUD gelado contextual, partículas e paisagem sonora; implementação leve e sem shaders externos.
+- Novo amuleto `wendigosfrost:frost_ward`, fabricável, com 6 cargas, cooldown e defesa temporária.
+- Quatro conquistas de progressão e ritual com efeitos e barra de progresso.
+- `/wendigofrost guia` recupera o livro atualizado; consumir cristais adicionais não reinicia os três dias.
+- Configurações `enablePhaseAbilities`, `enableDynamicAtmosphere`, `enableFrostWard`.
+- Testes estáticos de JSON/geo e build automático Forge via GitHub Actions; testes in-game ainda necessários.
 
 ## Implementado no código
 

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "PHP",
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:packed_ice"
+    },
+    "C": {
+      "item": "wendigosfrost:frostbloom_crystal"
+    },
+    "P": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "H": {
+      "item": "minecraft:heart_of_the_sea"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:frost_ward",
+    "count": 1
+  }
+}

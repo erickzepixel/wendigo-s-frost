@@ -1,0 +1,30 @@
+{
+  "parent": "wendigosfrost:root",
+  "display": {
+    "icon": {
+      "item": "wendigosfrost:frostbloom_crystal"
+    },
+    "title": {
+      "text": "A Semente do Medo"
+    },
+    "description": {
+      "text": "Consuma um Cristal Frostbloom e aceite a maldição."
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "ate_crystal": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "wendigosfrost:frostbloom_crystal"
+          ]
+        }
+      }
+    }
+  },
+  "rewards": {
+    "experience": 15
+  }
+}

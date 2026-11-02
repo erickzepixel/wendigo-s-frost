@@ -1,0 +1,28 @@
+{
+  "parent": "wendigosfrost:curse",
+  "display": {
+    "icon": {
+      "item": "wendigosfrost:wendigo_horn"
+    },
+    "title": {
+      "text": "Silêncio Depois do Rugido"
+    },
+    "description": {
+      "text": "Derrote o Wendigo."
+    },
+    "frame": "challenge"
+  },
+  "criteria": {
+    "slain": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "wendigosfrost:wendigo"
+        }
+      }
+    }
+  },
+  "rewards": {
+    "experience": 350
+  }
+}
