@@ -39,7 +39,7 @@ jobs:
               tex=base+'textures/item/relic_atlas.png'
               assert tex in names, 'Textura customizada nao foi incluida no JAR'
               signature=jar.read(tex)
-              assert signature.startswith(b'\\x89PNG'), 'PNG invalido'
+              assert signature[:4] == bytes([137,80,78,71]), 'PNG invalido'
               print('OK: 3 modelos 3D + textura PNG no JAR')
           PY
       - name: Publicar ou atualizar release de teste
