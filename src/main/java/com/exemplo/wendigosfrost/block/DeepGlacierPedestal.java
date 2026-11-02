@@ -2,6 +2,7 @@ package com.exemplo.wendigosfrost.block;
 
 import com.exemplo.wendigosfrost.blockentity.PedestalBlockEntity;
 import com.exemplo.wendigosfrost.registry.ModBlockEntities;
+import com.exemplo.wendigosfrost.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,6 +36,10 @@ public class DeepGlacierPedestal extends BaseEntityBlock {
         if(!(player instanceof ServerPlayer sp) || !(level.getBlockEntity(pos) instanceof PedestalBlockEntity be))
             return InteractionResult.PASS;
         ItemStack stack=player.getItemInHand(hand);
+        if (player.isShiftKeyDown() && stack.is(ModItems.FROSTBLOOM_CRYSTAL.get())) {
+            be.summonInstantly(sp, stack);
+            return InteractionResult.CONSUME;
+        }
         if(stack.isEmpty()) return be.start(sp) ? InteractionResult.CONSUME : InteractionResult.PASS;
         return be.insert(stack) ? InteractionResult.CONSUME : InteractionResult.PASS;
     }
