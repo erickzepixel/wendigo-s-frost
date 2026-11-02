@@ -21,6 +21,8 @@ jobs:
         run: python3 scripts/validate_assets.py
       - name: Verificar regras do ritual
         run: python3 scripts/test_summoning_structure.py
+      - name: Validar o novo altar
+        run: python3 scripts/test_summoning_structure.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
@@ -55,5 +57,5 @@ jobs:
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
               --title "Wendigo's Frost 0.4.2 — Invocação Instantânea (prévia)" \
-              --notes "Wendigo's Frost 0.4.2: novo ritual instantaneo com 4 Fogueiras das Almas, 4 blocos de Gelo Azul e um Pedestal das Geleiras Profundas. Agache e use 1 Cristal Frostbloom para invocar um Wendigo na hora, sem esperar os 3 dias. Inclui mensagens de erro, cooldown de 2 minutos, verificacao de espaco, efeitos de invocacao, livro e guia atualizados. Forge 1.20.1 + GeckoLib + TerraBlender. Testes em Minecraft ainda necessarios."
+              --notes "Versao 0.4.2: quatro fogueiras das almas acesas e quatro gelos azuis em torno do pedestal permitem invocar um Wendigo imediatamente ao agachar e usar um Cristal Frostbloom. Verificacao de espaco, cooldown de dois minutos, efeitos e guia atualizados. Requer Forge 1.20.1, GeckoLib e TerraBlender. Ainda necessita teste no jogo."
           fi
