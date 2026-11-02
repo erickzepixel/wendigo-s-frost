@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.3.1 (correção summon)
+name: Publicar Wendigo's Frost 0.3.2 (modelos corrigidos e guia)
 on:
   push:
-    branches: [fix-summon-v0.3.1]
+    branches: [fix-summon-v0.3.2]
   workflow_dispatch:
 permissions:
   contents: write
@@ -20,17 +20,17 @@ jobs:
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.3.1.jar
+        run: test -f build/libs/wendigosfrost-0.3.2.jar
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.3.1-summon-fix
-          JAR=build/libs/wendigosfrost-0.3.1.jar
+          TAG=v0.3.2-modelos-guia
+          JAR=build/libs/wendigosfrost-0.3.2.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.3.1 — Correção de invocação (prévia)" \
-              --notes "Correção do /summon em Pacífico, persistência da entidade e novos comandos /wendigofrost testspawn e /wendigofrost diagnostico. Compilado automaticamente para Minecraft Forge 1.20.1. Ainda não testado dentro do jogo. Requer GeckoLib 4 e TerraBlender compatíveis."
+              --title "Wendigo's Frost 0.3.2 — Modelos e Guia (prévia)" \
+              --notes "Reconstrucao dos modelos 3D, textura do Wendigo 128x128 gerada no build, livro de instrucoes entregue no primeiro login e site de documentacao. Minecraft Forge 1.20.1, GeckoLib e TerraBlender. Compilado pelo GitHub Actions; teste de renderizacao no jogo ainda necessario."
           fi
