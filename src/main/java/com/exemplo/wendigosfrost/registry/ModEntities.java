@@ -15,7 +15,7 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<WendigoEntity>> WENDIGO =
             ENTITIES.register("wendigo", () -> EntityType.Builder
                     .of(WendigoEntity::new, MobCategory.MONSTER)
-                    .sized(0.9F, 2.9F)
+                    .sized(1.95F, 4.5F)
                     .clientTrackingRange(12)
                     .build("wendigosfrost:wendigo"));
 

@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.TickEvent;
@@ -53,13 +52,16 @@ public final class MarkEvents {
         ServerLevel level = player.serverLevel();
         for (int i = 0; i < 48; i++) {
             double angle = player.getRandom().nextDouble() * Math.PI * 2;
-            int radius = 60 + player.getRandom().nextInt(41);
+            int radius = 18 + player.getRandom().nextInt(25);
             BlockPos pos = player.blockPosition().offset((int)(Math.cos(angle) * radius), 0, (int)(Math.sin(angle) * radius));
             if (!level.hasChunkAt(pos)) continue;
             BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
-            if (!level.getBiome(surface).is(BiomeTags.IS_FOREST) && !level.getBiome(surface).is(BiomeTags.IS_TAIGA)) continue;
-            if (!level.getBlockState(surface).isAir() || !level.getBlockState(surface.above()).isAir()
-                    || !level.getFluidState(surface).isEmpty() || !level.getFluidState(surface.below()).isEmpty()) continue;
+            if (!level.getFluidState(surface).isEmpty() || !level.getFluidState(surface.below()).isEmpty()) continue;
+            boolean clear = true;
+            for (int dy = 0; dy < 5; dy++) {
+                if (!level.getBlockState(surface.above(dy)).isAir()) { clear = false; break; }
+            }
+            if (!clear) continue;
             WendigoEntity w = ModEntities.WENDIGO.get().create(level);
             if (w == null) return;
             w.moveTo(surface.getX()+0.5, surface.getY(), surface.getZ()+0.5, player.getRandom().nextFloat()*360, 0);

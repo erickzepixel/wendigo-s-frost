@@ -2,7 +2,7 @@ name: Compilar Wendigos Frost
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, versoes-hd-v0.3.0]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,6 +22,6 @@ jobs:
       - name: Enviar JAR compilado
         uses: actions/upload-artifact@v4
         with:
-          name: WendigosFrost-JAR
+          name: WendigosFrost-0.3.0-JAR
           path: build/libs/*.jar
           if-no-files-found: error

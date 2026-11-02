@@ -1,0 +1,36 @@
+name: Publicar Wendigo's Frost 0.3.0 (prévia)
+on:
+  push:
+    branches: [versoes-hd-v0.3.0]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.1.1'
+      - name: Compilar mod Forge
+        run: gradle --no-daemon build --stacktrace
+      - name: Confirmar JAR principal
+        run: test -f build/libs/wendigosfrost-0.3.0.jar
+      - name: Publicar ou atualizar release de teste
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=v0.3.0-hd-preview
+          JAR=build/libs/wendigosfrost-0.3.0.jar
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$JAR" --clobber
+          else
+            gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
+              --title "Wendigo's Frost 0.3.0 — Boss e Modelos HD (prévia)" \
+              --notes "Prévia compilada automaticamente para Minecraft Forge 1.20.1. Inclui Wendigo gigante hostil, barra de boss, animações, spawn após 3 dias e recursos 3D. O arquivo foi compilado, mas não testado dentro do jogo. Requer GeckoLib e TerraBlender compatíveis."
+          fi
