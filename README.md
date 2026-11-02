@@ -1,20 +1,29 @@
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
-Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.4.1**.
+Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.4.2**.
 
 ## Guia e página do mod
 
 - **Guia dentro do jogo:** item `wendigofrost:guide_book` em português, concedido no primeiro login. Clique com o botão direito para abrir o manual com páginas sobre a Flor-Gelo, o cristal, a maldição, o ritual e comandos.
 - **Site do projeto:** [Página do Wendigo's Frost](docs/index.html). Quando GitHub Pages estiver ativado, o endereço previsto é `https://erickzepixel.github.io/wendigo-s-frost/`.
 - **Download das versões:** https://github.com/erickzepixel/wendigo-s-frost/releases
-- **Correções 0.4.1:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
-- **Versão de teste:** as atualizações são publicadas pela branch `fix-reliquias-3d-v0.4.1`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
+- **Correções 0.4.2:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
+- **Versão de teste:** as atualizações são publicadas pela branch `ritual-invocacao-v0.4.2`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
 
-## Relíquias tridimensionais — 0.4.1
+## Relíquias tridimensionais — 0.4.2
 
 O Chifre do Wendigo foi reconstruído com 42 cubos e UVs dedicadas, evitando a distorção da textura vanilla. O Coração Congelado agora tem 37 elementos 3D e o Amuleto de Proteção Gélida, 56. Todos usam o atlas próprio `relic_atlas.png` de 128px, gerado via Gradle no `processResources`. O CI valida todas as geometrias, os UVs e os arquivos incorporados ao JAR. Ainda são necessários testes in-game.
 
-## Nightfall 0.4.1 — atualização de combate e atmosfera
+## Ritual de invocação instantânea (0.4.2)
+
+- Um pedestal com **4 fogueiras das almas acesas** a 2 blocos nas direções cardeais e **4 gelos azuis** nas diagonais de 1 bloco.
+- Agache e clique no pedestal com 1 **Cristal Frostbloom**: o Wendigo é invocado na hora, sem aguardar os três dias.
+- Verifica espaço de spawn, impede múltiplos chefes num raio de 64 blocos, consome o cristal apenas se a invocação funcionar e persiste o cooldown de 2 minutos no pedestal.
+- Efeitos de neve, chamas espirituais e rugido; nova conquista do ritual.
+- O procedimento de purificação antigo continua funcionando normalmente.
+- Guia e site atualizados, sem mod externo adicional.
+
+## Nightfall 0.4.2 — atualização de combate e atmosfera
 
 - Wendigo em **três fases** e animações especiais para **rugido** e **pisada glacial**, com aviso visual e tempo de reação.
 - HUD gelado contextual, partículas e paisagem sonora; implementação leve e sem shaders externos.
