@@ -12,5 +12,6 @@
   "message.wendigosfrost.ritual_start": "O ritual começou. Não se afaste nem receba dano!",
   "message.wendigosfrost.ritual_failed": "O ritual foi interrompido!",
   "message.wendigosfrost.ritual_complete": "O gelo em seu sangue se desfaz. Você está livre!",
-  "entity.wendigosfrost.wendigo": "Wendigo"
+  "entity.wendigosfrost.wendigo": "Wendigo",
+  "item.wendigosfrost.guide_book": "Manual do Sobrevivente - Wendigo's Frost"
 }
