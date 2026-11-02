@@ -26,5 +26,6 @@ public final class ModItems {
     public static final RegistryObject<Item> FROZEN_HEART=ITEMS.register("frozen_heart",()->new Item(new Item.Properties()));
     public static final RegistryObject<Item> PEDESTAL_ITEM=ITEMS.register("deep_glacier_pedestal",
             ()->new BlockItem(ModBlocks.PEDESTAL.get(),new Item.Properties()));
-    private ModItems() {}
+    public static final RegistryObject<Item> GUIDE_BOOK = ITEMS.register("guide_book",
+            () -> new com.exemplo.wendigosfrost.item.GuideBookItem(new Item.Properties().stacksTo(1)));\n    private ModItems() {}
 }
