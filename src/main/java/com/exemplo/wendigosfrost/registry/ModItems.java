@@ -30,5 +30,9 @@ public final class ModItems {
             () -> new com.exemplo.wendigosfrost.item.GuideBookItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> FROST_WARD = ITEMS.register("frost_ward",
             () -> new com.exemplo.wendigosfrost.item.FrostWardItem(new Item.Properties().durability(6).rarity(net.minecraft.world.item.Rarity.RARE)));
+    public static final RegistryObject<Item> WENDIGO_SPAWN_EGG = ITEMS.register("wendigo_spawn_egg",
+        () -> new net.minecraftforge.common.ForgeSpawnEggItem(
+            ModEntities.WENDIGO, 0x1A2532, 0x91E6FF, new Item.Properties()));
+
     private ModItems() {}
 }
