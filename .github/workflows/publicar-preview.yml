@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.4.0 (Nightfall)
+name: Publicar Wendigo's Frost 0.4.1 (Nightfall)
 on:
   push:
-    branches: [overhaul-nightfall-v0.4.0]
+    branches: [fix-reliquias-3d-v0.4.1]
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,17 +22,36 @@ jobs:
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.4.0.jar
+        run: test -f build/libs/wendigosfrost-0.4.1.jar
+      - name: Validar modelos e textura dentro do JAR
+        run: |
+          python3 - <<'PY'
+          import json,zipfile
+          path='build/libs/wendigosfrost-0.4.1.jar'
+          base='assets/wendigosfrost/'
+          with zipfile.ZipFile(path) as jar:
+              names=set(jar.namelist())
+              for item in ('wendigo_horn','frozen_heart','frost_ward'):
+                  name=base+'models/item/'+item+'.json'
+                  assert name in names, 'Modelo ausente no JAR: '+name
+                  model=json.loads(jar.read(name))
+                  assert len(model['elements'])>=30
+              tex=base+'textures/item/relic_atlas.png'
+              assert tex in names, 'Textura customizada nao foi incluida no JAR'
+              signature=jar.read(tex)
+              assert signature.startswith(b'\\x89PNG'), 'PNG invalido'
+              print('OK: 3 modelos 3D + textura PNG no JAR')
+          PY
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.4.0-nightfall-preview
-          JAR=build/libs/wendigosfrost-0.4.0.jar
+          TAG=v0.4.1-reliquias3d
+          JAR=build/libs/wendigosfrost-0.4.1.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.4.0 — Nightfall - Boss e Progressão (prévia)" \
-              --notes "Nightfall 0.4.0: batalha de chefe com 3 fases, habilidades telegrafadas (rugido e pisada gelada), HUD de perigo, atmosfera dinâmica, amuleto defensivo craftável, livro expandido, conquistas e ritual cinematográfico. Forge 1.20.1 + GeckoLib + TerraBlender. Compilado em CI; ainda não testado visualmente no Minecraft."
+              --title "Wendigo's Frost 0.4.1 — Relíquias 3D Corrigidas (prévia)" \
+              --notes "Nightfall 0.4.1: chifre do Wendigo com textura propria sem vazamento de UVs; modelos 3D ineditos para Coracao Congelado e Amuleto de Protecao Gelida. Atlas colorido em 128x128 pixels gerado no build e validado automaticamente. Forge 1.20.1, GeckoLib e TerraBlender. Ainda nao testado dentro do jogo."
           fi
