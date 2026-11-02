@@ -21,5 +21,12 @@
   "message.wendigosfrost.roar_warning": "O Wendigo inspira! Afaste-se do rugido!",
   "message.wendigosfrost.stomp_warning": "O gelo treme! Fuja da onda de choque!",
   "message.wendigosfrost.near": "ELE ESTÁ ATRÁS DE VOCÊ!",
-  "message.wendigosfrost.overlay": "...você ouve passos no gelo..."
+  "message.wendigosfrost.overlay": "...você ouve passos no gelo...",
+  "message.wendigosfrost.summon_structure": "Ritual incompleto: coloque 4 fogueiras das almas acesas a 2 blocos do pedestal (norte, sul, leste e oeste), e 4 gelos azuis nas diagonais adjacentes.",
+  "message.wendigosfrost.summon_cooldown": "O pedestal ainda está congelado. Aguarde %s segundos.",
+  "message.wendigosfrost.summon_existing": "Há outro Wendigo por perto. Derrote-o antes de repetir o ritual.",
+  "message.wendigosfrost.summon_failed": "O portal gelado falhou. Tente novamente.",
+  "message.wendigosfrost.summon_space": "Não há espaço seguro para o Wendigo aparecer. Libere uma área aberta perto do pedestal.",
+  "message.wendigosfrost.summon_success": "O gelo se rompe... O WENDIGO FOI INVOCADO!",
+  "message.wendigosfrost.summon_busy": "O pedestal já está realizando um ritual de purificação."
 }
