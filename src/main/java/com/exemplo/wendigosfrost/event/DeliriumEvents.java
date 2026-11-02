@@ -24,7 +24,7 @@ public final class DeliriumEvents {
             player.serverLevel().sendParticles(ParticleTypes.SNOWFLAKE,
                     player.getX(), player.getY()+1.1, player.getZ(), 4, 1.0, 0.6, 1.0, 0.01);
         if (ModConfig.ENABLE_HALLUCINATIONS.get() && player.tickCount % 200 == 0 && player.getRandom().nextInt(3)==0)
-            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.AMBIENT_CAVE,
+            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.AMBIENT_CAVE.value(),
                     SoundSource.AMBIENT, 0.55f, 0.5f + player.getRandom().nextFloat() * 0.35f);
     }
 }
