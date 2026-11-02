@@ -6,6 +6,7 @@ import com.exemplo.wendigosfrost.registry.ModItems;
 import com.exemplo.wendigosfrost.registry.ModEntities;
 import com.exemplo.wendigosfrost.registry.ModBlockEntities;
 import com.exemplo.wendigosfrost.registry.ModEffects;
+import com.exemplo.wendigosfrost.registry.ModCreativeTabs;
 import com.exemplo.wendigosfrost.event.MarkEvents;
 import com.exemplo.wendigosfrost.config.ModConfig;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -23,6 +24,7 @@ public class WendigosFrost {
         ModBlocks.BLOCKS.register(bus);
         ModFeatures.FEATURES.register(bus);
         ModItems.ITEMS.register(bus);
+        ModCreativeTabs.TABS.register(bus);
         ModEntities.ENTITIES.register(bus);
         ModBlockEntities.TYPES.register(bus);
         ModEffects.EFFECTS.register(bus);
