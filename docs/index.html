@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Página oficial do mod Wendigo's Frost para Minecraft Forge 1.20.1. Guia, itens, ritual, comandos e downloads.">
+<title>Wendigo's Frost — Guia e download</title>
+<style>
+:root{color-scheme:dark;--bg:#09121a;--panel:#121f2b;--line:#294153;--white:#e9f7ff;--muted:#b3c8d5;--cyan:#66d9ed;--ice:#b0f2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{background:radial-gradient(ellipse at 75% 3%,#163a51 0%,#09121a 45%) fixed;color:var(--white);margin:0;font:16px/1.62 system-ui,-apple-system,Segoe UI,sans-serif}
+header{border-bottom:1px solid var(--line);background:#0b1822d9;position:sticky;top:0;z-index:2;backdrop-filter:blur(12px)}
+nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 24px;flex-wrap:wrap}a{color:var(--cyan)}a:hover{color:white}
+nav strong{letter-spacing:.07em}nav div{display:flex;gap:18px;flex-wrap:wrap}nav a{text-decoration:none;font-size:.93rem}
+main{max-width:1100px;margin:auto;padding:0 24px 80px}section{padding-top:52px}
+.hero{min-height:450px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;border-bottom:1px solid var(--line)}
+.eyebrow{text-transform:uppercase;font-size:.8rem;color:var(--ice);letter-spacing:.17em}h1{font-size:clamp(3rem,8vw,6rem);letter-spacing:-.06em;line-height:1.04;margin:12px 0;background:linear-gradient(100deg,#fff,#8fe7f8 65%,#7b98af);color:transparent;background-clip:text}
+h2{font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-.02em;margin:0 0 12px}h3{font-size:1.1rem;margin:0 0 6px}p{max-width:75ch;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.btn{display:inline-block;padding:12px 18px;border:1px solid var(--cyan);border-radius:9px;text-decoration:none;font-weight:650;background:#14384c;color:#e9fbff}.btn.secondary{background:transparent;border-color:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:22px}.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(155deg,#162b39,#111c26);padding:22px}.card p{margin:0}.tag{display:inline-block;font-size:.77rem;font-weight:bold;letter-spacing:.06em;border:1px solid #2f758b;border-radius:999px;padding:4px 10px;color:#a1edfa}
+dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}dl div{border:1px solid var(--line);padding:16px;border-radius:12px}dt{color:var(--muted);font-size:.9rem}dd{font-size:1.4rem;font-weight:750;margin:2px 0 0}
+code{color:#b5effb;background:#0a1823;padding:2px 5px;border-radius:4px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#07121a;border:1px solid #284151;padding:16px;border-radius:12px}
+ol li{padding-bottom:8px;color:var(--muted)}.note{border-left:3px solid #6bc9e2;padding:8px 15px;background:#122c3c}footer{border-top:1px solid var(--line);padding:30px;color:var(--muted);text-align:center}
+@media(max-width:500px){nav{padding:12px 16px}main{padding:0 16px 50px}}
+</style>
+</head>
+<body>
+<header><nav><strong>❄ WENDIGO'S FROST</strong><div><a href="#mecanicas">Mecânicas</a><a href="#guia">Guia</a><a href="#comandos">Comandos</a><a href="#download">Download</a><a href="https://github.com/erickzepixel/wendigo-s-frost">GitHub</a></div></nav></header>
+<main>
+<section class="hero"><span class="eyebrow">Um mod de terror para Minecraft Java 1.20.1</span><h1>O inverno<br>está caçando.</h1>
+<p>Uma flor misteriosa. Um cristal que deixa uma marca. Três dias até a criatura despertar. Descubra o ritual, enfrente o Wendigo e tente sobreviver.</p>
+<span class="tag">Forge 47.x • GeckoLib 4 • TerraBlender</span>
+<div class="actions"><a class="btn" href="#download">Baixar versão de teste</a><a class="btn secondary" href="#guia">Ler instruções</a></div></section>
+<section id="mecanicas"><h2>O que existe no mod</h2><div class="grid">
+<article class="card"><h3>🌱 Frost Bloom</h3><p>Flor-Gelo cultivável com seis estágios de crescimento. Suas sementes e cristais fazem parte da maldição.</p></article>
+<article class="card"><h3>💠 Cristal Frostbloom</h3><p>Consumir o cristal inicia o Delírio Gélido e marca o jogador; o efeito temporário não remove a marca.</p></article>
+<article class="card"><h3>☠ Wendigo</h3><p>Chefe gigante com barra de vida, ataques corpo a corpo, galhadas e animações de movimento.</p></article>
+<article class="card"><h3>🧊 Pedestal</h3><p>Use três ingredientes para realizar o ritual que desfaz a marca.</p></article>
+</div></section>
+<section><h2>O Wendigo em números</h2><dl><div><dt>Vida máxima</dt><dd>260 HP</dd></div><div><dt>Dano base</dt><dd>16</dd></div><div><dt>Tempo até despertar</dt><dd>3 dias</dd></div><div><dt>Duração do ritual</dt><dd>15 s</dd></div></dl><p>Os valores podem ser alterados nas configurações do servidor.</p></section>
+<section id="guia"><h2>Guia de sobrevivência</h2><ol>
+<li>Encontre sementes em vegetação de florestas e taigas e plante a Frost Bloom em solo cultivado.</li>
+<li>Colha cristais e consuma um para experimentar o Delírio Gélido e receber a marca.</li>
+<li>Após 72.000 ticks de jogo (três dias no padrão), o Wendigo pode surgir próximo de você. Prepare um esconderijo.</li>
+<li>Reúna <strong>1 coração congelado, 1 chifre de Wendigo e 1 cristal Frostbloom</strong>.</li>
+<li>Coloque os ingredientes no Pedestal das Geleiras Profundas e, de mãos vazias, inicie o ritual.</li>
+<li>Permaneça próximo ao pedestal por 15 segundos sem sofrer dano para remover a marca.</li>
+</ol><p class="note">A partir da versão 0.3.2, você recebe um <strong>Manual do Sobrevivente</strong> dentro do Minecraft, e ele também pode ser encontrado no menu criativo.</p></section>
+<section id="comandos"><h2>Comandos de teste</h2>
+<pre>/summon wendigosfrost:wendigo ~ ~ ~
+/wendigofrost diagnostico
+/wendigofrost status
+/wendigofrost testmark
+/wendigofrost testspawn</pre>
+<p>Os comandos administrativos requerem cheats ou privilégios adequados. Teste a invocação em uma área ampla para acomodar a criatura.</p></section>
+<section id="download"><h2>Instalar o mod</h2><p>Use Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4.4.9 e TerraBlender 3.0.1.7 compatíveis. Coloque um único arquivo WendigosFrost .jar na pasta <code>.minecraft/mods</code> e remova versões anteriores.</p>
+<div class="actions"><a class="btn" href="https://github.com/erickzepixel/wendigo-s-frost/releases">Ver downloads no GitHub</a><a class="btn secondary" href="https://github.com/erickzepixel/wendigo-s-frost/issues">Reportar um bug</a></div>
+<p>Versão 0.3.2: reconstrução dos modelos e atualização do manual. Testes dentro do jogo ainda são necessários para validar a aparência final.</p></section>
+</main><footer>Wendigo's Frost • Projeto comunitário para Minecraft Java • <a href="https://github.com/erickzepixel/wendigo-s-frost">Código-fonte e atualizações</a></footer>
+</body></html>
