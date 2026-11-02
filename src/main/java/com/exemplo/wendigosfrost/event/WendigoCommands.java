@@ -30,6 +30,13 @@ public final class WendigoCommands {
                 ctx.getSource().sendSuccess(() -> Component.literal("Manual do Sobrevivente recebido!"), false);
                 return 1;
             }))
+            .then(Commands.literal("altar").executes(ctx -> {
+                ctx.getSource().sendSuccess(() -> Component.literal(
+                    "Altar: pedestal ao centro, 4 Fogueiras das Almas ACESAS a 2 blocos nos pontos cardeais, " +
+                    "4 blocos de Gelo Azul nas diagonais adjacentes. Agache e clique no pedestal " +
+                    "segurando 1 Cristal Frostbloom para invocar o Wendigo imediatamente."), false);
+                return 1;
+            }))
             .then(Commands.literal("status").executes(ctx -> {
                 ServerPlayer p = ctx.getSource().getPlayerOrException();
                 boolean active = WendigoMark.isMarked(p);
