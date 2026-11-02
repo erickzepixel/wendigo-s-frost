@@ -35,17 +35,35 @@ public final class WendigoCommands {
                 ctx.getSource().sendSuccess(() -> Component.literal("Marca aplicada para teste."), true);
                 return 1;
             }))
+            .then(Commands.literal("diagnostico").requires(src -> src.hasPermission(2)).executes(ctx -> {
+                ServerPlayer p = ctx.getSource().getPlayerOrException();
+                int nearby = p.serverLevel().getEntitiesOfClass(WendigoEntity.class,
+                        p.getBoundingBox().inflate(80)).size();
+                ctx.getSource().sendSuccess(() -> Component.literal(
+                    "Wendigo registrado: wendigosfrost:wendigo | Dificuldade: "
+                    + p.serverLevel().getDifficulty() + " | Wendigos num raio de 80 blocos: "
+                    + nearby + " | Marca Frostbloom: " + WendigoMark.isMarked(p)), false);
+                return 1;
+            }))
             .then(Commands.literal("testspawn").requires(src -> src.hasPermission(2)).executes(ctx -> {
                 ServerPlayer p = ctx.getSource().getPlayerOrException();
-                if (!WendigoMark.isMarked(p) || WendigoMark.hasWendigo(p)) return 0;
+                boolean vincular = WendigoMark.isMarked(p) && !WendigoMark.hasWendigo(p);
                 WendigoEntity w = ModEntities.WENDIGO.get().create(p.serverLevel());
-                if (w == null) return 0;
-                w.moveTo(p.getX()+8, p.getY(), p.getZ()+8, 0, 0);
-                w.setOwnerId(p.getUUID());
+                if (w == null) {
+                    ctx.getSource().sendFailure(Component.literal("Falha ao criar entidade Wendigo. Verifique os logs."));
+                    return 0;
+                }
+                w.moveTo(p.getX()+4, p.getY()+0.2, p.getZ()+4, 0, 0);
                 w.setPersistenceRequired();
-                if (!p.serverLevel().addFreshEntity(w)) return 0;
-                WendigoMark.setWendigo(p, w.getUUID());
-                ctx.getSource().sendSuccess(() -> Component.literal("Wendigo de teste criado."), true);
+                if (vincular) w.setOwnerId(p.getUUID());
+                if (!p.serverLevel().addFreshEntity(w)) {
+                    ctx.getSource().sendFailure(Component.literal("Falha ao adicionar Wendigo ao mundo. Verifique os logs."));
+                    return 0;
+                }
+                if (vincular) WendigoMark.setWendigo(p, w.getUUID());
+                ctx.getSource().sendSuccess(() -> Component.literal(
+                    "Wendigo criado a 4 blocos! ID: " + w.getUUID()
+                    + " | Vinculado a marca: " + vincular), true);
                 return 1;
             })));
     }
