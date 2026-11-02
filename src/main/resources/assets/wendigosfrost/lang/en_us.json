@@ -28,5 +28,7 @@
   "message.wendigosfrost.summon_failed": "The frozen portal failed. Please try again.",
   "message.wendigosfrost.summon_space": "No safe spawn area nearby. Clear a large open area around the altar.",
   "message.wendigosfrost.summon_success": "The ice shatters... THE WENDIGO HAS BEEN SUMMONED!",
-  "message.wendigosfrost.summon_busy": "The altar is already performing a cleansing ritual."
+  "message.wendigosfrost.summon_busy": "The altar is already performing a cleansing ritual.",
+  "itemGroup.wendigosfrost": "Wendigo's Frost",
+  "item.wendigosfrost.wendigo_spawn_egg": "Wendigo Spawn Egg"
 }
