@@ -1,12 +1,12 @@
 # ❄ Wendigo's Frost — página do mod
 
-**Minecraft Java 1.20.1 · Forge 47.x · versão 0.4.1 (prévia)**
+**Minecraft Java 1.20.1 · Forge 47.x · versão 0.4.2 (prévia)**
 
 > O inverno não é o seu único inimigo. Um cristal misterioso marca o jogador e, após três dias, um Wendigo pode começar a caçá-lo.
 
-[**⬇️ Baixar a versão 0.4.1**](https://github.com/erickzepixel/wendigo-s-frost/releases/download/v0.4.1-reliquias3d/wendigosfrost-0.4.1.jar) · [Página de lançamentos](https://github.com/erickzepixel/wendigo-s-frost/releases) · [Código-fonte](https://github.com/erickzepixel/wendigo-s-frost/tree/fix-reliquias-3d-v0.4.1)
+[**⬇️ Baixar a versão 0.4.2**](https://github.com/erickzepixel/wendigo-s-frost/releases/download/v0.4.2-ritual-invocacao/wendigosfrost-0.4.2.jar) · [Página de lançamentos](https://github.com/erickzepixel/wendigo-s-frost/releases) · [Código-fonte](https://github.com/erickzepixel/wendigo-s-frost/tree/ritual-invocacao-v0.4.2)
 
-## Melhorias das relíquias 3D (0.4.1)
+## Melhorias das relíquias 3D (0.4.2)
 
 - **Chifre do Wendigo:** reconstruído em 42 elementos, com curvatura, pontas ósseas e veios de gelo, corrigindo a textura que antes se misturava com a do bloco de osso.
 - **Coração Congelado:** verdadeiro item 3D com 37 elementos, lóbulos assimétricos, camadas de tecido congelado, artérias e fissuras de gelo.
@@ -14,7 +14,7 @@
 - **Texturas próprias:** novo atlas `relic_atlas.png` (128×128), gerado durante a compilação, com UVs específicas para cada face e margens para evitar manchas nas bordas.
 - **Testes automatizados:** o GitHub Actions confere a geometria, o mapeamento UV e a presença do PNG dentro do JAR.
 
-## Atualização Nightfall 0.4.1
+## Atualização Nightfall 0.4.2
 
 Esta versão adiciona uma batalha em **três fases**, com vida, velocidade e habilidades que mudam ao longo do combate. O Wendigo avisa antes do **Rugido de Pavor** e da **Pisada Glacial**, oferecendo tempo para fugir. Efeitos de neve, batimentos e vinheta na tela dão pistas da distância do monstro.
 
@@ -84,12 +84,12 @@ Os comandos de teste exigem privilégios apropriados.
 1. Instale **Forge 47.x** para Minecraft Java **1.20.1**.
 2. Instale **GeckoLib 4.4.9** e **TerraBlender 3.0.1.7** compatíveis com Forge 1.20.1.
 3. Retire versões antigas do Wendigo's Frost da pasta `.minecraft/mods`.
-4. Coloque `wendigosfrost-0.4.1.jar` na pasta `mods` e inicie o jogo.
+4. Coloque `wendigosfrost-0.4.2.jar` na pasta `mods` e inicie o jogo.
 5. Faça backup do seu mundo antes de experimentar uma atualização de teste.
 
 ## Modelos e versões
 
-A versão 0.4.1 preserva a malha corrigida que reconstrói do Wendigo, agora com UVs alinhadas a uma textura gerada de 128×128, e simplifica as formas dos itens, da planta e do pedestal para reduzir artefatos. **O GitHub Actions compilou a versão, mas a renderização dentro do jogo ainda não foi validada.**
+A versão 0.4.2 preserva a malha corrigida que reconstrói do Wendigo, agora com UVs alinhadas a uma textura gerada de 128×128, e simplifica as formas dos itens, da planta e do pedestal para reduzir artefatos. **O GitHub Actions compilou a versão, mas a renderização dentro do jogo ainda não foi validada.**
 
 A página HTML responsiva também está em [`docs/index.html`](index.html). Para que ela seja publicada como site em `erickzepixel.github.io`, é necessário habilitar o GitHub Pages nas configurações do repositório.
 
