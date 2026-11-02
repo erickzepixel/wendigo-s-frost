@@ -25,7 +25,21 @@ public class PedestalBlockEntity extends BlockEntity {
     private UUID ritualPlayer;
     private int ticks;
     private float startHealth;
+    private long summonCooldownUntil;
     public PedestalBlockEntity(BlockPos pos, BlockState state){ super(ModBlockEntities.PEDESTAL.get(),pos,state); }
+    public boolean summonInstantly(ServerPlayer player, ItemStack held) {
+        if (ritualPlayer != null) {
+            player.displayClientMessage(Component.translatable("message.wendigosfrost.summon_busy"), false);
+            return false;
+        }
+        if (com.exemplo.wendigosfrost.ritual.WendigoSummoningRitual.activate(
+                player, worldPosition, held, summonCooldownUntil)) {
+            summonCooldownUntil = player.serverLevel().getGameTime() + 2400L;
+            setChanged();
+            return true;
+        }
+        return false;
+    }
     public boolean insert(ItemStack held){
         if(ritualPlayer!=null) return false;
         int slot=held.is(ModItems.FROSTBLOOM_CRYSTAL.get())?2:
@@ -92,11 +106,13 @@ public class PedestalBlockEntity extends BlockEntity {
         if(ritualPlayer!=null)tag.putUUID("RitualPlayer",ritualPlayer);
         tag.putInt("RitualTicks",ticks);
         tag.putFloat("StartHealth",startHealth);
+        tag.putLong("SummonCooldownUntil", summonCooldownUntil);
     }
     @Override public void load(CompoundTag tag){
         super.load(tag);
         for(int i=0;i<3;i++)inventory.setItem(i,ItemStack.of(tag.getCompound("Slot"+i)));
         ritualPlayer=tag.hasUUID("RitualPlayer")?tag.getUUID("RitualPlayer"):null;
         ticks=tag.getInt("RitualTicks");startHealth=tag.getFloat("StartHealth");
+        summonCooldownUntil=tag.getLong("SummonCooldownUntil");
     }
 }
