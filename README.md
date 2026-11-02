@@ -1,6 +1,14 @@
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
-Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.2.0**.
+Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.3.2**.
+
+## Guia e página do mod
+
+- **Guia dentro do jogo:** item `wendigofrost:guide_book` em português, concedido no primeiro login. Clique com o botão direito para abrir o manual com páginas sobre a Flor-Gelo, o cristal, a maldição, o ritual e comandos.
+- **Site do projeto:** [Página do Wendigo's Frost](docs/index.html). Quando GitHub Pages estiver ativado, o endereço previsto é `https://erickzepixel.github.io/wendigo-s-frost/`.
+- **Download das versões:** https://github.com/erickzepixel/wendigo-s-frost/releases
+- **Correções 0.3.2:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
+- **Versão de teste:** as atualizações são publicadas pela branch `fix-modelos-guia-v0.3.2`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
 
 ## Implementado no código
 
