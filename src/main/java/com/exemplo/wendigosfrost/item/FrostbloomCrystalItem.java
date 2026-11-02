@@ -22,7 +22,8 @@ public class FrostbloomCrystalItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack result = super.finishUsingItem(stack, level, entity);
         if (!level.isClientSide && entity instanceof ServerPlayer player) {
-            WendigoMark.apply(player);
+            // Re-consuming crystals must NOT restart the three-day curse countdown.
+            if (!WendigoMark.isMarked(player)) WendigoMark.apply(player);
             int duration = ModConfig.DELIRIUM_SECONDS.get() * 20;
             player.addEffect(new MobEffectInstance(ModEffects.FROST_DELIRIUM.get(), duration));
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, 0));
