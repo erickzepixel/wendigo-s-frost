@@ -1,0 +1,25 @@
+{
+  "parent": "wendigosfrost:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:soul_campfire"
+    },
+    "title": {
+      "text": "A Chamada da Nevasca"
+    },
+    "description": {
+      "text": "Invoque o Wendigo instantaneamente através do altar gélido."
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "invoked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 80
+  }
+}
