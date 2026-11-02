@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.4.2 (Ritual de Invocação)
+name: Publicar Wendigo's Frost 0.5.0 (Evolução Glacial)
 on:
   push:
-    branches: [ritual-invocacao-v0.4.2]
+    branches: [evolucao-glacial-v0.5.0]
   workflow_dispatch:
 permissions:
   contents: write
@@ -23,15 +23,17 @@ jobs:
         run: python3 scripts/test_summoning_structure.py
       - name: Validar o novo altar
         run: python3 scripts/test_summoning_structure.py
+      - name: Verificar fases, criatividade, craft e loot
+        run: python3 scripts/test_phase_forms.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.4.2.jar
+        run: test -f build/libs/wendigosfrost-0.5.0.jar
       - name: Validar modelos e textura dentro do JAR
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.4.2.jar'
+          path='build/libs/wendigosfrost-0.5.0.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -50,12 +52,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.4.2-ritual-invocacao
-          JAR=build/libs/wendigosfrost-0.4.2.jar
+          TAG=v0.5.0-evolucao-glacial
+          JAR=build/libs/wendigosfrost-0.5.0.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.4.2 — Invocação Instantânea (prévia)" \
-              --notes "Versao 0.4.2: quatro fogueiras das almas acesas e quatro gelos azuis em torno do pedestal permitem invocar um Wendigo imediatamente ao agachar e usar um Cristal Frostbloom. Verificacao de espaco, cooldown de dois minutos, efeitos e guia atualizados. Requer Forge 1.20.1, GeckoLib e TerraBlender. Ainda necessita teste no jogo."
+              --title "Wendigo's Frost 0.5.0 — Evolução Glacial (prévia)" \
+              --notes "Evolucao Glacial 0.5.0: Wendigo remodelado com cranio de cervo, olhos azuis, gelo e garras; fase 1 quadrupede, fase 2 bipede com animacao de transformacao; aba do mod no criativo com ovo de invocacao; receita de Amuleto Gelido e coracao congelado com drop de 100 por cento. Forge 1.20.1, GeckoLib e TerraBlender. Build e verificacoes estaticas aprovadas; teste visual in-game necessario."
           fi
