@@ -71,10 +71,21 @@ tasks.named('processResources', ProcessResources).configure {
                     r = 80 + variance; g = 166 + variance; b = 201 + variance
                 } else if (x >= 96 && y < 88) { // gelo brilhante
                     r = 111 + variance; g = 215 + variance; b = 229 + variance
-                } else if (x >= 96) { // olhos avermelhados
-                    r = 225 + variance; g = 43 + variance; b = 51 + variance
+                } else if (x >= 96) { // olhos espectrais azul-gelo
+                    r = 69 + variance; g = 207 + variance; b = 244 + variance
                 } else {
                     r = 34 + variance; g = 49 + variance; b = 54 + variance
+                }
+                // Veios amplos sobre a pele simularam pelagem congelada sem microcubos.
+                // Ossos recebem rachaduras escuras; areas geladas, brilho azul.
+                if (x < 64 && y < 48 && ((x * 7 + y * 13) % 47 < 3)) {
+                    r += 31; g += 39; b += 49
+                }
+                if (x >= 64 && x < 96 && y < 48 && ((x * 3 + y * 7) % 53 < 2)) {
+                    r -= 52; g -= 48; b -= 41
+                }
+                if (x >= 96 && y < 88 && ((x * 2 + y * 5) % 23 < 2)) {
+                    r += 34; g += 32; b += 27
                 }
                 r = Math.max(0, Math.min(255, r))
                 g = Math.max(0, Math.min(255, g))
