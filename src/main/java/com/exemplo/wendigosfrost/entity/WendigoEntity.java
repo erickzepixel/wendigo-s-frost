@@ -20,6 +20,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -47,6 +49,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
         SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CUE =
         SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> RISE_UNTIL =
+        SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
     private final ServerBossEvent bossBar = new ServerBossEvent(
         Component.translatable("entity.wendigosfrost.wendigo"),
@@ -69,8 +73,18 @@ public class WendigoEntity extends Monster implements GeoEntity {
         super.defineSynchedData();
         entityData.define(PHASE, 1);
         entityData.define(CUE, 0);
+        entityData.define(RISE_UNTIL, 0);
     }
     public int getBossPhase() { return entityData.get(PHASE); }
+    public boolean isQuadruped() { return getBossPhase() == 1; }
+    private boolean isRising() { return getBossPhase() >= 2 && tickCount < entityData.get(RISE_UNTIL); }
+    @Override public EntityDimensions getDimensions(Pose pose) {
+        return isQuadruped() ? EntityDimensions.scalable(2.75F, 2.85F) : super.getDimensions(pose);
+    }
+    @Override public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (PHASE.equals(key)) refreshDimensions();
+    }
     public int getAttackCue() { return entityData.get(CUE); }
     public UUID getOwnerId() { return ownerId; }
     public void setOwnerId(UUID owner) { ownerId = owner; }
@@ -86,16 +100,24 @@ public class WendigoEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "movement", 5, anim -> {
+        controllers.add(new AnimationController<>(this, "movement", 7, anim -> {
+            // First form stalks on all fours. The second form stands upright
+            // after a short, dedicated rise-up sequence synchronized to the server.
+            if (isRising())
+                return anim.setAndContinue(RawAnimation.begin().thenPlay("animation.wendigo.rise"));
             if (getAttackCue() == 1)
-                return anim.setAndContinue(RawAnimation.begin().thenLoop("animation.wendigo.roar"));
+                return anim.setAndContinue(RawAnimation.begin().thenLoop(isQuadruped()
+                    ? "animation.wendigo.quad_roar" : "animation.wendigo.roar"));
             if (getAttackCue() == 2)
                 return anim.setAndContinue(RawAnimation.begin().thenLoop("animation.wendigo.stomp"));
-            return anim.setAndContinue(RawAnimation.begin().thenLoop(
-                anim.isMoving() ? "animation.wendigo.walk" : "animation.wendigo.idle"));
+            boolean moving = anim.isMoving();
+            String clip = isQuadruped()
+                ? (moving ? "animation.wendigo.quad_walk" : "animation.wendigo.quad_idle")
+                : (moving ? "animation.wendigo.walk" : "animation.wendigo.idle");
+            return anim.setAndContinue(RawAnimation.begin().thenLoop(clip));
         }));
         controllers.add(new AnimationController<>(this, "attack", 0, anim -> {
-            if (this.swinging && getAttackCue() == 0)
+            if (!isRising() && this.swinging && getAttackCue() == 0)
                 return anim.setAndContinue(RawAnimation.begin().thenPlay("animation.wendigo.attack"));
             return PlayState.STOP;
         }));
@@ -145,6 +167,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
         float fraction = getHealth() / Math.max(1, getMaxHealth());
         int nextPhase = fraction > .65f ? 1 : fraction > .30f ? 2 : 3;
         if (getBossPhase() != nextPhase) {
+            if (getBossPhase() == 1 && nextPhase >= 2)
+                entityData.set(RISE_UNTIL, tickCount + 36);
             entityData.set(PHASE, nextPhase);
             bossBar.setColor(nextPhase == 1 ? BossEvent.BossBarColor.BLUE :
                 nextPhase == 2 ? BossEvent.BossBarColor.PURPLE : BossEvent.BossBarColor.RED);
@@ -158,6 +182,11 @@ public class WendigoEntity extends Monster implements GeoEntity {
             }
         }
         bossBar.setProgress(Math.max(0f, Math.min(1f, fraction)));
+        if (isRising()) {
+            getNavigation().stop();
+            setDeltaMovement(0, getDeltaMovement().y, 0);
+            return;
+        }
 
         if (ambientCooldown-- <= 0) {
             ambientCooldown = 150 + getRandom().nextInt(110);
@@ -236,6 +265,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean doHurtTarget(net.minecraft.world.entity.Entity victim) {
+        if (isRising()) return false;
         boolean hit = super.doHurtTarget(victim);
         if (hit && victim instanceof Player player && getBossPhase() >= 2) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 42, 0));
@@ -259,6 +289,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
         if (tag.hasUUID("MarkedOwner")) ownerId = tag.getUUID("MarkedOwner");
         skillCooldown = tag.contains("SkillCooldown") ? tag.getInt("SkillCooldown") : 100;
         entityData.set(PHASE, tag.contains("BossPhase") ? tag.getInt("BossPhase") : 1);
+        entityData.set(RISE_UNTIL, 0);
+        refreshDimensions();
         cancelSkill(); // Never resume a half-finished attack after a server restart.
     }
 }

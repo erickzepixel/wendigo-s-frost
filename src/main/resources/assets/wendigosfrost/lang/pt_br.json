@@ -28,5 +28,7 @@
   "message.wendigosfrost.summon_failed": "O portal gelado falhou. Tente novamente.",
   "message.wendigosfrost.summon_space": "Não há espaço seguro para o Wendigo aparecer. Libere uma área aberta perto do pedestal.",
   "message.wendigosfrost.summon_success": "O gelo se rompe... O WENDIGO FOI INVOCADO!",
-  "message.wendigosfrost.summon_busy": "O pedestal já está realizando um ritual de purificação."
+  "message.wendigosfrost.summon_busy": "O pedestal já está realizando um ritual de purificação.",
+  "itemGroup.wendigosfrost": "Wendigo's Frost",
+  "item.wendigosfrost.wendigo_spawn_egg": "Ovo de Invocação: Wendigo"
 }
