@@ -34,6 +34,7 @@ public class WendigosFrost {
                 e.accept(ModItems.WENDIGO_HORN);
                 e.accept(ModItems.FROZEN_HEART);
                 e.accept(ModItems.PEDESTAL_ITEM);
+                e.accept(ModItems.GUIDE_BOOK);
             }
         });
         ModLoadingContext.get().registerConfig(Type.SERVER, ModConfig.SERVER_SPEC);
