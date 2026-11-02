@@ -13,5 +13,13 @@
   "message.wendigosfrost.ritual_failed": "O ritual foi interrompido!",
   "message.wendigosfrost.ritual_complete": "O gelo em seu sangue se desfaz. Você está livre!",
   "entity.wendigosfrost.wendigo": "Wendigo",
-  "item.wendigosfrost.guide_book": "Manual do Sobrevivente - Wendigo's Frost"
+  "item.wendigosfrost.guide_book": "Manual do Sobrevivente - Wendigo's Frost",
+  "item.wendigosfrost.frost_ward": "Amuleto de Proteção Gélida",
+  "message.wendigosfrost.phase1": "Uma presença antiga despertou.",
+  "message.wendigosfrost.phase2": "O Wendigo entra em fúria!",
+  "message.wendigosfrost.phase3": "O último suspiro do inverno...",
+  "message.wendigosfrost.roar_warning": "O Wendigo inspira! Afaste-se do rugido!",
+  "message.wendigosfrost.stomp_warning": "O gelo treme! Fuja da onda de choque!",
+  "message.wendigosfrost.near": "ELE ESTÁ ATRÁS DE VOCÊ!",
+  "message.wendigosfrost.overlay": "...você ouve passos no gelo..."
 }
