@@ -36,6 +36,28 @@ Esta versão adiciona uma batalha em **três fases**, com vida, velocidade e hab
 | **Pedestal das Geleiras Profundas** | Bloco do ritual de libertação |
 | **Manual do Sobrevivente** | Livro in-game com instruções e comandos |
 
+## Ritual instantâneo de invocação do Wendigo — novo em 0.4.2
+
+Não é necessário aguardar os três dias da maldição. Construa este altar na **mesma altura do Pedestal das Geleiras Profundas** (visão superior):
+
+```text
+. . F . .
+. G . G .
+F . P . F
+. G . G .
+. . F . .
+```
+
+**P:** Pedestal das Geleiras Profundas · **F:** Fogueira das almas **acesa** · **G:** Gelo azul · **.:** espaço livre.
+
+1. Coloque 4 fogueiras das almas acesas a **2 blocos** do pedestal: norte, sul, leste e oeste.
+2. Coloque 4 gelos azuis nas quatro diagonais a 1 bloco do pedestal.
+3. Mantenha uma área externa aberta, com **5 blocos de altura livre** nas proximidades.
+4. Segure **1 Cristal Frostbloom**, **agache e clique com o botão direito no pedestal**.
+5. O cristal será consumido (exceto no criativo) e um Wendigo hostil surgirá **imediatamente** a 6–12 blocos do altar, com rugido e partículas.
+
+O pedestal tem **2 minutos de recarga** após uma invocação e impede a criação de outro Wendigo se já existir um em um raio de 64 blocos. Nenhum cristal é consumido se a estrutura estiver incompleta, não houver espaço ou o surgimento falhar. Este ritual não aplica nem remove a marca; o ritual de libertação permanece separado (clique normal para inserir os três ingredientes e mão vazia para iniciar a purificação).
+
 ## Como sobreviver
 
 1. Procure sementes em vegetação de florestas e taigas e cultive a Flor-Gelo.
