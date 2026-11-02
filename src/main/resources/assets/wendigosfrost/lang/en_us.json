@@ -21,5 +21,12 @@
   "message.wendigosfrost.roar_warning": "The Wendigo inhales! Escape the roar!",
   "message.wendigosfrost.stomp_warning": "The ice trembles! Dodge the shockwave!",
   "message.wendigosfrost.near": "IT IS BEHIND YOU!",
-  "message.wendigosfrost.overlay": "...footsteps in the snow..."
+  "message.wendigosfrost.overlay": "...footsteps in the snow...",
+  "message.wendigosfrost.summon_structure": "Incomplete ritual: place 4 lit soul campfires two blocks away in the cardinal directions, plus 4 blue ice blocks diagonally adjacent.",
+  "message.wendigosfrost.summon_cooldown": "The altar is still frozen. Wait %s seconds.",
+  "message.wendigosfrost.summon_existing": "There is already another Wendigo nearby. Defeat it before repeating the ritual.",
+  "message.wendigosfrost.summon_failed": "The frozen portal failed. Please try again.",
+  "message.wendigosfrost.summon_space": "No safe spawn area nearby. Clear a large open area around the altar.",
+  "message.wendigosfrost.summon_success": "The ice shatters... THE WENDIGO HAS BEEN SUMMONED!",
+  "message.wendigosfrost.summon_busy": "The altar is already performing a cleansing ritual."
 }
