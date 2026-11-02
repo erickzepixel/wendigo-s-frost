@@ -1,7 +1,7 @@
 name: Publicar Wendigo's Frost 0.3.2 (modelos corrigidos e guia)
 on:
   push:
-    branches: [fix-summon-v0.3.2]
+    branches: [fix-modelos-guia-v0.3.2]
   workflow_dispatch:
 permissions:
   contents: write
