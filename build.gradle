@@ -85,3 +85,50 @@ tasks.named('processResources', ProcessResources).configure {
         javax.imageio.ImageIO.write(atlas, 'png', out)
     }
 }
+
+
+// Atlas proprio para os itens 3D. Todas as faces apontam para celulas de 32px
+// em uma unica textura 128px, com materiais em UV explicitamente delimitados.
+// O arquivo e gerado tanto no build local quanto no GitHub Actions.
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        def folder = new File(destinationDir, 'assets/wendigosfrost/textures/item')
+        folder.mkdirs()
+        def atlas = new java.awt.image.BufferedImage(128, 128, java.awt.image.BufferedImage.TYPE_INT_ARGB)
+        // osso, osso sombreado, osso iluminado, runa;
+        // gelo, gelo escuro, gelo claro, gelo profundo;
+        // coracao, coracao vivo, tecido escuro, veias;
+        // prata, ferro, ouro antigo, luz cian
+        def palette = [
+            [204,190,164], [120,108,99], [233,226,199], [44,48,57],
+            [81,166,208], [31,97,148], [179,235,245], [26,68,105],
+            [126,37,62], [192,73,104], [66,26,49], [35,135,170],
+            [172,185,201], [65,79,99], [184,139,84], [103,238,239]
+        ]
+        def rng = new java.util.Random(20261102041L)
+        for (int y=0; y<128; y++) {
+            for (int x=0; x<128; x++) {
+                int tx = (int)(x / 32)
+                int ty = (int)(y / 32)
+                int tile = ty*4 + tx
+                def p = palette[tile]
+                int u = x % 32, v = y % 32
+                int grain = rng.nextInt(19)-9
+                int streak = (((u*7+v*11+tile*13) % 43) < 3) ? -19 : 0
+                int frost = (tile>=4 && tile<=7 && ((u-v+80)%19 < 2)) ? 21 : 0
+                int shadow = (u<3 || v>28) ? -12 : ((u>27 || v<3) ? 10 : 0)
+                int red = Math.max(0,Math.min(255,p[0]+grain+streak+frost+shadow))
+                int green = Math.max(0,Math.min(255,p[1]+grain+streak+frost+shadow))
+                int blue = Math.max(0,Math.min(255,p[2]+grain+streak+frost+shadow))
+                // Small bright veins on runic/ice tiles, dark blood striations in the heart.
+                if (tile == 3 && ((u+v*2)%23 < 2)) { red=74; green=149; blue=166 }
+                if (tile == 11 && ((u*2+v)%17 < 2)) { red=92; green=211; blue=232 }
+                if (tile>=8 && tile<=10 && ((u+v*3)%21 < 2)) {
+                    red=Math.max(0,red-23); green=Math.max(0,green-10)
+                }
+                atlas.setRGB(x,y,(0xff<<24) | (red<<16) | (green<<8) | blue)
+            }
+        }
+        javax.imageio.ImageIO.write(atlas, 'png', new File(folder,'relic_atlas.png'))
+    }
+}
