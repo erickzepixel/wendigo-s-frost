@@ -8,7 +8,8 @@
           "type": "minecraft:item",
           "name": "wendigosfrost:wendigo_horn"
         }
-      ]
+      ],
+      "conditions": []
     },
     {
       "rolls": 1,
@@ -18,12 +19,7 @@
           "name": "wendigosfrost:frozen_heart"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:random_chance",
-          "chance": 0.3
-        }
-      ]
+      "conditions": []
     }
   ]
 }
