@@ -41,6 +41,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
     public WendigoEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         xpReward = 25;
+        // Garante que o boss invocado manualmente não desapareça por distância.
+        setPersistenceRequired();
     }
     public UUID getOwnerId() { return ownerId; }
     public void setOwnerId(UUID id) { ownerId = id; }
@@ -108,6 +110,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
     @Override public boolean hurt(DamageSource source, float amount) {
         return super.hurt(source, source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE) ? amount * 1.8f : amount);
     }
+    // Boss invocado por comando ou ritual continua no mundo até ser derrotado ou dispensado.
+    @Override protected boolean shouldDespawnInPeaceful() { return false; }
     @Override public boolean removeWhenFarAway(double distance) { return false; }
     @Override public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
