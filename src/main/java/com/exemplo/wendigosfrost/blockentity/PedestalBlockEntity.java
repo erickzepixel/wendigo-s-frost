@@ -52,8 +52,22 @@ public class PedestalBlockEntity extends BlockEntity {
             if (player!=null) player.displayClientMessage(Component.translatable("message.wendigosfrost.ritual_failed"), true);
             be.ritualPlayer=null;be.ticks=0;be.setChanged();return;
         }
-        if (be.ticks % 10 == 0) server.sendParticles(ParticleTypes.SNOWFLAKE,
-                pos.getX()+.5,pos.getY()+1.4,pos.getZ()+.5,12,.45,.45,.45,.04);
+        if (be.ticks % 10 == 0) {
+            server.sendParticles(ParticleTypes.SNOWFLAKE, pos.getX()+.5,pos.getY()+1.4,pos.getZ()+.5,
+                    18,.65,.7,.65,.03);
+            for (int i=0;i<12;i++) {
+                double angle=i*Math.PI/6+be.ticks*.065;
+                server.sendParticles(ParticleTypes.END_ROD,
+                    pos.getX()+.5+Math.cos(angle)*1.2, pos.getY()+.2+(be.ticks%60)/60.0,
+                    pos.getZ()+.5+Math.sin(angle)*1.2,1,0,0,0,0);
+            }
+        }
+        if (be.ticks % 40 == 0) {
+            final int percent = Math.min(100,
+                (int)(100.0 * be.ticks / (com.exemplo.wendigosfrost.config.ModConfig.RITUAL_SECONDS.get()*20)));
+            player.displayClientMessage(Component.literal("❄ Ritual de purificação: " + percent + "%"),true);
+            server.playSound(null,pos,SoundEvents.AMETHYST_BLOCK_CHIME,SoundSource.BLOCKS,.7f,.6f+be.ticks*.001f);
+        }
         if(++be.ticks>=com.exemplo.wendigosfrost.config.ModConfig.RITUAL_SECONDS.get()*20){
             UUID owner=player.getUUID();
             WendigoMark.clear(player);
@@ -63,6 +77,9 @@ public class PedestalBlockEntity extends BlockEntity {
             for(int i=0;i<3;i++)be.inventory.setItem(i,ItemStack.EMPTY);
             server.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0f, .8f);
             player.displayClientMessage(Component.translatable("message.wendigosfrost.ritual_complete"), false);
+            var advancement = server.getServer().getAdvancements().getAdvancement(
+                new net.minecraft.resources.ResourceLocation("wendigosfrost", "freedom"));
+            if (advancement != null) player.getAdvancements().award(advancement, "cleansed");
             be.ritualPlayer=null;be.ticks=0;be.setChanged();
         }
     }
