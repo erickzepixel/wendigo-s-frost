@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CDC",
+    "DBD",
+    "CDC"
+  ],
+  "key": {
+    "C": {
+      "item": "wendigosfrost:frostbloom_crystal"
+    },
+    "D": {
+      "item": "minecraft:cobbled_deepslate"
+    },
+    "B": {
+      "item": "minecraft:blue_ice"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:deep_glacier_pedestal"
+  }
+}

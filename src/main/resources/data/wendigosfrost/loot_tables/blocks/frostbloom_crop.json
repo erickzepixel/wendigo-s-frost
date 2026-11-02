@@ -1,0 +1,64 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "wendigosfrost:frostbloom_crystal",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "wendigosfrost:frostbloom_crop",
+                  "properties": {
+                    "age": "5"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "min": 1,
+                    "max": 2
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "wendigosfrost:frostbloom_seeds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.45
+        },
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "wendigosfrost:frostbloom_crop",
+          "properties": {
+            "age": "5"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wendigosfrost:frostbloom_seeds"
+        }
+      ]
+    }
+  ]
+}

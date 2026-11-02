@@ -1,0 +1,16 @@
+{
+  "item.wendigosfrost.frostbloom_seeds": "Frostbloom Seeds",
+  "item.wendigosfrost.frostbloom_crystal": "Frostbloom Crystal",
+  "block.wendigosfrost.frostbloom_crop": "Frostbloom",
+  "message.wendigosfrost.marked": "The cold clings to your bones...",
+  "message.wendigosfrost.warning": "You feel something watching you...",
+  "message.wendigosfrost.awakened": "A distant scream cuts through the silence.",
+  "block.wendigosfrost.deep_glacier_pedestal": "Deep Glacier Pedestal",
+  "item.wendigosfrost.wendigo_horn": "Wendigo Horn",
+  "item.wendigosfrost.frozen_heart": "Frozen Heart",
+  "effect.wendigosfrost.frost_delirium": "Frost Delirium",
+  "message.wendigosfrost.ritual_start": "The ritual has begun. Stay close and avoid damage!",
+  "message.wendigosfrost.ritual_failed": "The ritual was interrupted!",
+  "message.wendigosfrost.ritual_complete": "The ice within your blood melts away. You are free!",
+  "entity.wendigosfrost.wendigo": "Wendigo"
+}

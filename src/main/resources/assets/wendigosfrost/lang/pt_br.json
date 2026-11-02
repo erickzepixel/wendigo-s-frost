@@ -1,0 +1,16 @@
+{
+  "item.wendigosfrost.frostbloom_seeds": "Sementes de Flor-Gelo",
+  "item.wendigosfrost.frostbloom_crystal": "Cristal de Frostbloom",
+  "block.wendigosfrost.frostbloom_crop": "Flor-Gelo",
+  "message.wendigosfrost.marked": "O frio se prende aos seus ossos...",
+  "message.wendigosfrost.warning": "Você sente que algo te observa...",
+  "message.wendigosfrost.awakened": "Um grito distante corta o silêncio.",
+  "block.wendigosfrost.deep_glacier_pedestal": "Pedestal das Geleiras Profundas",
+  "item.wendigosfrost.wendigo_horn": "Chifre de Wendigo",
+  "item.wendigosfrost.frozen_heart": "Coração Congelado",
+  "effect.wendigosfrost.frost_delirium": "Delírio Gélido",
+  "message.wendigosfrost.ritual_start": "O ritual começou. Não se afaste nem receba dano!",
+  "message.wendigosfrost.ritual_failed": "O ritual foi interrompido!",
+  "message.wendigosfrost.ritual_complete": "O gelo em seu sangue se desfaz. Você está livre!",
+  "entity.wendigosfrost.wendigo": "Wendigo"
+}
