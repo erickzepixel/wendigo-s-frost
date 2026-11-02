@@ -1,0 +1,32 @@
+{
+  "parent": "wendigosfrost:curse",
+  "display": {
+    "icon": {
+      "item": "wendigosfrost:frost_ward"
+    },
+    "title": {
+      "text": "O Gelo Também Protege"
+    },
+    "description": {
+      "text": "Crie um Amuleto de Proteção Gélida."
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "ward": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wendigosfrost:frost_ward"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 50
+  }
+}
