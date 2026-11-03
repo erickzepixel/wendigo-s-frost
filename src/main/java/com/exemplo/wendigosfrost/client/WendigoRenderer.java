@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
@@ -118,19 +119,24 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
     }
 
     private static void frontLeg(PoseStack pose, boolean left, float t, float speed,
-                                 float locomotion, float stand, float attack) {
+                                 float locomotion, float stand, float attack,
+                                 float roar, float stomp) {
         int upper = left ? 2 : 4, lower = left ? 3 : 5;
         float side = left ? 1f : -1f;
         float gait = (float)Math.sin(t*speed+(left ? 0 : Math.PI));
         float armSwing = gait * (1f-stand) * locomotion * 28f +
             gait * stand * locomotion * 16f;
-        float action = attack * (left ? -36f : 18f) * stand;
+        // Counter-pitch the erect ribcage so arms HANG vertically, rather
+        // than extending sideways. Each strike is a visible 14 tick arc.
+        float action = attack * (left ? -75f : -48f) +
+                       roar * -38f + stomp * -70f;
         pose.pushPose();
-        hinge(pose, 1.07f, side * .91f, 3.4f, armSwing + action);
+        hinge(pose, 1.07f, side * .91f, 3.4f,
+            armSwing + stand * 83f + action);
         drawBone(upper, pose);
         pose.pushPose();
         float elbow = ((float)Math.max(0, Math.sin(t*speed+(left ? .35 : Math.PI+.35))))
-            * locomotion * 22f * (1f-stand) + stand * (15f+attack*35f);
+            * locomotion * 22f * (1f-stand) + stand * (7f+attack*44f+stomp*24f);
         hinge(pose, 1.52f, side*1.29f, 1.68f, elbow);
         drawBone(lower, pose);
         pose.popPose();
@@ -171,9 +177,9 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
         float speed=entity.getBossPhase()==3 ? .37f : (entity.getBossPhase()==1 ? .25f : .29f);
         float breath=(float)Math.sin(t*.084f)*.018f;
         float walkBob=(float)Math.abs(Math.sin(t*speed))*locomotion*.045f;
-        float attack=entity.getAttackAnim(partialTick);
-        float roar=entity.getAttackCue()==1 ? 1f : 0f;
-        float stomp=entity.getAttackCue()==2 ? 1f : 0f;
+        float attack=Math.max(entity.getAttackAnim(partialTick), entity.getSwipeBlend(partialTick));
+        float roar=(entity.getAttackCue()==1 || entity.getAttackCue()==3) ? 1f : 0f;
+        float stomp=(entity.getAttackCue()==2 || entity.getAttackCue()==4) ? 1f : 0f;
 
         // Convert original +X muzzle, Z-up coordinates to Minecraft axes.
         pose.mulPose(Axis.YP.rotationDegrees(270f-yaw));
@@ -183,7 +189,16 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
         pose.translate(0, 0, walkBob + breath);
 
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.setShaderColor(1,1,1,1);
+        // The static-mesh renderer bypassed Minecraft's usual hurt overlay.
+        // Multiply the actual VBO vertex colors by red while hurtTime > 0.
+        boolean flashing = entity.hurtTime > 0 || entity.deathTime > 0;
+        if (flashing) {
+            float flicker = .25f + .12f *
+                (float)Math.abs(Math.sin((t)*1.15f));
+            RenderSystem.setShaderColor(1f, flicker, flicker, 1f);
+        } else {
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        }
         RenderSystem.enableDepthTest();
         RenderSystem.disableCull();
 
@@ -194,20 +209,30 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
         pose.pushPose();
         // Pivot the ribcage around the hips. Front arms and head inherit this
         // motion; this creates the true quadruped-to-biped upper-body transition.
-        hinge(pose,-1.85f,0f,2.80f,-63f*stand);
+        // From horizontal animal spine to an erect humanoid thorax (86 degrees).
+        // Hind paws stay planted while chest/head/forearms pivot together.
+        hinge(pose,-1.85f,0f,2.80f,-86f*stand);
         drawBone(0,pose);
 
         pose.pushPose();
-        hinge(pose,2.0f,0,3.19f,
-            (float)Math.sin(t*.07)*3f - roar*21f + stomp*9f);
+        float headYaw = Mth.clamp(
+            Mth.wrapDegrees(entity.getYHeadRot()-entity.yBodyRot), -42f, 42f);
+        // Cancel the torso pitch at the neck: muzzle and glowing eyes look
+        // FORWARD at the target rather than toward the sky in phase two.
+        pose.translate(2.0f, 0f, 3.19f);
+        pose.mulPose(Axis.YP.rotationDegrees(
+            86f*stand + (float)Math.sin(t*.07)*2f - roar*24f + stomp*11f));
+        pose.mulPose(Axis.ZP.rotationDegrees(headYaw));
+        pose.translate(-2.0f, 0f, -3.19f);
         drawBone(1,pose);
         pose.popPose();
 
-        frontLeg(pose,true,t,speed,locomotion,stand,attack);
-        frontLeg(pose,false,t,speed,locomotion,stand,attack);
+        frontLeg(pose,true,t,speed,locomotion,stand,attack,roar,stomp);
+        frontLeg(pose,false,t,speed,locomotion,stand,attack,roar,stomp);
         pose.popPose();
 
         VertexBuffer.unbind();
+        RenderSystem.setShaderColor(1f,1f,1f,1f);
         RenderSystem.enableCull();
         pose.popPose();
         super.render(entity,yaw,partialTick,pose,buffers,packedLight);
