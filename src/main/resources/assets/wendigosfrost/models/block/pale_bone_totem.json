@@ -1,233 +1,54 @@
 {
-  "parent": "minecraft:block/block",
+  "loader": "forge:obj",
+  "model": "wendigosfrost:models/block/bb/pale_bone_totem.obj",
+  "flip_v": true,
+  "automatic_culling": false,
+  "shade_quads": true,
+  "gui_light": "front",
   "textures": {
-    "bone": "wendigosfrost:block/pale_bone_totem",
-    "base": "wendigosfrost:block/ancient_frost_bricks"
+    "texture0": "wendigosfrost:bbmaterials/material_03",
+    "texture1": "wendigosfrost:bbmaterials/material_04",
+    "texture2": "wendigosfrost:bbmaterials/material_01",
+    "texture3": "wendigosfrost:bbmaterials/material_00",
+    "texture4": "wendigosfrost:bbmaterials/material_02",
+    "particle": "wendigosfrost:bbmaterials/material_03"
   },
-  "elements": [
-    {
-      "from": [
-        3,
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        45,
+        0
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "ground": {
+      "translation": [
         0,
-        3
-      ],
-      "to": [
-        13,
         2,
-        13
+        0
       ],
-      "faces": {
-        "north": {
-          "texture": "#base"
-        },
-        "south": {
-          "texture": "#base"
-        },
-        "east": {
-          "texture": "#base"
-        },
-        "west": {
-          "texture": "#base"
-        },
-        "up": {
-          "texture": "#base"
-        },
-        "down": {
-          "texture": "#base"
-        }
-      }
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
     },
-    {
-      "from": [
-        6,
-        2,
-        6
+    "fixed": {
+      "rotation": [
+        0,
+        35,
+        0
       ],
-      "to": [
-        10,
-        12,
-        10
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        10,
-        4
-      ],
-      "to": [
-        13,
-        15,
-        12
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
-    },
-    {
-      "from": [
-        4,
-        12,
-        2
-      ],
-      "to": [
-        12,
-        15,
-        14
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
-    },
-    {
-      "from": [
-        2,
-        14,
-        6
-      ],
-      "to": [
-        4,
-        16,
-        10
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        14,
-        6
-      ],
-      "to": [
-        14,
-        16,
-        10
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        9,
-        3
-      ],
-      "to": [
-        10,
-        12,
-        13
-      ],
-      "faces": {
-        "north": {
-          "texture": "#bone"
-        },
-        "south": {
-          "texture": "#bone"
-        },
-        "east": {
-          "texture": "#bone"
-        },
-        "west": {
-          "texture": "#bone"
-        },
-        "up": {
-          "texture": "#bone"
-        },
-        "down": {
-          "texture": "#bone"
-        }
-      }
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ]
     }
-  ]
+  }
 }
