@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " HF",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "H": {
+      "item": "wendigosfrost:frozen_heart"
+    },
+    "F": {
+      "item": "wendigosfrost:frostbloom_crystal"
+    },
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:heartbreaker_blade",
+    "count": 1
+  }
+}
