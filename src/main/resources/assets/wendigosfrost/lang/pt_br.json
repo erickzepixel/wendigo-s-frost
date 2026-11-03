@@ -30,5 +30,7 @@
   "message.wendigosfrost.summon_success": "O gelo se rompe... O WENDIGO FOI INVOCADO!",
   "message.wendigosfrost.summon_busy": "O pedestal já está realizando um ritual de purificação.",
   "itemGroup.wendigosfrost": "Wendigo's Frost",
-  "item.wendigosfrost.wendigo_spawn_egg": "Ovo de Invocação: Wendigo"
+  "item.wendigosfrost.wendigo_spawn_egg": "Ovo de Invocação: Wendigo",
+  "message.wendigosfrost.ward_wave": "O amuleto liberou a Onda de Gelo! Inimigos atingidos: %s",
+  "tooltip.wendigosfrost.frost_ward": "Botão direito: Onda Glacial. 6 cargas; recarga de 30 segundos."
 }
