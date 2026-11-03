@@ -132,7 +132,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
     public void setOwnerId(UUID owner) { ownerId = owner; }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 260)
+            .add(Attributes.MAX_HEALTH, 500)
             .add(Attributes.ATTACK_DAMAGE, 5.5)
             .add(Attributes.ARMOR, 4)
             .add(Attributes.MOVEMENT_SPEED, 0.34)
@@ -199,6 +199,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
             // Limit historical high-damage config files; 0.6.0 used 16 (8 hearts).
             getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                 Math.min(ModConfig.WENDIGO_DAMAGE.get(), 7.0));
+            // Respect the boss's current percentage, even in pre-0.7.3 saves
+            // that serialized a 100/100 or 260/260 Wendigo.
             setHealth(Math.max(1f, Math.min(getMaxHealth(), hp * getMaxHealth())));
         }
         if (ownerId != null) {
