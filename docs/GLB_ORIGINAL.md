@@ -26,7 +26,7 @@ O GLB original continua incluído no JAR. As cores originais dos 15 materiais s�
 
 ## Animação: limitação importante
 
-O GLB original é **estático**, sem ossos, pesos de skinning ou clipes de animação. Por isso, o novo visual preserva a geometria exata, mas só permite o movimento da entidade e pequenas alterações de pose de corpo inteiro. Os golpes e a transição de quadrúpede para bípede continuam existindo na lógica do boss; entretanto, **o modelo original não faz movimentos independentes de patas, mandíbula ou galhadas**.
+O GLB original continua estático, porém agora o mod gera uma segunda representação com **dez ossos rígidos** que herdam pivôs hierárquicos. O Wendigo movimenta as quatro patas, flexiona articulações, inclina a cabeça e se ergue ao entrar na segunda fase. A mandíbula e as galhadas acompanham a cabeça como partes do mesmo osso, sem animações individuais. Essa solução não modifica os vértices do original e não precisa de novas bibliotecas.
 
 Não é tecnicamente correto prometer que a transição bípede tenha a mesma animação articulada do modelo anterior. Para isso será necessário riggar e animar o GLB no Blender mantendo seus vértices.
 
@@ -36,4 +36,4 @@ O arquivo tem 70 mil triângulos, portanto pode reduzir o FPS em computadores mo
 
 ## Testes realizados
 
-O CI valida o hash exato do GLB antes e depois do build, os materiais e a compilação Java/Forge. O teste final de orientação, sombras, iluminação e desempenho exige uma execução real do Minecraft 1.20.1.
+O CI valida a cópia integral do GLB (SHA-256), a existência dos dez ossos, a conservação dos 70.020 triângulos, os arquivos do mod e a compilação Java/Forge. O teste visual, as posições das articulações, a orientação e o desempenho ainda exigem execução no Minecraft 1.20.1.
