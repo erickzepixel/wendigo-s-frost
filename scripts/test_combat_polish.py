@@ -20,7 +20,7 @@ assert "getSwipeBlend(partialTick)" in render and "SWIPE_COUNTER" in entity, "me
 assert "getAttackCue()==3" in render and "getAttackCue()==4" in render, "boss impact poses missing"
 assert "FrostShockwave.release(server, this" in entity, "boss does not use shared frost wave"
 assert "FrostShockwave.release(server.serverLevel(), server" in ward, "amulet does not use the same attack"
-assert "server.sendParticles" in shock and "ParticleTypes.SNOWFLAKE" in shock, "shockwave VFX missing"
+assert "level.sendParticles" in shock and "ParticleTypes.SNOWFLAKE" in shock, "shockwave VFX missing"
 assert 'baseMeleeDamage", 5.5' in config
 assert "Math.min(ModConfig.WENDIGO_DAMAGE.get(), 7.0)" in entity
 assert ".add(Attributes.ARMOR, 4)" in entity
