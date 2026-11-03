@@ -16,6 +16,9 @@ document=json.loads(glb[20:20+count].decode())
 assert len(document.get("meshes",[]))>=1
 assert len(document.get("materials",[]))>=15
 renderer=Path("src/main/java/com/exemplo/wendigosfrost/client/WendigoRenderer.java").read_text()
-assert "GltfApi.render(ORIGINAL_MESH" in renderer
-assert 'models/gltf/wendigo_glacial_exact.glb' in renderer
-print("OK: original GLB SHA-256 matches exactly, glTF 2.0 header and 15 materials validated")
+assert "gpuMesh.drawWithShader" in renderer
+assert 'models/mesh/wendigo_glacial.wfmesh' in renderer
+mesh=Path("src/main/resources/assets/wendigosfrost/models/mesh/wendigo_glacial.wfmesh")
+assert mesh.exists() and mesh.read_bytes()[:4]==b"WFMS", "GPU stream not generated"
+assert len(mesh.read_bytes()) == 8 + 70020*52, "Unexpected triangle stream size"
+print("OK: GLB SHA-256, glTF 2.0, all materials, native 70,020-triangle GPU stream")
