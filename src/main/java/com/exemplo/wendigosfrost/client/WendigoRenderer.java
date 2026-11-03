@@ -23,105 +23,198 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Native OpenGL VBO renderer using the *exact* original 70,020 GLB triangles.
- * GPU upload happens once, not once per tick. No new client-side dependency.
- * This model was delivered without a skeleton, so only rigid body movement
- * is available until the original mesh is rigged and weight-painted.
+ * Articulated rigid-part skeleton driven by the actual original GLB surface:
+ * 70,020 triangles unchanged; each connected surface receives a bone.
+ * Each of ten bones gets a GPU-cached VertexBuffer, not an upload per frame.
+ *
+ * The model was not originally skinned. Parts rotate at anatomical joints;
+ * no interpolation of vertices across joints (possible minor seams).
+ * Original GLB is preserved byte-identically in the resource pack.
  */
 public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation STREAM =
-        new ResourceLocation(WendigosFrost.MOD_ID, "models/mesh/wendigo_glacial.wfmesh");
-    private static final ResourceLocation LEGACY_TEXTURE =
+    private static final ResourceLocation RIGGED_STREAM =
+        new ResourceLocation(WendigosFrost.MOD_ID, "models/mesh/wendigo_articulado.wfar");
+    private static final ResourceLocation FALLBACK_TEXTURE =
         new ResourceLocation(WendigosFrost.MOD_ID, "textures/entity/wendigo.png");
-    private static VertexBuffer gpuMesh;
+    // 0 torso, 1 head, 2/3 front left upper/lower, 4/5 front right,
+    // 6/7 hind left upper/lower, 8/9 hind right.
+    private static final int BONES = 10;
+    private static final VertexBuffer[] GPU_BONES = new VertexBuffer[BONES];
     private static boolean attempted;
 
     public WendigoRenderer(EntityRendererProvider.Context context) {
         super(context);
-        shadowRadius = 1.35f;
+        shadowRadius = 1.4f;
     }
 
-    private static int littleInt(DataInputStream input) throws IOException {
+    private static int intLE(DataInputStream input) throws IOException {
         return Integer.reverseBytes(input.readInt());
     }
-    private static float littleFloat(DataInputStream input) throws IOException {
-        return Float.intBitsToFloat(littleInt(input));
+    private static float floatLE(DataInputStream input) throws IOException {
+        return Float.intBitsToFloat(intLE(input));
     }
 
-    private static void initializeMesh() {
+    private static void loadBones() {
         if (attempted) return;
         attempted = true;
         RenderSystem.assertOnRenderThread();
-        try (InputStream stream = Minecraft.getInstance().getResourceManager().open(STREAM);
+        try (InputStream stream = Minecraft.getInstance().getResourceManager().open(RIGGED_STREAM);
              DataInputStream input = new DataInputStream(stream)) {
             byte[] magic = input.readNBytes(4);
             if (magic.length != 4 || magic[0] != 'W' || magic[1] != 'F' ||
-                magic[2] != 'M' || magic[3] != 'S') throw new IOException("Invalid mesh header");
-            int triangles = littleInt(input);
-            if (triangles != 70020) throw new IOException("Unexpected triangle count: " + triangles);
+                    magic[2] != 'A' || magic[3] != 'R') throw new IOException("Invalid rig header");
+            if (intLE(input) != 1 || intLE(input) != BONES)
+                throw new IOException("Unsupported rig version or number of bones");
 
-            BufferBuilder builder = new BufferBuilder(8 * 1024 * 1024);
-            builder.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
-            for (int t = 0; t < triangles; t++) {
-                int r = input.readUnsignedByte(), g = input.readUnsignedByte();
-                int b = input.readUnsignedByte(), alpha = input.readUnsignedByte();
-                // Source triangle normal is stored for future lit renderer upgrades.
-                littleFloat(input); littleFloat(input); littleFloat(input);
-                for (int vertex = 0; vertex < 3; vertex++) {
-                    float x = littleFloat(input), y = littleFloat(input), z = littleFloat(input);
-                    builder.vertex(x, y, z).color(r, g, b, alpha).endVertex();
+            int allTriangles = 0;
+            for (int i = 0; i < BONES; ++i) {
+                int id = intLE(input), triangles = intLE(input);
+                if (id != i || triangles < 1 || triangles > 70020)
+                    throw new IOException("Invalid rig group " + id + " (" + triangles + ")");
+                allTriangles += triangles;
+                BufferBuilder builder = new BufferBuilder(Math.max(524288, triangles * 84));
+                builder.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
+                for (int t = 0; t < triangles; t++) {
+                    int r = input.readUnsignedByte(), g = input.readUnsignedByte();
+                    int b = input.readUnsignedByte(), alpha = input.readUnsignedByte();
+                    float nx = floatLE(input), ny = floatLE(input), nz = floatLE(input);
+                    for (int v = 0; v < 3; ++v) {
+                        float x = floatLE(input), y = floatLE(input), z = floatLE(input);
+                        builder.vertex(x, y, z).color(r, g, b, alpha).endVertex();
+                    }
                 }
+                GPU_BONES[i] = new VertexBuffer(VertexBuffer.Usage.STATIC);
+                GPU_BONES[i].bind();
+                GPU_BONES[i].upload(builder.end());
+                VertexBuffer.unbind();
             }
-            gpuMesh = new VertexBuffer(VertexBuffer.Usage.STATIC);
-            gpuMesh.bind();
-            gpuMesh.upload(builder.end());
+            if (allTriangles != 70020)
+                throw new IOException("Expected 70,020 original triangles, got " + allTriangles);
+            LOGGER.info("Wendigo's Frost: 70,020 original triangles in ten animated VBO bones");
+        } catch (Exception ex) {
+            LOGGER.error("Could not initialize original articulated Wendigo mesh", ex);
             VertexBuffer.unbind();
-            LOGGER.info("Wendigo's Frost: original 70,020-triangle GPU mesh uploaded");
-        } catch (Exception failure) {
-            VertexBuffer.unbind();
-            LOGGER.error("Wendigo's Frost: original mesh could not be rendered", failure);
+            for (int i=0; i<BONES; i++) {
+                if (GPU_BONES[i] != null) GPU_BONES[i].close();
+                GPU_BONES[i] = null;
+            }
         }
     }
 
-    @Override
-    public void render(WendigoEntity boss, float yaw, float partialTick,
-                       PoseStack pose, MultiBufferSource buffers, int packedLight) {
-        initializeMesh();
-        if (gpuMesh == null || gpuMesh.isInvalid()) return;
-        pose.pushPose();
-        // Original asset is Z-up, glTF exported without rig or axis correction.
-        // 90 degrees of yaw maps the model's original +X (muzzle) to forward -Z.
-        pose.mulPose(Axis.YP.rotationDegrees(270f - yaw));
-        float time = boss.tickCount + partialTick;
-        boolean quad = boss.getBossPhase() == 1;
-        float motion = (float)Math.min(1, boss.getDeltaMovement().horizontalDistanceSqr() * 25);
-        float bob = (float)Math.sin(time * (quad ? .13 : .08)) * motion * .035f;
-        pose.translate(-.1f, bob, 0f);
-        float size = quad ? .417f : .61f;
-        pose.scale(size, size, size);
-        // Rigid pose change only; individual limb animation requires skinning.
-        if (!quad) pose.mulPose(Axis.XP.rotationDegrees(12f));
-        pose.mulPose(Axis.XP.rotationDegrees(-90f));
-
-        // Position-color material renderer; the GLB's original material factors
-        // are baked per triangle, preserving all of the original source geometry.
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableCull();
-        gpuMesh.bind();
-        gpuMesh.drawWithShader(pose.last().pose(), RenderSystem.getProjectionMatrix(),
+    private static void drawBone(int bone, PoseStack pose) {
+        VertexBuffer buffer = GPU_BONES[bone];
+        if (buffer == null || buffer.isInvalid()) return;
+        buffer.bind();
+        buffer.drawWithShader(pose.last().pose(), RenderSystem.getProjectionMatrix(),
             RenderSystem.getShader());
-        VertexBuffer.unbind();
-        RenderSystem.enableCull();
+    }
 
+    // Coordinates are in the original Z-up GLB space (+X is nose).
+    private static void hinge(PoseStack pose, float x, float y, float z, float degrees) {
+        pose.translate(x, y, z);
+        pose.mulPose(Axis.YP.rotationDegrees(degrees));
+        pose.translate(-x, -y, -z);
+    }
+
+    private static void frontLeg(PoseStack pose, boolean left, float t, float speed,
+                                 float locomotion, float stand, float attack) {
+        int upper = left ? 2 : 4, lower = left ? 3 : 5;
+        float side = left ? 1f : -1f;
+        float gait = (float)Math.sin(t*speed+(left ? 0 : Math.PI));
+        float armSwing = gait * (1f-stand) * locomotion * 28f +
+            gait * stand * locomotion * 16f;
+        float action = attack * (left ? -36f : 18f) * stand;
+        pose.pushPose();
+        hinge(pose, 1.07f, side * .91f, 3.4f, armSwing + action);
+        drawBone(upper, pose);
+        pose.pushPose();
+        float elbow = ((float)Math.max(0, Math.sin(t*speed+(left ? .35 : Math.PI+.35))))
+            * locomotion * 22f * (1f-stand) + stand * (15f+attack*35f);
+        hinge(pose, 1.52f, side*1.29f, 1.68f, elbow);
+        drawBone(lower, pose);
         pose.popPose();
-        super.render(boss, yaw, partialTick, pose, buffers, packedLight);
+        pose.popPose();
+    }
+
+    private static void hindLeg(PoseStack pose, boolean left, float t, float speed,
+                                float locomotion, float stand) {
+        int upper = left ? 6 : 8, lower = left ? 7 : 9;
+        float side=left ? 1f : -1f;
+        float gait=(float)Math.sin(t*speed+(left ? Math.PI : 0));
+        pose.pushPose();
+        hinge(pose, -2.19f, side*.86f, 2.78f, gait*locomotion*(21f-stand*12f));
+        drawBone(upper,pose);
+        pose.pushPose();
+        float knee=(float)Math.max(0, Math.sin(t*speed+(left ? Math.PI : 0)));
+        hinge(pose, -2.42f, side*.98f, 1.40f,
+            knee*locomotion*(22f-stand*14f));
+        drawBone(lower,pose);
+        pose.popPose();
+        pose.popPose();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(WendigoEntity boss) {
-        return LEGACY_TEXTURE;
+    public void render(WendigoEntity entity, float yaw, float partialTick,
+                       PoseStack pose, MultiBufferSource buffers, int packedLight) {
+        loadBones();
+        if (GPU_BONES[0] == null) {
+            super.render(entity, yaw, partialTick, pose, buffers, packedLight);
+            return;
+        }
+
+        pose.pushPose();
+        float t = entity.tickCount + partialTick;
+        float stand = entity.getStandBlend(partialTick);
+        float horizontalSpeed=(float)Math.sqrt(entity.getDeltaMovement().horizontalDistanceSqr());
+        float locomotion=Math.min(1f,horizontalSpeed*5.5f);
+        float speed=entity.getBossPhase()==3 ? .37f : (entity.getBossPhase()==1 ? .25f : .29f);
+        float breath=(float)Math.sin(t*.084f)*.018f;
+        float walkBob=(float)Math.abs(Math.sin(t*speed))*locomotion*.045f;
+        float attack=entity.getAttackAnim(partialTick);
+        float roar=entity.getAttackCue()==1 ? 1f : 0f;
+        float stomp=entity.getAttackCue()==2 ? 1f : 0f;
+
+        // Convert original +X muzzle, Z-up coordinates to Minecraft axes.
+        pose.mulPose(Axis.YP.rotationDegrees(270f-yaw));
+        float scale=.445f;
+        pose.scale(scale,scale,scale);
+        pose.mulPose(Axis.XP.rotationDegrees(-90f));
+        pose.translate(0, 0, walkBob + breath);
+
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShaderColor(1,1,1,1);
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableCull();
+
+        // Hind legs keep supporting the creature as its torso rears upward.
+        hindLeg(pose,true,t,speed,locomotion,stand);
+        hindLeg(pose,false,t,speed,locomotion,stand);
+
+        pose.pushPose();
+        // Pivot the ribcage around the hips. Front arms and head inherit this
+        // motion; this creates the true quadruped-to-biped upper-body transition.
+        hinge(pose,-1.85f,0f,2.80f,-63f*stand);
+        drawBone(0,pose);
+
+        pose.pushPose();
+        hinge(pose,2.0f,0,3.19f,
+            (float)Math.sin(t*.07)*3f - roar*21f + stomp*9f);
+        drawBone(1,pose);
+        pose.popPose();
+
+        frontLeg(pose,true,t,speed,locomotion,stand,attack);
+        frontLeg(pose,false,t,speed,locomotion,stand,attack);
+        pose.popPose();
+
+        VertexBuffer.unbind();
+        RenderSystem.enableCull();
+        pose.popPose();
+        super.render(entity,yaw,partialTick,pose,buffers,packedLight);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(WendigoEntity entity) {
+        return FALLBACK_TEXTURE;
     }
 }
