@@ -7,7 +7,7 @@ java=Path("src/main/java/com/exemplo/wendigosfrost")
 assets=Path("src/main/resources/assets/wendigosfrost")
 data=Path("src/main/resources/data/wendigosfrost")
 ids=("hunter_helmet","hunter_chestplate","hunter_leggings","hunter_boots",
-     "rune_spear","thaw_axe","thermal_flare")
+     "rune_spear","thaw_axe","thermal_flare","heartbreaker_blade","runic_torch")
 reg=(java/"registry/ModItems.java").read_text()
 creative=(java/"registry/ModCreativeTabs.java").read_text()
 for id in ids:
@@ -22,7 +22,8 @@ for id in ids:
 
 for javafile in ("item/HunterArmorMaterial.java","item/HunterArmorItem.java",
                  "item/RuneSpearItem.java","item/ThawAxeItem.java",
-                 "item/ThermalFlareItem.java","event/CombatEquipmentEvents.java",
+                 "item/ThermalFlareItem.java","item/HeartbreakerBladeItem.java",
+                 "item/RunicTorchItem.java","event/CombatEquipmentEvents.java",
                  "client/WendigoPhaseDetails.java"):
     assert (java/javafile).exists(),javafile
 heart=json.loads((assets/"models/item/frozen_heart.json").read_text())
@@ -54,5 +55,5 @@ for lang in ("pt_br","en_us"):
     loc=json.loads((assets/"lang"/(lang+".json")).read_text())
     for id in ids:
         assert loc.get("item.wendigosfrost."+id), (lang,id)
-print("OK: 7 new items and recipes, armor set, heart weak point, red eyes,")
+print("OK: 9 new items and recipes, armor set, heart weak point, red eyes,")
 print("    growing ice spines, dedicated textures and corrected singular structure path")
