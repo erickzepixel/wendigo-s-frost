@@ -14,6 +14,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import java.util.List;
 import net.minecraft.world.level.Level;
 
 /**
@@ -27,6 +29,13 @@ public final class FrostWardItem extends Item {
     @Override
     public boolean isFoil(ItemStack stack) {
         return true; // enchanted glimmer over the new icy rune texture
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
+        super.appendHoverText(stack, level, lines, flag);
+        lines.add(Component.translatable("tooltip.wendigosfrost.frost_ward")
+            .withStyle(net.minecraft.ChatFormatting.AQUA));
     }
 
     @Override
