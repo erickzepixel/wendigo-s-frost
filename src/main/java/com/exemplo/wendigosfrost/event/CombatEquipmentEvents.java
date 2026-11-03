@@ -25,6 +25,8 @@ public final class CombatEquipmentEvents {
                 // Early-game weapon remains useful; the exposed chest is a weak point.
                 float bonus = boss.getBossPhase() >= 2 ? 1.55f : 1.15f;
                 event.setAmount(event.getAmount() * bonus);
+            } else if (attacker.getMainHandItem().is(ModItems.HEARTBREAKER_BLADE.get())) {
+                event.setAmount(event.getAmount() * (boss.getBossPhase() == 3 ? 1.42f : 1.22f));
             } else if (attacker.getMainHandItem().is(ModItems.THAW_AXE.get())) {
                 event.setAmount(event.getAmount() * 1.27f);
                 boss.setSecondsOnFire(3); // Fire cancels an icy charged skill.
