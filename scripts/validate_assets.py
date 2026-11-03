@@ -43,38 +43,19 @@ for required in [
     if not (root / required).exists():
         errors.append("Missing resource " + required)
 
-# Regression tests for the custom relic atlas models.
-for item in ("wendigo_horn", "frozen_heart", "frost_ward"):
-    file = root / "assets/wendigosfrost/models/item" / f"{item}.json"
+# Relics now use the actual uploaded Blockbench geometry through Forge OBJ.
+for item in ("wendigo_horn","frozen_heart","frost_ward"):
+    file=root/"assets/wendigosfrost/models/item"/(item+".json")
     if not file.exists():
-        errors.append(f"missing item model {item}")
+        errors.append("Missing Blockbench relic model "+item)
         continue
-    model = json.loads(file.read_text(encoding="utf-8"))
-    expected_atlas = f"wendigosfrost:item/rework/{item}"
-    if model.get("textures", {}).get("atlas") != expected_atlas:
-        errors.append(f"{item}: wrong texture atlas reference")
-    cubes = model.get("elements", [])
-    if len(cubes) < 30:
-        errors.append(f"{item}: expected a detailed true-3D model")
-    for idx, cube in enumerate(cubes):
-        f = cube.get("from", [])
-        t = cube.get("to", [])
-        if len(f) != 3 or len(t) != 3 or any(not 0 <= a < b <= 16 for a,b in zip(f,t)):
-            errors.append(f"{item}: invalid cube #{idx}")
-            continue
-        if t[2]-f[2] < 0.1:
-            errors.append(f"{item}: flat geometry #{idx}")
-        for face_name in ("north", "south", "east", "west", "up", "down"):
-            data = cube.get("faces", {}).get(face_name, {})
-            uv = data.get("uv")
-            if data.get("texture") != "#atlas" or not isinstance(uv, list) or len(uv)!=4:
-                errors.append(f"{item}: missing UV/atlas in cube #{idx} {face_name}")
-                continue
-            if not (0 <= uv[0] < uv[2] <= 16 and 0 <= uv[1] < uv[3] <= 16):
-                errors.append(f"{item}: UV out of bounds #{idx}")
-            # UVs must remain strictly inside one material tile (4x4 model UV units).
-            if int(uv[0] // 4) != int((uv[2]-0.0001) // 4) or int(uv[1] // 4) != int((uv[3]-0.0001) // 4):
-                errors.append(f"{item}: atlas tile bleeding in cube #{idx}")
+    model=json.loads(file.read_text(encoding="utf-8"))
+    expected="wendigosfrost:models/item/bb/"+item+".obj"
+    if model.get("loader")!="forge:obj" or model.get("model")!=expected:
+        errors.append(item+": expected original Forge OBJ mesh")
+    for extension in ("obj","mtl"):
+        if not (root/"assets/wendigosfrost/models/item/bb"/(item+"."+extension)).is_file():
+            errors.append(item+": missing BB artifact ."+extension)
 
 if errors:
     print("\n".join(errors))

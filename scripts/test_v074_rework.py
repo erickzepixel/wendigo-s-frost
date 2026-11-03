@@ -28,31 +28,18 @@ for id in ids:
         assert set(obj["textures"])=={"t0","t1","t2","t3","t4"}
         references.append(obj["textures"]["t0"])
         continue
-    assert obj.get("parent")=="minecraft:block/block",id
-    path=obj["textures"]["atlas"]
-    assert path=="wendigosfrost:item/rework/"+id,(id,path)
-    references.append(path)
-    elements=obj["elements"]
-    assert len(elements)>=50,(id,len(elements))
-    for box in elements:
-        assert all(0<=a<b<=16 for a,b in zip(box["from"],box["to"])),id
-        for face in box["faces"].values():
-            assert face["texture"]=="#atlas",id
-            u,v,ur,vr=face["uv"]
-            assert 0<=u<ur<=16 and 0<=v<vr<=16,id
+    assert obj["loader"]=="forge:obj",id
+    assert obj["model"]=="wendigosfrost:models/item/bb/"+id+".obj",id
+    source=Path("src/main/resources/assets/wendigosfrost/models/item/bb")/(id+".obj")
+    assert source.exists() and source.stat().st_size>500,id
+    assert source.read_text().count("f ")>=24,id
+    references.append(obj["model"])
 assert len(set(references))==len(ids)
-axe=json.loads((base/"thaw_axe.json").read_text())
-parts=axe["elements"]
-# Visual-semantic check, not merely triangle count: distinct wide head and
-# vertical shaft, broad sharpened edge to the left and hammer poll to the right.
-handle=[p for p in parts if p["from"][1]<5 and 7<p["from"][0]<9]
-blade=[p for p in parts if p["from"][0]<4 and p["from"][1]>8.5]
-poll=[p for p in parts if p["to"][0]>11 and p["from"][1]>10]
-assert len(handle)>=10,len(handle)
-assert len(blade)>=20,len(blade)
-assert len(poll)>=5,len(poll)
-assert min(p["from"][0] for p in blade)<2.2
-assert max(p["to"][0] for p in parts)>11
+# The newly provided original axe features a recognizable complete blade.
+axe=Path("src/main/resources/assets/wendigosfrost/models/item/bb/thaw_axe.obj").read_text()
+assert "g handle_0" in axe and "g head_metal_" in axe
+assert "g blade_left_" in axe and "g blade_right_" in axe
+assert "g spike_top_" in axe
 renderer=(src/"client/WendigoRenderer.java").read_text()
 detail=(src/"client/WendigoPhaseDetails.java").read_text()
 entity=(src/"entity/WendigoEntity.java").read_text()

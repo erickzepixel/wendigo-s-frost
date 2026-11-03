@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.7.6 (Ovo e Manual Blockbench)
+name: Publicar Wendigo's Frost 0.7.6 (18 Blockbench Assets)
 on:
   push:
-    branches: [v0.7.6-modelos-ovo-manual]
+    branches: [v0.7.6-18-modelos-bb]
   workflow_dispatch:
 permissions:
   contents: write
@@ -71,6 +71,8 @@ jobs:
           PY
       - name: Validar ovo e manual Blockbench originais e interface funcional
         run: python3 scripts/test_v076_egg_manual.py
+      - name: Testar 18 modelos originais Blockbench e geometrias OBJ
+        run: python3 scripts/test_v076_18_blockbench_models.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
@@ -91,32 +93,8 @@ jobs:
               print('Rig de 10 ossos presente no JAR')
               print('GLB original e identico ao arquivo 3D criado: SHA256='+digest)
           PY
-      - name: Validar modelos e textura dentro do JAR
-        run: |
-          python3 - <<'PY'
-          import json,zipfile
-          path='build/libs/wendigosfrost-0.7.6.jar'
-          base='assets/wendigosfrost/'
-          with zipfile.ZipFile(path) as jar:
-              names=set(jar.namelist())
-              for item in ('wendigo_horn','frozen_heart','frost_ward'):
-                  name=base+'models/item/'+item+'.json'
-                  assert name in names, 'Modelo ausente no JAR: '+name
-                  model=json.loads(jar.read(name))
-                  assert len(model['elements'])>=30
-              tex=base+'textures/item/relic_atlas.png'
-              assert tex in names, 'Textura customizada nao foi incluida no JAR'
-              signature=jar.read(tex)
-              assert signature[:4] == bytes([137,80,78,71]), 'PNG invalido'
-              ward_texture=base+'textures/item/frost_ward_atlas.png'
-              assert ward_texture in names, 'Textura dedicada ao amuleto ausente'
-              png=jar.read(ward_texture)
-              assert png[:4] == bytes([137,80,78,71]), 'Textura do amuleto invalida'
-              from struct import unpack
-              assert unpack('>II',png[16:24]) == (256,256), 'Atlas do amuleto com tamanho incorreto'
-              print('Amuleto: atlas 256x256 presente e valido')
-              print('OK: 3 modelos 3D + textura PNG no JAR')
-          PY
+      - name: Conferir 18 OBJ, texturas Blockbench e blocos no JAR
+        run: python3 scripts/test_v076_18_blockbench_models.py build/libs/wendigosfrost-0.7.6.jar
       - name: Verificar texturas e estruturas da expansao no JAR
         run: |
           python3 - <<'PY'
@@ -148,79 +126,18 @@ jobs:
           PY
       - name: Validar modelos NBT de estruturas e loot dentro do JAR
         run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.6.jar
-      - name: Verificar modelos, texturas e armaduras no JAR
+      - name: Garantir classes e texturas da armadura original no JAR
         run: |
           python3 - <<'PY'
-          import zipfile,struct,json
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as z:
-              names=set(z.namelist())
-              for id in ('hunter_helmet','hunter_chestplate','hunter_leggings',
-                         'hunter_boots','rune_spear','thaw_axe','thermal_flare',
-                         'heartbreaker_blade','runic_torch'):
-                  p='assets/wendigosfrost/textures/item/'+id+'.png'
-                  assert p in names,p
-                  img=z.read(p)
-                  assert img[:8]==bytes([137,80,78,71,13,10,26,10])
-                  assert struct.unpack('>II',img[16:24])==(32,32)
-              for layer in (1,2):
-                  p=f'assets/wendigosfrost/textures/models/armor/vigilia_layer_{layer}.png'
-                  assert p in names,p
-                  assert struct.unpack('>II',z.read(p)[16:24])==(128,128)
-              p='assets/wendigosfrost/textures/item/frost_relic_master.png'
-              assert p in names and struct.unpack('>II',z.read(p)[16:24])==(256,256)
-              model=json.loads(z.read('assets/wendigosfrost/models/item/frozen_heart.json'))
-              assert len(model['elements'])>=400
-              horn=json.loads(z.read('assets/wendigosfrost/models/item/wendigo_horn.json'))
-              assert len(horn['elements'])>=250
-              for item in ('hunter_helmet','hunter_chestplate','hunter_leggings','hunter_boots',
-                           'rune_spear','thaw_axe','heartbreaker_blade','runic_torch','winter_sigil'):
-                  m=json.loads(z.read('assets/wendigosfrost/models/item/'+item+'.json'))
-                  if item.startswith('hunter_'):
-                      assert m['parent']=='builtin/entity' and 'elements' not in m
-                  else:
-                      assert m['textures']['atlas']=='wendigosfrost:item/rework/'+item
-                      assert len(m['elements'])>=50
-              for path in (
-                  'com/exemplo/wendigosfrost/client/WendigoPhaseDetails.class',
-                  'com/exemplo/wendigosfrost/event/CombatEquipmentEvents.class',
-                  'com/exemplo/wendigosfrost/item/HunterArmorMaterial.class',
-                  'com/exemplo/wendigosfrost/client/WendigoHunterArmorModel.class'):
-                  assert path in names,path
-              print('PASS: 9 item sprites, 2 armor layers, 3D heart and combat classes')
-          PY
-      - name: Validar 18 texturas PNG unicas e atlas de 256px no JAR
-        run: |
-          python3 - <<'PY'
-          import hashlib,zipfile,struct,json
-          ids=('frostbloom_seeds','frostbloom_crystal','frozen_heart',
-               'wendigo_horn','frost_ward','guide_book','whisper_shard',
-               'lost_page','winter_sigil','hunter_helmet','hunter_chestplate',
-               'hunter_leggings','hunter_boots','rune_spear','thaw_axe',
-               'thermal_flare','heartbreaker_blade','runic_torch')
+          import zipfile
           with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as jar:
-              paths=set(jar.namelist())
-              hashes=set()
-              for item in ids:
-                  texture=f'assets/wendigosfrost/textures/item/rework/{item}.png'
-                  assert texture in paths,texture
-                  raw=jar.read(texture)
-                  assert raw[:8]==bytes([137,80,78,71,13,10,26,10]),texture
-                  assert struct.unpack('>II',raw[16:24])==(256,256),texture
-                  hashes.add(hashlib.sha256(raw).hexdigest())
-                  model=f'assets/wendigosfrost/models/item/{item}.json'
-                  assert model in paths,model
-                  obj=json.loads(jar.read(model))
-                  if item.startswith('hunter_'):
-                      assert obj['parent']=='builtin/entity' and 'elements' not in obj
-                  elif item=='guide_book':
-                      assert obj['parent']=='minecraft:block/block'
-                      assert len(obj['elements'])==5
-                      assert len(obj['textures'])==5
-                  else:
-                      assert obj['textures']['atlas']=='wendigosfrost:item/rework/'+item
-                      assert len(obj['elements'])>=50
-              assert len(hashes)==len(ids),'Duplicate texture PNG: assets are not independently authored'
-              print('PASS: 18 different 256x256 textures + 18 independently linked 3D models in Forge JAR')
+              names=set(jar.namelist())
+              for cls in ('WendigoHunterArmorModel','VigilArmorMesh','VigilArmorItemRenderer'):
+                  assert 'com/exemplo/wendigosfrost/client/'+cls+'.class' in names
+              for item in ('elmo','peitoral','calcas','botas'):
+                  assert 'assets/wendigosfrost/armor_bb/'+item+'.json' in names
+                  assert 'assets/wendigosfrost/textures/models/armor/vigilia_bb_'+item+'.png' in names
+              print('PASS: 4 original wearable Blockbench armor meshes preserved')
           PY
       - name: Conferir 4 modelos BB e PNGs originais no JAR
         run: |
@@ -284,12 +201,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.7.6-ovo-manual
+          TAG=v0.7.6-18-modelos-bb
           JAR=build/libs/wendigosfrost-0.7.6.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.6 — Ovo e Manual Interativo (prévia)" \
-              --notes "Wendigo's Frost 0.7.6 (versao inalterada): modelo original Blockbench com 5 cubos e 4 texturas para o Ovo de Invocacao do Wendigo, preservando a invocacao real Forge. Manual do Sobrevivente com modelo original Blockbench de 5 cubos e 5 texturas, e GUI funcional com 13 capitulos (indice, navegacao, rolagem, comandos, rituais, Frostbloom, equipamentos e Wendigo 500 HP), aberta com botao direito. Texturas PNG originais e UVs preservados e conferidos dentro do JAR. Elmo, peitoral, calcas, botas, mundo e demais mecanicas permanecem inalterados. Versao mod_version continua exatamente 0.7.6; release publicada com tag propria para manter o JAR anterior disponivel. Compilacao CI aprovada; teste visual in-game pendente."
+              --title "Wendigo's Frost 0.7.6 — 18 Modelos Blockbench (prévia)" \
+              --notes "Wendigo's Frost 0.7.6 (sem alterar o numero): 18 modelos Blockbench originais para 5 blocos (Tijolos de Gelo Ancestral, Totem dos Cacadores, Lanterna de Almas, Pedestal das Geleiras, Pedra dos Sussurros) e 13 itens (Lanca Runica, Machado do Degelo, Espada do Coracao Partido, Tocha Runica, Amuleto, Chifre de Wendigo, Coracao Congelado, Cristal Frostbloom, Fragmento do Sussurro, Pagina do Cacador, Selo do Inverno, Sementes de Flor-Gelo e Sinalizador Termico). Meshes Forge OBJ permitem preservar rotacoes originais e faces UV; dez texturas PNG 64x64 originais usadas sem alteracoes. Modelos originais BB preservados para edicao. Blocos usam mesma geometria no inventario e no mundo; receitas, drops, vida do Wendigo 500 HP, ovo e manual interativo 0.7.6, armadura Blockbench permanecem. Testes CI validam fontes PNG e models no JAR; confirmar visual no cliente Minecraft antes de usar em mundo principal."
           fi
