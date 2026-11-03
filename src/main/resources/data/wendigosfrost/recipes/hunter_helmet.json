@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "wendigosfrost:whisper_shard"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:hunter_helmet",
+    "count": 1
+  }
+}
