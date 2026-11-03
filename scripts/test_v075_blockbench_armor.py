@@ -18,8 +18,8 @@ src=Path("src/main/java/com/exemplo/wendigosfrost")
 inputs={
  "elmo":("hunter_helmet",8,6,"4509b3f0cb469947dacf4149c04780fd34cc62773896e89206bc21b34d67eb4a"),
  "peitoral":("hunter_chestplate",9,5,"fe8370d8b080d83b857ed338f2ddd258e237eaa0af8f2e329858ac50a6c0ed57"),
- "calcas":("hunter_leggings",9,3,"69d3e09a37755eecbc08797ca5c587b3fb23e7ef61f93b7d53c81ee9cece7913"),
- "botas":("hunter_boots",8,3,"9689cad97bf0c91edbe566202b43309939b25ecc05108ac451679641d42be73e")
+ "calcas":("hunter_leggings",9,3,"f0540b4a3ac6e83b90088ebab686be51ff25e1d90feac5c9311b7b704a2ac382"),
+ "botas":("hunter_boots",8,3,"995a4986cc099c530c748287db926aba1ceaebd77d2c7f2272fc98a01c82ffd3")
 }
 for key,(item,nc,nt,digest) in inputs.items():
     source=root/(key+"_da_vigilia.bbmodel")
