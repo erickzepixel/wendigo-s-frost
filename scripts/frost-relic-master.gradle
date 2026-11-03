@@ -1,6 +1,6 @@
 // 256x256 author-created master atlas for all detailed 3D relics and equipment.
 // The 16 hand-selected materials are painted as 4x4 mineral/skin/metal tiles.
-tasks.named('processResources', ProcessResources).configure {
+tasks.named('processResources') {
     doLast {
         def dir=new File(destinationDir,'assets/wendigosfrost/textures/item')
         dir.mkdirs()
