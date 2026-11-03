@@ -127,7 +127,8 @@ jobs:
           with zipfile.ZipFile('build/libs/wendigosfrost-0.7.2.jar') as z:
               names=set(z.namelist())
               for id in ('hunter_helmet','hunter_chestplate','hunter_leggings',
-                         'hunter_boots','rune_spear','thaw_axe','thermal_flare'):
+                         'hunter_boots','rune_spear','thaw_axe','thermal_flare',
+                         'heartbreaker_blade','runic_torch'):
                   p='assets/wendigosfrost/textures/item/'+id+'.png'
                   assert p in names,p
                   img=z.read(p)
@@ -146,7 +147,7 @@ jobs:
                   'com/exemplo/wendigosfrost/event/CombatEquipmentEvents.class',
                   'com/exemplo/wendigosfrost/item/HunterArmorMaterial.class'):
                   assert path in names,path
-              print('PASS: 7 item sprites, 2 armor layers, 3D heart and combat classes')
+              print('PASS: 9 item sprites, 2 armor layers, 3D heart and combat classes')
           PY
       - name: Publicar ou atualizar release de teste
         env:
@@ -159,5 +160,5 @@ jobs:
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
               --title "Wendigo's Frost 0.7.2 — Caçadores da Vigília — Coração e Espinhos (prévia)" \
-              --notes "Wendigo's Frost 0.7.2: correcao do /locate structure (pasta structure/ singular do Minecraft 1.20.1); coracao glacial exposto e pulsante na fase bípede, olhos vermelhos e nove espinhos de gelo crescentes na fase tres. Coração Congelado 3D remodelado. Nova armadura Vigília de quatro peças, lança rúnica, machado do degelo e sinalizador térmico com receitas, bonus anti-Wendigo, sprites e texturas de armadura próprias. Modelo GLB original preservado. Compilacao validada; efeitos visuais e estruturas requerem teste dentro do Minecraft."
+              --notes "Wendigo's Frost 0.7.2: correcao do /locate structure (pasta structure/ singular do Minecraft 1.20.1); coracao glacial exposto e pulsante na fase bípede, olhos vermelhos e nove espinhos de gelo crescentes na fase tres. Coração Congelado 3D remodelado. Armadura Vigília de quatro peças, lança rúnica, machado do degelo, Espada do Coração Partido, sinalizador térmico e tocha rúnica com receitas, bonus anti-Wendigo, sprites e texturas de armadura próprias. Modelo GLB original preservado. Compilacao validada; efeitos visuais e estruturas requerem teste dentro do Minecraft."
           fi
