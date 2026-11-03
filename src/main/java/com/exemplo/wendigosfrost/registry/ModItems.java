@@ -53,5 +53,28 @@ public final class ModItems {
             "winter_sigil", () -> new com.exemplo.wendigosfrost.item.WinterSigilItem(
                 new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
 
+    // New hunter equipment: craftable before the boss is defeated.
+    public static final RegistryObject<Item> HUNTER_HELMET = ITEMS.register("hunter_helmet",
+        () -> new com.exemplo.wendigosfrost.item.HunterArmorItem(
+            net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> HUNTER_CHESTPLATE = ITEMS.register("hunter_chestplate",
+        () -> new com.exemplo.wendigosfrost.item.HunterArmorItem(
+            net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> HUNTER_LEGGINGS = ITEMS.register("hunter_leggings",
+        () -> new com.exemplo.wendigosfrost.item.HunterArmorItem(
+            net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> HUNTER_BOOTS = ITEMS.register("hunter_boots",
+        () -> new com.exemplo.wendigosfrost.item.HunterArmorItem(
+            net.minecraft.world.item.ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> RUNE_SPEAR = ITEMS.register("rune_spear",
+        () -> new com.exemplo.wendigosfrost.item.RuneSpearItem(
+            new Item.Properties().durability(380).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> THAW_AXE = ITEMS.register("thaw_axe",
+        () -> new com.exemplo.wendigosfrost.item.ThawAxeItem(
+            new Item.Properties().durability(280).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> THERMAL_FLARE = ITEMS.register("thermal_flare",
+        () -> new com.exemplo.wendigosfrost.item.ThermalFlareItem(
+            new Item.Properties().stacksTo(16).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+
     private ModItems() {}
 }
