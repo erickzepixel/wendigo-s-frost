@@ -13,7 +13,7 @@ tasks.named('processResources', ProcessResources).configure {
         final String BONE = 'minecraft:bone_block'
         final String AIR = 'minecraft:air'
         final String CHEST = 'minecraft:chest'
-        def dir = new File(destinationDir, 'data/wendigosfrost/structures')
+        def dir = new File(destinationDir, 'data/wendigosfrost/structure')
         dir.mkdirs()
 
         def makeShrine = {
