@@ -12,7 +12,8 @@ reg=(java/"registry/ModItems.java").read_text()
 creative=(java/"registry/ModCreativeTabs.java").read_text()
 for id in ids:
     obj=json.loads((assets/"models/item"/(id+".json")).read_text())
-    assert obj["textures"]["layer0"]=="wendigosfrost:item/"+id, id
+    assert obj["textures"]["atlas"]=="wendigosfrost:item/frost_relic_master", id
+    assert len(obj["elements"]) >= 50, id
     rec=json.loads((data/"recipes"/(id+".json")).read_text())
     assert rec["type"]=="minecraft:crafting_shaped", id
     assert rec["result"]["item"]=="wendigosfrost:"+id, id
@@ -28,7 +29,7 @@ for javafile in ("item/HunterArmorMaterial.java","item/HunterArmorItem.java",
     assert (java/javafile).exists(),javafile
 heart=json.loads((assets/"models/item/frozen_heart.json").read_text())
 assert len(heart["elements"]) >= 40
-assert heart["textures"]["atlas"]=="wendigosfrost:item/frozen_heart_atlas"
+assert heart["textures"]["atlas"]=="wendigosfrost:item/frost_relic_master"
 detail=(java/"client/WendigoPhaseDetails.java").read_text()
 renderer=(java/"client/WendigoRenderer.java").read_text()
 entity=(java/"entity/WendigoEntity.java").read_text()
