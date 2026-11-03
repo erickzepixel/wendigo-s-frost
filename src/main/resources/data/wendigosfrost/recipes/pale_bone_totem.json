@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    " B ",
+    " D "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bone_block"
+    },
+    "D": {
+      "item": "wendigosfrost:ancient_frost_bricks"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:pale_bone_totem",
+    "count": 1
+  }
+}
