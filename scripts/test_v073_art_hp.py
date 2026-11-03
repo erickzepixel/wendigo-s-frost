@@ -27,7 +27,11 @@ counts={}
 for id in ids:
     file=asset/"models/item"/f"{id}.json"
     model=json.loads(file.read_text(encoding="utf-8"))
-    assert model["textures"]["atlas"]=="wendigosfrost:item/rework/"+id, id
+    if id.startswith("hunter_"):
+        assert model["parent"]=="builtin/entity" and "elements" not in model,id
+        counts[id]="original BB mesh"
+        continue
+    assert model["textures"]["atlas"]=="wendigosfrost:item/rework/"+id,id
     parts=model["elements"]
     minimum=250 if id in ("frozen_heart","wendigo_horn") else 50
     assert len(parts)>=minimum, (id,len(parts))
