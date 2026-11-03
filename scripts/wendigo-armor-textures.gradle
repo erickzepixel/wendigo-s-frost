@@ -1,7 +1,7 @@
 // Premium bone-and-glacier 128x128 worn armor atlas, matching the new real
 // humanoid armor geometry (antlers, skull mask, ribs, talons). Register this
 // AFTER the original sprite generator to replace its old flat 64x32 layers.
-tasks.named('processResources', ProcessResources).configure {
+tasks.named('processResources') {
     doLast {
         def dir=new File(destinationDir,'assets/wendigosfrost/textures/models/armor')
         dir.mkdirs()
