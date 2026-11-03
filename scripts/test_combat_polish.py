@@ -24,7 +24,7 @@ assert "level.sendParticles" in shock and "ParticleTypes.SNOWFLAKE" in shock, "s
 assert 'baseMeleeDamage", 5.5' in config
 assert "Math.min(ModConfig.WENDIGO_DAMAGE.get(), 7.0)" in entity
 assert ".add(Attributes.ARMOR, 4)" in entity
-assert model["textures"]["atlas"]=="wendigosfrost:item/frost_ward_atlas"
+assert model["textures"]["atlas"]=="wendigosfrost:item/rework/frost_ward"
 assert "frost_ward_atlas.png" in build and "256, 256" in build
 assert "public boolean isFoil(" in ward
 for lang in ("pt_br","en_us"):
