@@ -15,8 +15,9 @@ for id in ids:
     if id.startswith("hunter_"):
         assert obj["parent"]=="builtin/entity" and "elements" not in obj,id
     else:
-        assert obj["textures"]["atlas"]=="wendigosfrost:item/rework/"+id,id
-        assert len(obj["elements"])>=50,id
+        assert obj["loader"]=="forge:obj",id
+        assert obj["model"]=="wendigosfrost:models/item/bb/"+id+".obj",id
+        assert (assets/"models/item/bb"/(id+".obj")).is_file(),id
     rec=json.loads((data/"recipes"/(id+".json")).read_text())
     assert rec["type"]=="minecraft:crafting_shaped", id
     assert rec["result"]["item"]=="wendigosfrost:"+id, id
@@ -31,8 +32,8 @@ for javafile in ("item/HunterArmorMaterial.java","item/HunterArmorItem.java",
                  "client/WendigoPhaseDetails.java"):
     assert (java/javafile).exists(),javafile
 heart=json.loads((assets/"models/item/frozen_heart.json").read_text())
-assert len(heart["elements"]) >= 40
-assert heart["textures"]["atlas"]=="wendigosfrost:item/rework/frozen_heart"
+assert heart["loader"]=="forge:obj"
+assert heart["model"]=="wendigosfrost:models/item/bb/frozen_heart.obj"
 detail=(java/"client/WendigoPhaseDetails.java").read_text()
 renderer=(java/"client/WendigoRenderer.java").read_text()
 entity=(java/"entity/WendigoEntity.java").read_text()
