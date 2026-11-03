@@ -207,6 +207,6 @@ jobs:
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.6 — 18 Modelos Blockbench (prévia)" \ \
+              --title "Wendigo's Frost 0.7.6 — 18 Modelos Blockbench (prévia)" \
               --notes "Wendigo's Frost 0.7.6 (sem alterar o numero): 18 modelos Blockbench originais para 5 blocos (Tijolos de Gelo Ancestral, Totem dos Cacadores, Lanterna de Almas, Pedestal das Geleiras, Pedra dos Sussurros) e 13 itens (Lanca Runica, Machado do Degelo, Espada do Coracao Partido, Tocha Runica, Amuleto, Chifre de Wendigo, Coracao Congelado, Cristal Frostbloom, Fragmento do Sussurro, Pagina do Cacador, Selo do Inverno, Sementes de Flor-Gelo e Sinalizador Termico). Meshes Forge OBJ permitem preservar rotacoes originais e faces UV; dez texturas PNG 64x64 originais usadas sem alteracoes. Modelos originais BB preservados para edicao. Blocos usam mesma geometria no inventario e no mundo; receitas, drops, vida do Wendigo 500 HP, ovo e manual interativo 0.7.6, armadura Blockbench permanecem. Testes CI validam fontes PNG e models no JAR; confirmar visual no cliente Minecraft antes de usar em mundo principal."
           fi
