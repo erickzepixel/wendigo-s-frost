@@ -1,0 +1,15 @@
+{
+  "name": "wendigosfrost:hunter_cairn",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wendigosfrost:hunter_cairn",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}
