@@ -32,6 +32,13 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.WHISPER_SHARD.get());
                 output.accept(ModItems.LOST_PAGE.get());
                 output.accept(ModItems.WINTER_SIGIL.get());
+                output.accept(ModItems.HUNTER_HELMET.get());
+                output.accept(ModItems.HUNTER_CHESTPLATE.get());
+                output.accept(ModItems.HUNTER_LEGGINGS.get());
+                output.accept(ModItems.HUNTER_BOOTS.get());
+                output.accept(ModItems.RUNE_SPEAR.get());
+                output.accept(ModItems.THAW_AXE.get());
+                output.accept(ModItems.THERMAL_FLARE.get());
                 output.accept(ModItems.WENDIGO_SPAWN_EGG.get());
             })
             .build());
