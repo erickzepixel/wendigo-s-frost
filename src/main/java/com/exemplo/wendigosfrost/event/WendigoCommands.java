@@ -30,7 +30,6 @@ public final class WendigoCommands {
                 ServerPlayer p = ctx.getSource().getPlayerOrException();
                 var stack = new net.minecraft.world.item.ItemStack(
                     com.exemplo.wendigosfrost.registry.ModItems.GUIDE_BOOK.get());
-                com.exemplo.wendigosfrost.item.GuideBookItem.prepare(stack);
                 if (!p.getInventory().add(stack)) p.drop(stack, false);
                 ctx.getSource().sendSuccess(() -> Component.literal("Manual do Sobrevivente recebido!"), false);
                 return 1;
