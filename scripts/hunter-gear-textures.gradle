@@ -63,7 +63,7 @@ tasks.named('processResources', ProcessResources).configure {
         def atlas=new java.awt.image.BufferedImage(128,128,java.awt.image.BufferedImage.TYPE_INT_ARGB)
         def rng=new java.util.Random(7012026L)
         for(int y=0;y<128;y++) for(int x=0;x<128;x++){
-            int n=(y/32)*4+x/32
+            int n=y.intdiv(32)*4+x.intdiv(32)
             def p=colors[n]
             int u=x%32,v=y%32
             int noise=rng.nextInt(21)-10
