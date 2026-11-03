@@ -32,12 +32,12 @@ tasks.named('processResources') {
             int fleck=((u*13+v*23+cell*17)%47<3)?22:0
             int fissure=(((u*7+v*11+cell*9)%73)<3)?-29:0
             int bevel=(u<3||v<3)?19:((u>60||v>60)?-23:0)
-            double vein=Math.sin(u*.23+Math.sin(v*.3)*2.1 +cell*.7)
-            int grain=(int)(vein*8+Math.cos(v*.19)*5)
+            double vein=Math.sin(u*0.23+Math.sin(v*0.3)*2.1 +cell*0.7)
+            int grain=(int)(vein*8+Math.cos(v*0.19)*5)
             if(cell==3||cell==4||cell==10||cell==12) {
                 if((u*3+v*7+cell*13)%41<3) {fleck+=41;fissure=0}
             }
-            if(cell==5||cell==6||cell==11) grain+=(int)(Math.sin(u*.39+v*.21)*12)
+            if(cell==5||cell==6||cell==11) grain+=(int)(Math.sin(u*0.39+v*0.21)*12)
             int red=clamp(rgb[0]+fleck+fissure+bevel+grain)
             int green=clamp(rgb[1]+fleck+fissure+bevel+grain)
             int blue=clamp(rgb[2]+fleck+fissure+bevel+grain)
