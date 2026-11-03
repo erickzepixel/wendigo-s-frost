@@ -215,8 +215,6 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
         drawBone(0,pose);
         if(stand > 0f)
             WendigoPhaseDetails.drawHeart(pose,stand,t);
-        if(entity.getBossPhase() >= 3)
-            WendigoPhaseDetails.drawSpines(pose,entity.getThirdPhaseGrowth(partialTick));
 
         pose.pushPose();
         float headYaw = Mth.clamp(
@@ -229,8 +227,6 @@ public final class WendigoRenderer extends EntityRenderer<WendigoEntity> {
         pose.mulPose(Axis.ZP.rotationDegrees(headYaw));
         pose.translate(-2.0f, 0f, -3.19f);
         drawBone(1,pose);
-        if(entity.getBossPhase() >= 3)
-            WendigoPhaseDetails.drawRedEyes(pose,t);
         pose.popPose();
 
         frontLeg(pose,true,t,speed,locomotion,stand,attack,roar,stomp);
