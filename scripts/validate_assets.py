@@ -51,7 +51,8 @@ for item in ("wendigo_horn", "frozen_heart", "frost_ward"):
         continue
     model = json.loads(file.read_text(encoding="utf-8"))
     expected_atlas = ("wendigosfrost:item/frost_ward_atlas" if item == "frost_ward"
-                      else "wendigosfrost:item/relic_atlas")
+                      else ("wendigosfrost:item/frozen_heart_atlas" if item == "frozen_heart"
+                            else "wendigosfrost:item/relic_atlas"))
     if model.get("textures", {}).get("atlas") != expected_atlas:
         errors.append(f"{item}: wrong texture atlas reference")
     cubes = model.get("elements", [])

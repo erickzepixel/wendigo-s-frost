@@ -61,5 +61,20 @@
   "screen.wendigosfrost.story_2": "O Wendigo caça em quatro patas, mas se ergue quando ferido. Seu rugido anuncia o frio. Corra, lute ou procure as ruínas dos antigos caçadores.",
   "screen.wendigosfrost.story_2b": "Explore santuários, leia as pedras rúnicas e encontre o ritual de libertação. Seu Manual do Sobrevivente está no inventário.",
   "screen.wendigosfrost.next": "Continuar",
-  "screen.wendigosfrost.enter": "Entrar no mundo"
+  "screen.wendigosfrost.enter": "Entrar no mundo",
+  "item.wendigosfrost.hunter_helmet": "Elmo da Vigília",
+  "item.wendigosfrost.hunter_chestplate": "Peitoral da Vigília",
+  "item.wendigosfrost.hunter_leggings": "Calças da Vigília",
+  "item.wendigosfrost.hunter_boots": "Botas da Vigília",
+  "item.wendigosfrost.rune_spear": "Lança Rúnica do Caçador",
+  "item.wendigosfrost.thaw_axe": "Machado do Degelo",
+  "item.wendigosfrost.thermal_flare": "Sinalizador Térmico",
+  "tooltip.wendigosfrost.rune_spear": "Dano adicional contra o coração exposto do Wendigo.",
+  "tooltip.wendigosfrost.thaw_axe": "Enfraquece o gelo do Wendigo e interrompe habilidades.",
+  "tooltip.wendigosfrost.hunter_armor": "Cada peça reduz 8% do dano do Wendigo (até 32%).",
+  "tooltip.wendigosfrost.thermal_flare": "Emite uma onda térmica que incendeia o Wendigo próximo.",
+  "item.wendigosfrost.heartbreaker_blade": "Espada do Coração Partido",
+  "item.wendigosfrost.runic_torch": "Tocha Rúnica da Vigília",
+  "tooltip.wendigosfrost.heartbreaker_blade": "Mais dano contra o Wendigo enfurecido na fase 3.",
+  "tooltip.wendigosfrost.runic_torch": "Luz rúnica que reduz a velocidade e a força do Wendigo por 5 segundos."
 }

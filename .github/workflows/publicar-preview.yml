@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.7.1 (Ruínas Localizáveis)
+name: Publicar Wendigo's Frost 0.7.2 (Ruínas Localizáveis)
 on:
   push:
-    branches: [v0.7.1-particulas-estruturas-locate]
+    branches: [v0.7.2-cacadores-coracao-espinhos]
   workflow_dispatch:
 permissions:
   contents: write
@@ -41,15 +41,17 @@ jobs:
         run: python3 scripts/test_lore_expansion.py
       - name: Validar estruturas localizaveis, sementes e particulas
         run: python3 scripts/test_structure_registration.py
+      - name: Verificar equipamentos, coracao, terceira fase e /locate
+        run: python3 scripts/test_v072_hunters.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.7.1.jar
+        run: test -f build/libs/wendigosfrost-0.7.2.jar
       - name: Verificar GLB original dentro do JAR
         run: |
           python3 - <<'PY'
           import zipfile,hashlib
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.1.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.2.jar') as jar:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
@@ -65,7 +67,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.7.1.jar'
+          path='build/libs/wendigosfrost-0.7.2.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -91,7 +93,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import zipfile,struct
-          jar='build/libs/wendigosfrost-0.7.1.jar'
+          jar='build/libs/wendigosfrost-0.7.2.jar'
           tex=[
             ('block','ancient_frost_bricks'),('block','whispering_runestone'),
             ('block','soul_frost_lantern'),('block','soul_frost_lantern_frame'),
@@ -117,17 +119,46 @@ jobs:
               print('OK: oito PNGs 32x32, duas ruinas e tela de introducao no JAR')
           PY
       - name: Validar modelos NBT de estruturas e loot dentro do JAR
-        run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.1.jar
+        run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.2.jar
+      - name: Verificar modelos, texturas e armaduras no JAR
+        run: |
+          python3 - <<'PY'
+          import zipfile,struct,json
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.2.jar') as z:
+              names=set(z.namelist())
+              for id in ('hunter_helmet','hunter_chestplate','hunter_leggings',
+                         'hunter_boots','rune_spear','thaw_axe','thermal_flare',
+                         'heartbreaker_blade','runic_torch'):
+                  p='assets/wendigosfrost/textures/item/'+id+'.png'
+                  assert p in names,p
+                  img=z.read(p)
+                  assert img[:8]==bytes([137,80,78,71,13,10,26,10])
+                  assert struct.unpack('>II',img[16:24])==(32,32)
+              for layer in (1,2):
+                  p=f'assets/wendigosfrost/textures/models/armor/vigilia_layer_{layer}.png'
+                  assert p in names,p
+                  assert struct.unpack('>II',z.read(p)[16:24])==(64,32)
+              p='assets/wendigosfrost/textures/item/frozen_heart_atlas.png'
+              assert p in names and struct.unpack('>II',z.read(p)[16:24])==(128,128)
+              model=json.loads(z.read('assets/wendigosfrost/models/item/frozen_heart.json'))
+              assert len(model['elements'])>=40
+              for path in (
+                  'com/exemplo/wendigosfrost/client/WendigoPhaseDetails.class',
+                  'com/exemplo/wendigosfrost/event/CombatEquipmentEvents.class',
+                  'com/exemplo/wendigosfrost/item/HunterArmorMaterial.class'):
+                  assert path in names,path
+              print('PASS: 9 item sprites, 2 armor layers, 3D heart and combat classes')
+          PY
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.7.1-particulas-estruturas
-          JAR=build/libs/wendigosfrost-0.7.1.jar
+          TAG=v0.7.2-cacadores
+          JAR=build/libs/wendigosfrost-0.7.2.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.1 — Partículas, Ruínas Localizáveis e Sementes (prévia)" \
-              --notes "Wendigo's Frost 0.7.1: tres estruturas reais vanilla Jigsaw registradas para /locate structure (ancient_ice_shrine, hunter_cairn, frozen_sanctuary); cada uma contem bau com sementes Frostbloom garantidas por loot table. Novas particulas de ataques do Wendigo: garras com trilhas de gelo, rugido com cone de almas e pisada com aviso e onda de estilhacos. Os modelos NBT das estruturas sao gerados pelo Gradle e validados dentro do JAR. Forge 1.20.1, GeckoLib e TerraBlender. Compilacao automatica aprovada; ainda requer teste no jogo."
+              --title "Wendigo's Frost 0.7.2 — Caçadores da Vigília — Coração e Espinhos (prévia)" \
+              --notes "Wendigo's Frost 0.7.2: correcao do /locate structure (pasta structure/ singular do Minecraft 1.20.1); coracao glacial exposto e pulsante na fase bípede, olhos vermelhos e nove espinhos de gelo crescentes na fase tres. Coração Congelado 3D remodelado. Armadura Vigília de quatro peças, lança rúnica, machado do degelo, Espada do Coração Partido, sinalizador térmico e tocha rúnica com receitas, bonus anti-Wendigo, sprites e texturas de armadura próprias. Modelo GLB original preservado. Compilacao validada; efeitos visuais e estruturas requerem teste dentro do Minecraft."
           fi

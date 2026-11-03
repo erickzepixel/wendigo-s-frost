@@ -1,0 +1,102 @@
+// All anti-Wendigo equipment and the revised 3D heart use original textures.
+// Generated reproducibly with the JDK during processResources. No external PNG library.
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        def folder=new File(destinationDir,'assets/wendigosfrost/textures/item')
+        def armorFolder=new File(destinationDir,'assets/wendigosfrost/textures/models/armor')
+        folder.mkdirs()
+        armorFolder.mkdirs()
+        def palettes=[
+          hunter_helmet:[84,162,195],hunter_chestplate:[62,135,183],
+          hunter_leggings:[67,115,155],hunter_boots:[52,103,145],
+          rune_spear:[128,229,244],thaw_axe:[226,149,83],
+          thermal_flare:[255,117,40],
+          heartbreaker_blade:[204,56,119],runic_torch:[80,216,224]
+        ]
+        def clamp={ int v -> Math.max(0,Math.min(255,v)) }
+        palettes.each { name,col ->
+            def img=new java.awt.image.BufferedImage(32,32,java.awt.image.BufferedImage.TYPE_INT_ARGB)
+            for(int y=0;y<32;y++) for(int x=0;x<32;x++) {
+                int grain=((x*13+y*29+name.length()*17)%17)-8
+                int alpha=0,red=col[0]+grain,green=col[1]+grain,blue=col[2]+grain
+                boolean metal=false,glow=false
+                if(name=='rune_spear' || name=='heartbreaker_blade') {
+                    boolean shaft=(Math.abs((x+y)-30)<=2 && x>5 && x<26 && y>5 && y<28)
+                    boolean tip=(Math.abs(x-y+2)<(name=='heartbreaker_blade'?6:5) && x>17 && x<30 && y<14)
+                    alpha=(shaft||tip) ? 255 : 0
+                    metal=shaft
+                    glow=tip
+                } else if(name=='runic_torch') {
+                    boolean shaft=(x>=14&&x<=18&&y>=11&&y<=28)
+                    boolean head=(x>=10&&x<=21&&y>=6&&y<=14)
+                    boolean flame=Math.abs(x-16)<(y<6?2:4)&&y>=2&&y<10
+                    alpha=(shaft||head||flame)?255:0
+                    metal=shaft||head;glow=flame
+                } else if(name=='thaw_axe') {
+                    boolean haft=(Math.abs(x+y-32)<=2 && x>5&&x<27)
+                    boolean blade=(x>15&&x<29&&y>3&&y<15 && Math.abs(x-y-15)<12)
+                    alpha=(haft||blade)?255:0;metal=haft;glow=blade
+                } else if(name=='thermal_flare') {
+                    double d=Math.hypot(x-16,y-16)
+                    alpha=d<12?255:0
+                    glow=d<6 || Math.abs(x-16)<2
+                    metal=d>9
+                } else {
+                    boolean shape
+                    if(name=='hunter_helmet') shape=(y>=5&&y<=21&&x>=8&&x<=24&&!(y>17&&x>11&&x<21))
+                    else if(name=='hunter_chestplate') shape=(y>=7&&y<=26&&x>=6&&x<=26&&(y>=12||x<10||x>22))
+                    else if(name=='hunter_leggings') shape=(y>=5&&y<=28&&x>=8&&x<=23&&!(y>13&&x>=14&&x<=17))
+                    else shape=(y>=16&&y<=27&&x>=7&&x<=25&&!(y<22&&x>12&&x<20))
+                    alpha=shape?255:0
+                    metal=x%6==0 || y%8==0
+                    glow=(x+y)%13==0 || (Math.abs(x-16)<=2&&y>10&&y<20)
+                }
+                if(metal){red+=32;green+=33;blue+=31}
+                if(glow){red=Math.max(red,105);green+=52;blue+=65}
+                int rgba=(alpha<<24)|(clamp(red)<<16)|(clamp(green)<<8)|clamp(blue)
+                img.setRGB(x,y,rgba)
+            }
+            javax.imageio.ImageIO.write(img,'png',new File(folder,name+'.png'))
+        }
+
+        // 4x4 palette of 32x32 atlas cells: crimson tissue, dark veins,
+        // spectral blue ice, ancient bone, silver and rune highlights.
+        def colors=[
+            [125,36,63],[71,26,52],[38,39,73],[177,59,75],
+            [50,143,211],[22,72,140],[175,238,253],[18,58,105],
+            [208,196,176],[112,109,117],[233,243,246],[85,231,246],
+            [166,189,214],[73,90,119],[128,44,102],[94,224,250]
+        ]
+        def atlas=new java.awt.image.BufferedImage(128,128,java.awt.image.BufferedImage.TYPE_INT_ARGB)
+        def rng=new java.util.Random(7012026L)
+        for(int y=0;y<128;y++) for(int x=0;x<128;x++){
+            int n=y.intdiv(32)*4+x.intdiv(32)
+            def p=colors[n]
+            int u=x%32,v=y%32
+            int noise=rng.nextInt(21)-10
+            int cracks=((u*7+v*11+n*3)%31<2) ? (n>=4&&n<=7?38:-32) : 0
+            int rim=u<2||v<2||u>29||v>29?-23:4
+            if(n==11 && Math.abs(u-v)<2){cracks+=65}
+            int r=clamp(p[0]+noise+cracks+rim)
+            int g=clamp(p[1]+noise+cracks+rim)
+            int b=clamp(p[2]+noise+cracks+rim)
+            atlas.setRGB(x,y,(0xff<<24)|(r<<16)|(g<<8)|b)
+        }
+        javax.imageio.ImageIO.write(atlas,'png',new File(folder,'frozen_heart_atlas.png'))
+
+        // A player-worn Vigília set with matching blue-steel and frost etching.
+        for(int layer=1;layer<=2;layer++){
+            def worn=new java.awt.image.BufferedImage(64,32,java.awt.image.BufferedImage.TYPE_INT_ARGB)
+            for(int y=0;y<32;y++) for(int x=0;x<64;x++){
+                int grain=((x*19+y*23)%13)-6
+                boolean edge=(x%8<1||y%8<1)
+                boolean rune=((x+y*2)%17<2)
+                int r=clamp((edge?114:62)+(rune?42:0)+grain)
+                int g=clamp((edge?183:124)+(rune?52:0)+grain)
+                int b=clamp((edge?212:172)+(rune?41:0)+grain)
+                worn.setRGB(x,y,(0xff<<24)|(r<<16)|(g<<8)|b)
+            }
+            javax.imageio.ImageIO.write(worn,'png',new File(armorFolder,'vigilia_layer_'+layer+'.png'))
+        }
+    }
+}

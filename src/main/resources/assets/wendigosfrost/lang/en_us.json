@@ -61,5 +61,20 @@
   "screen.wendigosfrost.story_2": "The Wendigo stalks on all fours, but rises when wounded. Its roar heralds the cold. Run, fight, or search for the hunters' ruins.",
   "screen.wendigosfrost.story_2b": "Explore sanctuaries, read the runestones and discover how to break the curse. Your survival guide is in your inventory.",
   "screen.wendigosfrost.next": "Continue",
-  "screen.wendigosfrost.enter": "Enter world"
+  "screen.wendigosfrost.enter": "Enter world",
+  "item.wendigosfrost.hunter_helmet": "Vigil Hunter Helmet",
+  "item.wendigosfrost.hunter_chestplate": "Vigil Hunter Chestplate",
+  "item.wendigosfrost.hunter_leggings": "Vigil Hunter Leggings",
+  "item.wendigosfrost.hunter_boots": "Vigil Hunter Boots",
+  "item.wendigosfrost.rune_spear": "Hunter's Runic Spear",
+  "item.wendigosfrost.thaw_axe": "Thawing Axe",
+  "item.wendigosfrost.thermal_flare": "Thermal Flare",
+  "tooltip.wendigosfrost.rune_spear": "Extra damage against the Wendigo's exposed heart.",
+  "tooltip.wendigosfrost.thaw_axe": "Burns the Wendigo and interrupts its ice abilities.",
+  "tooltip.wendigosfrost.hunter_armor": "Each piece reduces 8% of Wendigo damage (up to 32%).",
+  "tooltip.wendigosfrost.thermal_flare": "Releases a thermal burst that burns nearby Wendigos.",
+  "item.wendigosfrost.heartbreaker_blade": "Heartbreaker Blade",
+  "item.wendigosfrost.runic_torch": "Vigil Runic Torch",
+  "tooltip.wendigosfrost.heartbreaker_blade": "Deals extra damage to the enraged Wendigo in phase 3.",
+  "tooltip.wendigosfrost.runic_torch": "Runic light that weakens and slows Wendigos for 5 seconds."
 }

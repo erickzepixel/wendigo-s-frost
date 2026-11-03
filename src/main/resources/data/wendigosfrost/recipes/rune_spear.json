@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " I ",
+    "S  "
+  ],
+  "key": {
+    "C": {
+      "item": "wendigosfrost:frostbloom_crystal"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:rune_spear",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FCF",
+    " I ",
+    " S "
+  ],
+  "key": {
+    "F": {
+      "item": "wendigosfrost:whisper_shard"
+    },
+    "C": {
+      "item": "minecraft:soul_torch"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:runic_torch",
+    "count": 1
+  }
+}

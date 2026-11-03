@@ -6,12 +6,12 @@ from pathlib import Path
 import sys
 import zipfile
 
-jar=Path(sys.argv[1] if len(sys.argv)>1 else "build/libs/wendigosfrost-0.7.1.jar")
+jar=Path(sys.argv[1] if len(sys.argv)>1 else "build/libs/wendigosfrost-0.7.2.jar")
 names=("ancient_ice_shrine","hunter_cairn","frozen_sanctuary")
 with zipfile.ZipFile(jar) as z:
     included=set(z.namelist())
     for name in names:
-        asset="data/wendigosfrost/structures/"+name+".nbt"
+        asset="data/wendigosfrost/structure/"+name+".nbt"
         assert asset in included, "Missing Jigsaw template: "+asset
         raw=z.read(asset)
         assert raw[:2]==bytes([31,139]), "Template must be GZip NBT: "+name
