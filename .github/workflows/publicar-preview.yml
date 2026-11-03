@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.6.0 (Evolução Glacial)
+name: Publicar Wendigo's Frost 0.6.1 (Evolução Glacial)
 on:
   push:
-    branches: [rig-organico-v0.6.0]
+    branches: [combate-polido-v0.6.1]
   workflow_dispatch:
 permissions:
   contents: write
@@ -35,15 +35,17 @@ jobs:
         run: python3 scripts/test_summoning_structure.py
       - name: Verificar fases, criatividade, craft e loot
         run: python3 scripts/test_phase_forms.py
+      - name: Verificar combate, animacoes, dano e amuleto
+        run: python3 scripts/test_combat_polish.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.6.0.jar
+        run: test -f build/libs/wendigosfrost-0.6.1.jar
       - name: Verificar GLB original dentro do JAR
         run: |
           python3 - <<'PY'
           import zipfile,hashlib
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.6.0.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.6.1.jar') as jar:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
@@ -59,7 +61,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.6.0.jar'
+          path='build/libs/wendigosfrost-0.6.1.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -72,18 +74,25 @@ jobs:
               assert tex in names, 'Textura customizada nao foi incluida no JAR'
               signature=jar.read(tex)
               assert signature[:4] == bytes([137,80,78,71]), 'PNG invalido'
+              ward_texture=base+'textures/item/frost_ward_atlas.png'
+              assert ward_texture in names, 'Textura dedicada ao amuleto ausente'
+              png=jar.read(ward_texture)
+              assert png[:4] == bytes([137,80,78,71]), 'Textura do amuleto invalida'
+              from struct import unpack
+              assert unpack('>II',png[16:24]) == (256,256), 'Atlas do amuleto com tamanho incorreto'
+              print('Amuleto: atlas 256x256 presente e valido')
               print('OK: 3 modelos 3D + textura PNG no JAR')
           PY
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.6.0-rig-organico
-          JAR=build/libs/wendigosfrost-0.6.0.jar
+          TAG=v0.6.1-combate-polido
+          JAR=build/libs/wendigosfrost-0.6.1.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.6.0 — Rig Orgânico (prévia)" \
-              --notes "Wendigo's Frost 0.6.0 - Rig Organico. Modelo GLB original preservado integralmente, com 70.020 triangulos agora distribuidos em 10 ossos articulados GPU. Animacoes de caminhada quadrupede, corrida, movimentos de patas, ataques e rugido, e transicao corporal quadrupede para bipede ao chegar a 65 por cento de vida. Sem bibliotecas de animacao extras. Renderizador nativo, compile e hash validados; falta teste visual dentro do Minecraft. Rig por partes rigidas, com possiveis costuras visuais."
+              --title "Wendigo's Frost 0.6.1 — Combate Polido (prévia)" \
+              --notes "0.6.1 - Corrige postura bipede ereta e cabeca olhando para frente, animacoes sincronizadas de golpes, efeito vermelho ao sofrer dano e particulas dos poderes. Reduz dano corpo a corpo padrao para 5.5, armadura para 4 e pisada para 5-7 de dano. Amuleto ganha textura dedicada 256x256 e libera a mesma Onda Glacial do Wendigo, mas com menor dano e alcance. Sem dependencias extras. Build CI aprovado; teste visual in-game necessario."
           fi
