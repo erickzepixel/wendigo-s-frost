@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ICI",
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "wendigosfrost:whisper_shard"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:hunter_leggings",
+    "count": 1
+  }
+}
