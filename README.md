@@ -1,4 +1,22 @@
-## 0.7.0 — Vigília do Inverno: expansão de lore
+## 0.7.1 — Ruínas localizáveis, sementes naturais e partículas de combate
+
+Todas as três áreas da lore agora são **estruturas vanilla Jigsaw**, não features comuns, então podem ser encontradas com comandos nativos:
+
+```mcfunction
+/locate structure wendigosfrost:ancient_ice_shrine
+/locate structure wendigosfrost:hunter_cairn
+/locate structure wendigosfrost:frozen_sanctuary
+```
+
+As estruturas são distribuídas em **novos chunks** em florestas, taigas e regiões geladas (santuário subterrâneo em aproximadamente Y=-16). **Baús de cada estrutura contêm sementes Frostbloom garantidas:** 2–5 no Santuário Ancestral, 1–3 no Memorial dos Caçadores e 3–6 no Santuário Congelado. Fragmentos, páginas e cristais continuam como recompensas adicionais.
+
+O Wendigo ganhou partículas de combate distintas: **riscos de neve e estilhaços no ataque de garras**, **cone de almas e onda sônica no rugido**, **círculo de advertência e anel de estilhaços de gelo que se expande na pisada**. Os efeitos são produzidos no servidor com limites para não aumentar demais o lag.
+
+Os modelos NBT das estruturas são gerados na compilação via Gradle e ficam dentro do JAR, assim como os registros `worldgen/structure`, `structure_set`, `template_pool` e `tags/worldgen/biome`. Os antigos biome modifiers que causariam duplicação das ruínas foram desativados.
+
+**Importante:** o comando `/locate` exige permissão de comandos/cheats. As novas estruturas aparecerão apenas em regiões ainda não geradas. O funcionamento no mundo real ainda requer teste in-game; o CI valida os arquivos, o NBT e a compilação Java.
+
+## 0.7.1 — Vigília do Inverno: expansão de lore
 
 Esta atualização mantém o Wendigo articulado e o combate da 0.6.1, e adiciona uma linha de exploração:
 
