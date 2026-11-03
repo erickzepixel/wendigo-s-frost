@@ -185,3 +185,6 @@ tasks.named('processResources', ProcessResources).configure {
         javax.imageio.ImageIO.write(image,'png',new File(folder,'frost_ward_atlas.png'))
     }
 }
+
+// Original lore blocks and item textures are baked into the distributable JAR.
+apply from: 'scripts/lore-textures.gradle'
