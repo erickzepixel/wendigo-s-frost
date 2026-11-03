@@ -46,8 +46,8 @@ tasks.named('processResources') {
                 boolean engraved=(material==2)
                 boolean deep=(material==3)
                 int fissure=((px*11+py*7+cell*3+seed)%71<3) ? (crystal?44:-28):0
-                int grain=(int)(Math.sin(px*.29+py*.18+seed%13)*9
-                                +Math.cos(py*.33+cell*.57)*6)
+                int grain=(int)(Math.sin(px*0.29+py*0.18+seed%13)*9
+                                +Math.cos(py*0.33+cell*0.57)*6)
                 int border=(px<3||py<3||px>60||py>60)?-22:4
                 int rib=(Math.abs((px*3+py*5+cell*7+seed)%47-23)<2) ? (engraved?33:8):0
                 int sigil=0
