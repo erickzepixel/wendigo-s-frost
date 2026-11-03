@@ -61,6 +61,17 @@ public class WendigoEntity extends Monster implements GeoEntity {
     private int chargingSkill = 0;
     private int ambientCooldown = 0;
     private boolean configuredAttributes = false;
+    // Client-only render phase interpolation, measured in the entity's own tick time.
+    // The legacy RISE_UNTIL server field is preserved for combat/attack safety.
+    private int clientRiseStartTick = -10000;
+    public float getStandBlend(float partialTick) {
+        if (getBossPhase() <= 1) return 0f;
+        if (clientRiseStartTick < 0) return 1f; // Loaded mid-fight.
+        float progress = Math.max(0f, Math.min(1f,
+            (tickCount + partialTick - clientRiseStartTick) / 36f));
+        return progress * progress * (3f - 2f * progress);
+    }
+
 
     public WendigoEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -83,7 +94,11 @@ public class WendigoEntity extends Monster implements GeoEntity {
     }
     @Override public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (PHASE.equals(key)) refreshDimensions();
+        if (PHASE.equals(key)) {
+            refreshDimensions();
+            if (level().isClientSide && getBossPhase() >= 2 && clientRiseStartTick < 0)
+                clientRiseStartTick = tickCount;
+        }
     }
     public int getAttackCue() { return entityData.get(CUE); }
     public UUID getOwnerId() { return ownerId; }

@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.5.1 (Evolução Glacial)
+name: Publicar Wendigo's Frost 0.6.0 (Evolução Glacial)
 on:
   push:
-    branches: [mesh-original-glb-v0.5.1]
+    branches: [rig-organico-v0.6.0]
   workflow_dispatch:
 permissions:
   contents: write
@@ -21,8 +21,12 @@ jobs:
         run: python3 scripts/restore_original_wendigo_glb.py
       - name: Preparar stream de triangulos exatos para a GPU
         run: python3 scripts/bake_exact_mesh.py
+      - name: Gerar rig de dez ossos sem perder triangulos
+        run: python3 scripts/bake_rig_original.py
       - name: Validar integridade da escultura GLB
         run: python3 scripts/test_original_mesh.py
+      - name: Verificar articulacoes e topologia do rig
+        run: python3 scripts/test_articulated_rig.py
       - name: Verificar modelos e JSONs
         run: python3 scripts/validate_assets.py
       - name: Verificar regras do ritual
@@ -34,23 +38,28 @@ jobs:
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.5.1.jar
+        run: test -f build/libs/wendigosfrost-0.6.0.jar
       - name: Verificar GLB original dentro do JAR
         run: |
           python3 - <<'PY'
           import zipfile,hashlib
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.5.1.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.6.0.jar') as jar:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
               assert 'assets/wendigosfrost/models/mesh/wendigo_glacial.wfmesh' in jar.namelist(), 'Stream de triangulos ausente'
+              assert 'assets/wendigosfrost/models/mesh/wendigo_articulado.wfar' in jar.namelist(), 'Rig articulado ausente'
+              import struct
+              r=jar.read('assets/wendigosfrost/models/mesh/wendigo_articulado.wfar')
+              assert r[:4]==b'WFAR' and struct.unpack_from('<II',r,4)==(1,10)
+              print('Rig de 10 ossos presente no JAR')
               print('GLB original e identico ao arquivo 3D criado: SHA256='+digest)
           PY
       - name: Validar modelos e textura dentro do JAR
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.5.1.jar'
+          path='build/libs/wendigosfrost-0.6.0.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -69,12 +78,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.5.1-glb-original
-          JAR=build/libs/wendigosfrost-0.5.1.jar
+          TAG=v0.6.0-rig-organico
+          JAR=build/libs/wendigosfrost-0.6.0.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.5.1 — Escultura 3D Original (prévia)" \
-              --notes "0.5.1: integra o GLB original do Wendigo Glacial (70.020 triangulos) sem conversao para cubos e com seus 15 materiais, renderizado via glTF Renderer API para Forge 1.20.1. Renderizacao nativa Minecraft com VBO, sem dependencia de API glTF externa. A escultura GLB nao tem rigging: movimentos articulados de patas e transformacao corporal bípede ainda nao sao compativeis com o arquivo estatico. Integridade GLB e compilacao testadas; renderizacao no jogo ainda nao validada."
+              --title "Wendigo's Frost 0.6.0 — Rig Orgânico (prévia)" \
+              --notes "Wendigo's Frost 0.6.0 - Rig Organico. Modelo GLB original preservado integralmente, com 70.020 triangulos agora distribuidos em 10 ossos articulados GPU. Animacoes de caminhada quadrupede, corrida, movimentos de patas, ataques e rugido, e transicao corporal quadrupede para bipede ao chegar a 65 por cento de vida. Sem bibliotecas de animacao extras. Renderizador nativo, compile e hash validados; falta teste visual dentro do Minecraft. Rig por partes rigidas, com possiveis costuras visuais."
           fi
