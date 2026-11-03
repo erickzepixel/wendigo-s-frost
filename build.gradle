@@ -191,3 +191,6 @@ apply from: 'scripts/lore-textures.gradle'
 
 // Vanilla Jigsaw NBT templates for /locate structure (generated with the JDK).
 apply from: 'scripts/structure-templates.gradle'
+
+// Unique 3D frozen-heart material and seven anti-Wendigo equipment textures.
+apply from: 'scripts/hunter-gear-textures.gradle'
