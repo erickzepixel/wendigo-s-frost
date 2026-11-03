@@ -32,20 +32,12 @@ for id in ids:
         assert model["parent"]=="builtin/entity" and "elements" not in model,id
         counts[id]="original BB mesh"
         continue
-    assert model["textures"]["atlas"]=="wendigosfrost:item/rework/"+id,id
-    parts=model["elements"]
-    minimum=250 if id in ("frozen_heart","wendigo_horn") else 50
-    assert len(parts)>=minimum, (id,len(parts))
-    for part in parts:
-        a,b=part["from"],part["to"]
-        assert len(a)==len(b)==3
-        assert all(0<=x<y<=16 for x,y in zip(a,b)),(id,a,b)
-        for side in ("north","south","east","west","up","down"):
-            face=part["faces"][side]
-            assert face["texture"]=="#atlas",id
-            u0,v0,u1,v1=face["uv"]
-            assert 0<=u0<u1<=16 and 0<=v0<v1<=16,id
-    counts[id]=len(parts)
+    assert model["loader"]=="forge:obj",id
+    assert model["model"]=="wendigosfrost:models/item/bb/"+id+".obj",id
+    obj=asset/"models/item/bb"/(id+".obj")
+    assert obj.exists(),obj
+    assert obj.read_text().count("\\nf ")>=24,id
+    counts[id]="original Blockbench OBJ"
 build=Path("build.gradle").read_text()
 assert "scripts/frost-relic-master.gradle" in build
 assert "scripts/wendigo-armor-textures.gradle" in build
