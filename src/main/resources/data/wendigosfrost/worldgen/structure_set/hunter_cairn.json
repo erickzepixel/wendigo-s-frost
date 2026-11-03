@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "wendigosfrost:hunter_cairn",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 93348331,
+    "spacing": 31,
+    "separation": 9,
+    "spread_type": "triangular"
+  }
+}

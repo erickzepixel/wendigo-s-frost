@@ -188,3 +188,6 @@ tasks.named('processResources', ProcessResources).configure {
 
 // Original lore blocks and item textures are baked into the distributable JAR.
 apply from: 'scripts/lore-textures.gradle'
+
+// Vanilla Jigsaw NBT templates for /locate structure (generated with the JDK).
+apply from: 'scripts/structure-templates.gradle'

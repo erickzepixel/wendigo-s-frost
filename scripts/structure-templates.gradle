@@ -1,0 +1,146 @@
+// Vanilla 1.20.1 compressed structure templates generated with Java in the Gradle build.
+// No Python, external libraries, manual binary asset uploads or additional mods.
+// Every chest delegates to a data-driven loot table (guaranteed Frostbloom seeds).
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        final String BRICK = 'wendigosfrost:ancient_frost_bricks'
+        final String RUNE = 'wendigosfrost:whispering_runestone'
+        final String LANTERN = 'wendigosfrost:soul_frost_lantern'
+        final String TOTEM = 'wendigosfrost:pale_bone_totem'
+        final String PEDESTAL = 'wendigosfrost:deep_glacier_pedestal'
+        final String ICE = 'minecraft:packed_ice'
+        final String BLUE = 'minecraft:blue_ice'
+        final String BONE = 'minecraft:bone_block'
+        final String AIR = 'minecraft:air'
+        final String CHEST = 'minecraft:chest'
+        def dir = new File(destinationDir, 'data/wendigosfrost/structures')
+        dir.mkdirs()
+
+        def makeShrine = {
+            def blocks = [:]
+            def put = { x,y,z,id,loot=null ->
+                blocks[x+','+y+','+z] = [pos:[x,y,z],type:id,loot:loot]
+            }
+            for (int x=0;x<9;x++) for(int z=0;z<9;z++) {
+                put(x,0,z,(x+2*z)%7==0 ? BLUE : BRICK)
+                for(int y=1;y<7;y++) put(x,y,z,AIR)
+            }
+            for (int x : [1,7]) for(int z : [1,7]) {
+                for(int y=1;y<4;y++) put(x,y,z,y==3 ? BONE : BRICK)
+                put(x,4,z,LANTERN)
+            }
+            for(int x=1;x<8;x++) {
+                if(x!=4) put(x,1,1,BRICK)
+                if(x%3!=0) put(x,1,7,BRICK)
+            }
+            for(int z=2;z<7;z++) if(z!=4) {
+                put(1,1,z,BRICK); put(7,1,z,BRICK)
+            }
+            for(int x=2;x<7;x++) {
+                put(x,4,1,BRICK)
+                if(x%2==0)put(x,5,1,BLUE)
+            }
+            put(4,1,4,TOTEM)
+            put(4,2,4,RUNE)
+            put(2,1,3,LANTERN)
+            put(6,1,3,LANTERN)
+            put(5,1,6,CHEST,'wendigosfrost:chests/ancient_ice_shrine')
+            return blocks.values().toList()
+        }
+
+        def makeCairn = {
+            def blocks = [:]
+            def put = { x,y,z,id,loot=null ->
+                blocks[x+','+y+','+z] = [pos:[x,y,z],type:id,loot:loot]
+            }
+            for(int x=0;x<7;x++) for(int z=0;z<7;z++) {
+                put(x,0,z,(x+z)%4==0 ? ICE : BRICK)
+                for(int y=1;y<6;y++) put(x,y,z,AIR)
+            }
+            put(3,1,3,TOTEM)
+            put(3,2,3,RUNE)
+            put(3,3,3,BONE)
+            for(int x : [1,5]) for(int z : [1,5]) {
+                put(x,1,z,BONE)
+                put(x,2,z,x==z ? LANTERN : BRICK)
+            }
+            for(int x : [0,6]) for(int z : [0,2,4,6]) put(x,1,z,BRICK)
+            for(int z : [0,6]) for(int x : [2,4]) put(x,1,z,BRICK)
+            put(5,1,3,CHEST,'wendigosfrost:chests/hunter_cairn')
+            return blocks.values().toList()
+        }
+
+        def makeUndergroundSanctuary = {
+            def blocks = [:]
+            def put = { x,y,z,id,loot=null ->
+                blocks[x+','+y+','+z] = [pos:[x,y,z],type:id,loot:loot]
+            }
+            for(int x=0;x<9;x++) for(int z=0;z<9;z++) {
+                put(x,0,z,(x+z)%5==0 ? BLUE : BRICK)
+                for(int y=1;y<7;y++) {
+                    boolean wall = x==0 || x==8 || z==0 || z==8 || y==6
+                    put(x,y,z,wall ? ((x*y+z)%5==0 ? ICE : BRICK) : AIR)
+                }
+            }
+            for(int x : [2,6]) for(int z : [2,6]) {
+                put(x,1,z,BONE)
+                put(x,2,z,BRICK)
+                put(x,3,z,LANTERN)
+            }
+            put(4,1,4,PEDESTAL)
+            put(4,1,2,RUNE)
+            put(2,1,4,CHEST,'wendigosfrost:chests/frozen_sanctuary')
+            put(6,1,4,TOTEM)
+            for(int z=3;z<6;z++) put(4,2,z,AIR)
+            return blocks.values().toList()
+        }
+
+        def makeTemplate = { String id,List<Integer> size,List blocks ->
+            def file = new File(dir,id+'.nbt')
+            def palette = blocks.collect { it.type }.unique()
+            def stateIds = [:]
+            palette.eachWithIndex { type,i -> stateIds[type]=i }
+
+            // java.io.DataOutputStream writes NBT big-endian tags, strings in ASCII
+            // (all NBT tag names, block IDs and loot IDs are plain ASCII).
+            file.withOutputStream { raw ->
+                def z = new java.util.zip.GZIPOutputStream(raw)
+                def out = new java.io.DataOutputStream(z)
+                out.writeByte(10); out.writeUTF('')  // unnamed root compound
+                out.writeByte(3); out.writeUTF('DataVersion'); out.writeInt(3465)
+                out.writeByte(11); out.writeUTF('size')
+                out.writeInt(3)
+                size.each { out.writeInt(it) }
+
+                out.writeByte(9); out.writeUTF('palette')
+                out.writeByte(10); out.writeInt(palette.size())
+                palette.each { name ->
+                    out.writeByte(8); out.writeUTF('Name'); out.writeUTF(name)
+                    out.writeByte(0) // end palette compound
+                }
+                out.writeByte(9); out.writeUTF('blocks')
+                out.writeByte(10); out.writeInt(blocks.size())
+                blocks.each { block ->
+                    out.writeByte(11); out.writeUTF('pos'); out.writeInt(3)
+                    block.pos.each { out.writeInt(it) }
+                    out.writeByte(3); out.writeUTF('state'); out.writeInt(stateIds[block.type])
+                    if (block.loot != null) {
+                        out.writeByte(10); out.writeUTF('nbt')
+                        out.writeByte(8); out.writeUTF('LootTable'); out.writeUTF(block.loot)
+                        out.writeByte(0)
+                    }
+                    out.writeByte(0) // end block compound
+                }
+                out.writeByte(9); out.writeUTF('entities')
+                out.writeByte(10); out.writeInt(0)
+                out.writeByte(0) // end root
+                out.close()
+            }
+            println "Wendigo's Frost: baked "+id+".nbt ("+blocks.size()+" positions / "+file.length()+" bytes)"
+        }
+
+        makeTemplate('ancient_ice_shrine',[9,7,9],makeShrine())
+        makeTemplate('hunter_cairn',[7,6,7],makeCairn())
+        makeTemplate('frozen_sanctuary',[9,7,9],makeUndergroundSanctuary())
+    }
+}

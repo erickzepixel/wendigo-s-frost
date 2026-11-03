@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.7.0 (Evolução Glacial)
+name: Publicar Wendigo's Frost 0.7.1 (Ruínas Localizáveis)
 on:
   push:
-    branches: [lore-ruins-v0.7.0]
+    branches: [v0.7.1-particulas-estruturas-locate]
   workflow_dispatch:
 permissions:
   contents: write
@@ -39,15 +39,17 @@ jobs:
         run: python3 scripts/test_combat_polish.py
       - name: Validar introducao, ruinas, itens, receitas e lore
         run: python3 scripts/test_lore_expansion.py
+      - name: Validar estruturas localizaveis, sementes e particulas
+        run: python3 scripts/test_structure_registration.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.7.0.jar
+        run: test -f build/libs/wendigosfrost-0.7.1.jar
       - name: Verificar GLB original dentro do JAR
         run: |
           python3 - <<'PY'
           import zipfile,hashlib
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.0.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.1.jar') as jar:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
@@ -63,7 +65,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.7.0.jar'
+          path='build/libs/wendigosfrost-0.7.1.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -89,7 +91,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import zipfile,struct
-          jar='build/libs/wendigosfrost-0.7.0.jar'
+          jar='build/libs/wendigosfrost-0.7.1.jar'
           tex=[
             ('block','ancient_frost_bricks'),('block','whispering_runestone'),
             ('block','soul_frost_lantern'),('block','soul_frost_lantern_frame'),
@@ -114,16 +116,18 @@ jobs:
                   assert path in contents,path
               print('OK: oito PNGs 32x32, duas ruinas e tela de introducao no JAR')
           PY
+      - name: Validar modelos NBT de estruturas e loot dentro do JAR
+        run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.1.jar
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.7.0-lore-ruins
-          JAR=build/libs/wendigosfrost-0.7.0.jar
+          TAG=v0.7.1-particulas-estruturas
+          JAR=build/libs/wendigosfrost-0.7.1.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.0 — Vigília do Inverno — Expansão de Lore (prévia)" \
-              --notes "Wendigo's Frost 0.7.0 - Vigilia do Inverno: duas ruinas de lore em taigas/florestas, quatro blocos com texturas originais (pedra runica, tijolos de gelo ancestral, lanterna de almas, totem osseo), tres itens (fragmento, pagina perdida, Selo do Inverno), receitas e saque, interface de introducao em duas paginas apresentada uma unica vez por jogador/mundo, novos capitulos no manual e comando /wendigofrost historia. Mantem chefe, combate, rituais e modelo GLB riggado. Compilado em CI; worldgen e GUI ainda precisam ser testados no Minecraft."
+              --title "Wendigo's Frost 0.7.1 — Partículas, Ruínas Localizáveis e Sementes (prévia)" \
+              --notes "Wendigo's Frost 0.7.1: tres estruturas reais vanilla Jigsaw registradas para /locate structure (ancient_ice_shrine, hunter_cairn, frozen_sanctuary); cada uma contem bau com sementes Frostbloom garantidas por loot table. Novas particulas de ataques do Wendigo: garras com trilhas de gelo, rugido com cone de almas e pisada com aviso e onda de estilhacos. Os modelos NBT das estruturas sao gerados pelo Gradle e validados dentro do JAR. Forge 1.20.1, GeckoLib e TerraBlender. Compilacao automatica aprovada; ainda requer teste no jogo."
           fi

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "wendigosfrost:frozen_sanctuary",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 36788641,
+    "spacing": 43,
+    "separation": 14,
+    "spread_type": "triangular"
+  }
+}

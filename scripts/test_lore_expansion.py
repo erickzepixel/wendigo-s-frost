@@ -21,16 +21,16 @@ assert (assets/"models/item/winter_sigil.json").exists()
 for name in (*blocks,*items,*extra):
     assert name in Path("scripts/lore-textures.gradle").read_text(), "missing texture recipe "+name
 
-for feature in ("ancient_ice_shrine","hunter_cairn"):
-    for p in (f"worldgen/configured_feature/{feature}.json",
-              f"worldgen/placed_feature/{feature}.json",
-              f"forge/biome_modifier/{feature}.json"):
-        assert (data/p).exists(), "missing worldgen "+p
-    placed=json.loads((data/f"worldgen/placed_feature/{feature}.json").read_text())
-    assert placed["placement"][-1]["type"]=="minecraft:biome"
-    assert any(e["type"]=="minecraft:heightmap" for e in placed["placement"])
-    biome=json.loads((data/f"forge/biome_modifier/{feature}.json").read_text())
-    assert biome["step"]=="surface_structures"
+for feature in ("ancient_ice_shrine","hunter_cairn","frozen_sanctuary"):
+    structure=json.loads((data/f"worldgen/structure/{feature}.json").read_text())
+    assert structure["type"]=="minecraft:jigsaw"
+    assert structure["start_pool"]=="wendigosfrost:"+feature
+    assert (data/f"worldgen/structure_set/{feature}.json").exists()
+    assert (data/f"worldgen/template_pool/{feature}.json").exists()
+    assert (data/f"tags/worldgen/biome/has_structure/{feature}.json").exists()
+    # The old biome modifiers must not generate a duplicate feature beside
+    # the new registered vanilla structure.
+    assert not (data/f"forge/biome_modifier/{feature}.json").exists()
 
 for name in (*blocks,"winter_sigil"):
     recipe=json.loads((data/f"recipes/{name}.json").read_text())
@@ -52,7 +52,7 @@ assert "sendIntroduction(player)" in login and "READ_KEY" in login
 assert "mc.setScreen(new LoreIntroScreen())" in queue
 assert "ModNetwork.acknowledgeIntroduction()" in screen
 assert "screen.wendigosfrost.story_1" in screen
-assert "new com.exemplo.wendigosfrost.worldgen.LostRuinFeature" in (src/"registry/ModFeatures.java").read_text()
+assert "makeTemplate('ancient_ice_shrine'" in Path("scripts/structure-templates.gradle").read_text()
 assert 'apply from: \'scripts/lore-textures.gradle\'' in Path("build.gradle").read_text()
 for lang in ("pt_br","en_us"):
     loc=json.loads((assets/f"lang/{lang}.json").read_text())
@@ -60,5 +60,5 @@ for lang in ("pt_br","en_us"):
                 "screen.wendigosfrost.story_2","screen.wendigosfrost.enter",
                 "item.wendigosfrost.winter_sigil"):
         assert loc[key], f"{lang}: {key}"
-print("PASS: two lore ruin features, four custom blocks, three items, five recipes,")
+print("PASS: three locatable lore structures, four custom blocks, three items, five recipes,")
 print("      custom texture generator, persistent one-time intro and translated story.")

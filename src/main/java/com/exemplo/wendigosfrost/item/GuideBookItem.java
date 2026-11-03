@@ -34,6 +34,9 @@ public class GuideBookItem extends WrittenBookItem {
         "13. RUINAS DA VIGILIA\n\nNa taiga e nas montanhas geladas, procure os Santuarios do Gelo Ancestral. Nas florestas ainda restam os Memoriais dos Cacadores.",
         "14. PEDRAS DOS SUSSURROS\n\nToque nas pedras com runas para escutar fragmentos da historia. As ruinas guardam Paginas Perdidas e Fragmentos do Sussurro.",
         "15. O SELO DO INVERNO\n\nCrie o Selo do Inverno com dois Fragmentos do Sussurro, Ametista, Gelo Azul e Coracao do Mar. Ele ilumina o escuro e concede breve protecao.",
+        "17. LOCALIZE AS RUINAS\n\nNo chat: /locate structure wendigosfrost:ancient_ice_shrine ou wendigosfrost:hunter_cairn. Tambem ha o wendigosfrost:frozen_sanctuary subterraneo.",
+        "18. SEMENTES NATURAIS\n\nBaús do Santuário Ancestral: 2 a 5 Sementes Frostbloom; Memorial dos Cacadores: 1 a 3; Santuario subterraneo: 3 a 6. Todas garantidas nos novos baus.",
+        "19. GOLPES DE GELO\n\nObserve as particulas: garras de neve indicam golpe corpo a corpo; almas azuis anunciam rugido; aneis de gelo antecipam a pisada. Aproveite o aviso para escapar.",
         "16. A VIGILIA FINAL\n\nO Wendigo nao nasceu do frio. Ele nasceu de uma fome que os antigos juraram selar. Seu ritual pode libertar voce da marca, mas nao destruir todas as ruinas.",
         "12. INFORMACOES\n\nRequer Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4 e TerraBlender. Atualizacoes e instrucao: github.com/erickzepixel/wendigo-s-frost"
     };

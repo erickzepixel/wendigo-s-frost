@@ -1,3 +1,24 @@
+## Novidade 0.7.1 — Encontre as ruínas e cultive Frostbloom
+
+Agora você pode usar **três comandos vanilla** para encontrar ruínas em regiões ainda não exploradas:
+
+```mcfunction
+/locate structure wendigosfrost:ancient_ice_shrine
+/locate structure wendigosfrost:hunter_cairn
+/locate structure wendigosfrost:frozen_sanctuary
+```
+
+As primeiras duas estruturas aparecem na superfície (taigas, florestas e regiões geladas); a terceira fica no subterrâneo. Jogadores sem cheats podem descobri-las explorando o mapa.
+
+**Sementes naturais de Frostbloom nos baús:**
+- Santuário de Gelo Ancestral: 2 a 5 sementes garantidas.
+- Memorial dos Caçadores: 1 a 3 sementes garantidas.
+- Santuário Congelado subterrâneo: 3 a 6 sementes garantidas.
+
+Essas recompensas vêm de tabelas de saque e não exigem que o jogador já possua a flor. As estruturas antigas não são modificadas retroativamente, mas novas áreas poderão conter os baús.
+
+**Efeitos das habilidades do Wendigo:** neve em forma de garras e estilhaços ao atacar; cone de almas azuis e onda sônica no rugido; anel no chão para avisar a pisada e explosão de gelo durante o impacto.
+
 # ❄ Wendigo's Frost — página do mod
 
 **Minecraft Java 1.20.1 · Forge 47.x · versão 0.6.0 (prévia)**
@@ -85,7 +106,7 @@ F . P . F
 
 O pedestal tem **2 minutos de recarga** após uma invocação e impede a criação de outro Wendigo se já existir um em um raio de 64 blocos. Nenhum cristal é consumido se a estrutura estiver incompleta, não houver espaço ou o surgimento falhar. Este ritual não aplica nem remove a marca; o ritual de libertação permanece separado (clique normal para inserir os três ingredientes e mão vazia para iniciar a purificação).
 
-## Vigília do Inverno — novidades 0.7.0
+## Vigília do Inverno — novidades 0.7.1
 
 ### Uma história ao entrar no mundo
 
