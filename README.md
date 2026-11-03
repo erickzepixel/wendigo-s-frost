@@ -1,4 +1,32 @@
-## 0.7.1 — Ruínas localizáveis, sementes naturais e partículas de combate
+## 0.7.2 — Caçadores da Vigília: coração exposto, fase final e correção do /locate
+
+**Correção da busca por ruínas:** o JAR 0.7.1 gerava modelos NBT em `data/wendigosfrost/structures/` (plural). O Minecraft Java 1.20.1 procura em **`data/wendigosfrost/structure/` (singular)**. A 0.7.2 corrige isso e testa explicitamente os caminhos dentro do JAR.
+
+Com cheats habilitados, em regiões novas:
+```mcfunction
+/locate structure wendigosfrost:ancient_ice_shrine
+/locate structure wendigosfrost:hunter_cairn
+/locate structure wendigosfrost:frozen_sanctuary
+```
+As estruturas nascem em chunks **ainda não gerados**; o Santuário Congelado aparece no subterrâneo. A atualização não regenera chunks existentes.
+
+**Wendigo (modelo GLB preservado):**
+- 1ª fase: quadrúpede.
+- 2ª fase: coração espectral exposto e pulsante na região do peito, ponto vulnerável à Lança Rúnica.
+- 3ª fase: olhos vermelhos e nove espinhos de gelo que crescem nas costas.
+- O Coração Congelado do inventário ganhou um modelo 3D refeito, com 48 partes e atlas de textura próprio.
+
+**Novos equipamentos fabricáveis antes de derrotar o chefe:**
+- Armadura da Vigília: elmo, peitoral, calças e botas. Cada peça reduz em 8% o dano do Wendigo (máximo de 32%), além da proteção normal da armadura.
+- Lança Rúnica do Caçador: +55% de dano corpo a corpo contra o Wendigo enquanto seu coração estiver exposto; +15% na forma quadrúpede.
+- Machado do Degelo: +27% de dano contra o chefe e fogo breve que interrompe habilidades geladas.
+- Sinalizador Térmico: item consumível que incendeia Wendigos próximos por 6 segundos, com recarga de 24 segundos.
+
+As imagens dos itens e as texturas da armadura são criadas pelo próprio Gradle, e as receitas usam materiais acessíveis antes da primeira vitória. O combate continua server-side; preserva singleplayer e servidores dedicados.
+
+**Instalação:** remova versões anteriores do mod da pasta `mods`, mantenha Forge 1.20.1, GeckoLib e TerraBlender compatíveis. Faça backup do mundo. Build e teste de empacotamento não substituem a validação visual no Minecraft.
+
+## 0.7.2 — Ruínas localizáveis, sementes naturais e partículas de combate
 
 Todas as três áreas da lore agora são **estruturas vanilla Jigsaw**, não features comuns, então podem ser encontradas com comandos nativos:
 
@@ -16,7 +44,7 @@ Os modelos NBT das estruturas são gerados na compilação via Gradle e ficam de
 
 **Importante:** o comando `/locate` exige permissão de comandos/cheats. As novas estruturas aparecerão apenas em regiões ainda não geradas. O funcionamento no mundo real ainda requer teste in-game; o CI valida os arquivos, o NBT e a compilação Java.
 
-## 0.7.1 — Vigília do Inverno: expansão de lore
+## 0.7.2 — Vigília do Inverno: expansão de lore
 
 Esta atualização mantém o Wendigo articulado e o combate da 0.6.1, e adiciona uma linha de exploração:
 
