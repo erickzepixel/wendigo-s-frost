@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.5.0 (Evolução Glacial)
+name: Publicar Wendigo's Frost 0.5.1 (Evolução Glacial)
 on:
   push:
-    branches: [evolucao-glacial-v0.5.0]
+    branches: [mesh-original-glb-v0.5.1]
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,6 +17,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.1.1'
+      - name: Restaurar escultura 3D original exata
+        run: python3 scripts/restore_original_wendigo_glb.py
+      - name: Preparar stream de triangulos exatos para a GPU
+        run: python3 scripts/bake_exact_mesh.py
+      - name: Validar integridade da escultura GLB
+        run: python3 scripts/test_original_mesh.py
       - name: Verificar modelos e JSONs
         run: python3 scripts/validate_assets.py
       - name: Verificar regras do ritual
@@ -28,12 +34,23 @@ jobs:
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.5.0.jar
+        run: test -f build/libs/wendigosfrost-0.5.1.jar
+      - name: Verificar GLB original dentro do JAR
+        run: |
+          python3 - <<'PY'
+          import zipfile,hashlib
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.5.1.jar') as jar:
+              mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
+              digest=hashlib.sha256(mesh).hexdigest()
+              assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
+              assert 'assets/wendigosfrost/models/mesh/wendigo_glacial.wfmesh' in jar.namelist(), 'Stream de triangulos ausente'
+              print('GLB original e identico ao arquivo 3D criado: SHA256='+digest)
+          PY
       - name: Validar modelos e textura dentro do JAR
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.5.0.jar'
+          path='build/libs/wendigosfrost-0.5.1.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -52,12 +69,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.5.0-evolucao-glacial
-          JAR=build/libs/wendigosfrost-0.5.0.jar
+          TAG=v0.5.1-glb-original
+          JAR=build/libs/wendigosfrost-0.5.1.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.5.0 — Evolução Glacial (prévia)" \
-              --notes "Evolucao Glacial 0.5.0: Wendigo remodelado com cranio de cervo, olhos azuis, gelo e garras; fase 1 quadrupede, fase 2 bipede com animacao de transformacao; aba do mod no criativo com ovo de invocacao; receita de Amuleto Gelido e coracao congelado com drop de 100 por cento. Forge 1.20.1, GeckoLib e TerraBlender. Build e verificacoes estaticas aprovadas; teste visual in-game necessario."
+              --title "Wendigo's Frost 0.5.1 — Escultura 3D Original (prévia)" \
+              --notes "0.5.1: integra o GLB original do Wendigo Glacial (70.020 triangulos) sem conversao para cubos e com seus 15 materiais, renderizado via glTF Renderer API para Forge 1.20.1. Renderizacao nativa Minecraft com VBO, sem dependencia de API glTF externa. A escultura GLB nao tem rigging: movimentos articulados de patas e transformacao corporal bípede ainda nao sao compativeis com o arquivo estatico. Integridade GLB e compilacao testadas; renderizacao no jogo ainda nao validada."
           fi
