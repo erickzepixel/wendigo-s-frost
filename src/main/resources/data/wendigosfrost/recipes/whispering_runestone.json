@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "BEB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "item": "wendigosfrost:ancient_frost_bricks"
+    },
+    "B": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "E": {
+      "item": "minecraft:echo_shard"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:whispering_runestone",
+    "count": 1
+  }
+}
