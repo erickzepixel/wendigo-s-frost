@@ -1,0 +1,48 @@
+// 256x256 author-created master atlas for all detailed 3D relics and equipment.
+// The 16 hand-selected materials are painted as 4x4 mineral/skin/metal tiles.
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        def dir=new File(destinationDir,'assets/wendigosfrost/textures/item')
+        dir.mkdirs()
+        def img=new java.awt.image.BufferedImage(256,256,java.awt.image.BufferedImage.TYPE_INT_ARGB)
+        def palette=[
+            [225,218,196], // ivory
+            [144,132,122], // ancient bone
+            [61,73,83],    // skull socket
+            [151,225,253], // bright glacier
+            [47,137,208],  // cobalt ice
+            [154,44,80],   // frozen blood
+            [88,45,67],    // black veins
+            [185,199,216], // silver
+            [40,61,87],    // forged dark metal
+            [206,171,87],  // rune gold
+            [167,250,255], // spectral heart glow
+            [242,73,89],   // rage glow
+            [91,189,229],  // frosted hide
+            [244,247,242], // bone white
+            [70,117,213],  // rune lapis
+            [21,29,46]     // abyssal black
+        ]
+        def clamp={ int v -> Math.max(0,Math.min(255,v)) }
+        for(int y=0;y<256;y++) for(int x=0;x<256;x++) {
+            int cell=(y.intdiv(64))*4+x.intdiv(64)
+            def rgb=palette[cell]
+            int u=x%64,v=y%64
+            // Etched fissures, frost blooms and pearlescent bone:
+            int fleck=((u*13+v*23+cell*17)%47<3)?22:0
+            int fissure=(((u*7+v*11+cell*9)%73)<3)?-29:0
+            int bevel=(u<3||v<3)?19:((u>60||v>60)?-23:0)
+            double vein=Math.sin(u*.23+Math.sin(v*.3)*2.1 +cell*.7)
+            int grain=(int)(vein*8+Math.cos(v*.19)*5)
+            if(cell==3||cell==4||cell==10||cell==12) {
+                if((u*3+v*7+cell*13)%41<3) {fleck+=41;fissure=0}
+            }
+            if(cell==5||cell==6||cell==11) grain+=(int)(Math.sin(u*.39+v*.21)*12)
+            int red=clamp(rgb[0]+fleck+fissure+bevel+grain)
+            int green=clamp(rgb[1]+fleck+fissure+bevel+grain)
+            int blue=clamp(rgb[2]+fleck+fissure+bevel+grain)
+            img.setRGB(x,y,(0xff<<24)|(red<<16)|(green<<8)|blue)
+        }
+        javax.imageio.ImageIO.write(img,'png',new File(dir,'frost_relic_master.png'))
+    }
+}
