@@ -290,6 +290,6 @@ jobs:
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.6 — Novos Modelos de Ovo e Manual Interativo (prévia)" \\ \
+              --title "Wendigo's Frost 0.7.6 — Ovo e Manual Interativo (prévia)" \
               --notes "Wendigo's Frost 0.7.6 (versao inalterada): modelo original Blockbench com 5 cubos e 4 texturas para o Ovo de Invocacao do Wendigo, preservando a invocacao real Forge. Manual do Sobrevivente com modelo original Blockbench de 5 cubos e 5 texturas, e GUI funcional com 13 capitulos (indice, navegacao, rolagem, comandos, rituais, Frostbloom, equipamentos e Wendigo 500 HP), aberta com botao direito. Texturas PNG originais e UVs preservados e conferidos dentro do JAR. Elmo, peitoral, calcas, botas, mundo e demais mecanicas permanecem inalterados. Versao mod_version continua exatamente 0.7.6; release publicada com tag propria para manter o JAR anterior disponivel. Compilacao CI aprovada; teste visual in-game pendente."
           fi
