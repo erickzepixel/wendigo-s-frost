@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.7.5 (Armadura Blockbench)
+name: Publicar Wendigo's Frost 0.7.6 (Calças e Botas Blockbench)
 on:
   push:
-    branches: [v0.7.5-armadura-bbmodel-player]
+    branches: [v0.7.6-calcas-botas-bbmodel]
   workflow_dispatch:
 permissions:
   contents: write
@@ -49,15 +49,35 @@ jobs:
         run: python3 scripts/test_v074_rework.py
       - name: Validar quatro arquivos Blockbench e rigging do jogador
         run: python3 scripts/test_v075_blockbench_armor.py
+      - name: Confirmar substituicao das calcas e botas sem alterar elmo e peitoral
+        run: |
+          python3 - <<'PY'
+          import hashlib, pathlib, json
+          root=pathlib.Path('assets-source/vigilia-bbmodels')
+          hashes={
+              'calcas':'f0540b4a3ac6e83b90088ebab686be51ff25e1d90feac5c9311b7b704a2ac382',
+              'botas':'995a4986cc099c530c748287db926aba1ceaebd77d2c7f2272fc98a01c82ffd3',
+              'elmo':'4509b3f0cb469947dacf4149c04780fd34cc62773896e89206bc21b34d67eb4a',
+              'peitoral':'fe8370d8b080d83b857ed338f2ddd258e237eaa0af8f2e329858ac50a6c0ed57'
+          }
+          for part,digest in hashes.items():
+              p=root/(part+'_da_vigilia.bbmodel')
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==digest,part
+              model=json.loads(p.read_text())
+              assert all(len(e.get('faces',{}))>=6 for e in model['elements']),part
+          assert len(json.loads((root/'calcas_da_vigilia.bbmodel').read_text())['elements'])==9
+          assert len(json.loads((root/'botas_da_vigilia.bbmodel').read_text())['elements'])==8
+          print('PASS: revised pants/boots, original helmet/chestplate exact')
+          PY
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
-        run: test -f build/libs/wendigosfrost-0.7.5.jar
+        run: test -f build/libs/wendigosfrost-0.7.6.jar
       - name: Verificar GLB original dentro do JAR
         run: |
           python3 - <<'PY'
           import zipfile,hashlib
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.5.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as jar:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
@@ -73,7 +93,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json,zipfile
-          path='build/libs/wendigosfrost-0.7.5.jar'
+          path='build/libs/wendigosfrost-0.7.6.jar'
           base='assets/wendigosfrost/'
           with zipfile.ZipFile(path) as jar:
               names=set(jar.namelist())
@@ -99,7 +119,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import zipfile,struct
-          jar='build/libs/wendigosfrost-0.7.5.jar'
+          jar='build/libs/wendigosfrost-0.7.6.jar'
           tex=[
             ('block','ancient_frost_bricks'),('block','whispering_runestone'),
             ('block','soul_frost_lantern'),('block','soul_frost_lantern_frame'),
@@ -125,12 +145,12 @@ jobs:
               print('OK: oito PNGs 32x32, duas ruinas e tela de introducao no JAR')
           PY
       - name: Validar modelos NBT de estruturas e loot dentro do JAR
-        run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.5.jar
+        run: python3 scripts/test_built_jigsaw_templates.py build/libs/wendigosfrost-0.7.6.jar
       - name: Verificar modelos, texturas e armaduras no JAR
         run: |
           python3 - <<'PY'
           import zipfile,struct,json
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.5.jar') as z:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as z:
               names=set(z.namelist())
               for id in ('hunter_helmet','hunter_chestplate','hunter_leggings',
                          'hunter_boots','rune_spear','thaw_axe','thermal_flare',
@@ -175,7 +195,7 @@ jobs:
                'lost_page','winter_sigil','hunter_helmet','hunter_chestplate',
                'hunter_leggings','hunter_boots','rune_spear','thaw_axe',
                'thermal_flare','heartbreaker_blade','runic_torch')
-          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.5.jar') as jar:
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as jar:
               paths=set(jar.namelist())
               hashes=set()
               for item in ids:
@@ -200,7 +220,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import zipfile,struct,json,hashlib
-          filepath='build/libs/wendigosfrost-0.7.5.jar'
+          filepath='build/libs/wendigosfrost-0.7.6.jar'
           ids=('elmo','peitoral','calcas','botas')
           counts=(8,9,9,8)
           orig_tex=(6,5,3,3)
@@ -230,12 +250,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.7.5-armadura-bbmodel
-          JAR=build/libs/wendigosfrost-0.7.5.jar
+          TAG=v0.7.6-calcas-botas-bbmodel
+          JAR=build/libs/wendigosfrost-0.7.6.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.5 — Caçadores da Vigília — 500 HP e Rework de Itens (prévia)" \
-              --notes "Wendigo's Frost 0.7.5: os quatro arquivos Blockbench .bbmodel fornecidos pelo autor (elmo, peitoral, calcas e botas) foram integrados sem redesenhar as geometrias ou texturas. Cada item usa exatamente a mesma malha, UV de cada face, rotacoes dos cubos e atlas PNG original do conjunto equipado. O renderizador BEWLR nativo foi conectado a armadura real do player via HumanoidModel articulado: elmo acompanha cabeca, ombreiras acompanham bracos, cinto acompanha corpo e cada calca/bota segue a perna correspondente. Escala das pernas foi adaptada ao jogador sem mudar a proporcao original da escultura. 500 HP do Wendigo, modelos e loot anteriores preservados. Build Forge CI aprovado; movimentacao e encaixe visual ainda requerem teste dentro do Minecraft."
+              --title "Wendigo's Frost 0.7.6 — Caçadores da Vigília — 500 HP e Rework de Itens (prévia)" \
+              --notes "Wendigo's Frost 0.7.6: novas Calças e Botas da Vigília usando exatamente os dois modelos Blockbench (.bbmodel) enviados pelo criador, com suas texturas, faces e rotacoes originais. Calças reajustadas nos joelhos, coxas e cintura; botas revisadas com camadas de pelo, sola e pontas de gelo. Modelos do Elmo e Peitoral mantidos sem qualquer alteração. Inventario e personagem continuam usando a mesma malha 3D via renderizador BB compartilhado. Mod Forge 1.20.1, 500 HP e restantes recursos mantidos. Build CI compilado e validado; encaixe visual durante o movimento ainda requer teste no jogo."
           fi
