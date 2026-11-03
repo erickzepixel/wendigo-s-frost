@@ -19,6 +19,8 @@ jobs:
           gradle-version: '8.1.1'
       - name: Restaurar escultura 3D original exata
         run: python3 scripts/restore_original_wendigo_glb.py
+      - name: Preparar stream de triangulos exatos para a GPU
+        run: python3 scripts/bake_exact_mesh.py
       - name: Validar integridade da escultura GLB
         run: python3 scripts/test_original_mesh.py
       - name: Verificar modelos e JSONs
@@ -41,6 +43,7 @@ jobs:
               mesh=jar.read('assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb')
               digest=hashlib.sha256(mesh).hexdigest()
               assert digest == 'e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1'
+              assert 'assets/wendigosfrost/models/mesh/wendigo_glacial.wfmesh' in jar.namelist(), 'Stream de triangulos ausente'
               print('GLB original e identico ao arquivo 3D criado: SHA256='+digest)
           PY
       - name: Validar modelos e textura dentro do JAR
@@ -73,5 +76,5 @@ jobs:
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
               --title "Wendigo's Frost 0.5.1 — Escultura 3D Original (prévia)" \
-              --notes "0.5.1: integra o GLB original do Wendigo Glacial (70.020 triangulos) sem conversao para cubos e com seus 15 materiais, renderizado via glTF Renderer API para Forge 1.20.1. Requer instalar glTF Renderer API 1.0.0-beta.1 alem das dependencias anteriores. A escultura GLB nao tem rigging: movimentos articulados de patas e transformacao corporal bípede ainda nao sao compativeis com o arquivo estatico. Integridade GLB e compilacao testadas; renderizacao no jogo ainda nao validada."
+              --notes "0.5.1: integra o GLB original do Wendigo Glacial (70.020 triangulos) sem conversao para cubos e com seus 15 materiais, renderizado via glTF Renderer API para Forge 1.20.1. Renderizacao nativa Minecraft com VBO, sem dependencia de API glTF externa. A escultura GLB nao tem rigging: movimentos articulados de patas e transformacao corporal bípede ainda nao sao compativeis com o arquivo estatico. Integridade GLB e compilacao testadas; renderizacao no jogo ainda nao validada."
           fi
