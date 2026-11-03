@@ -1,3 +1,15 @@
+## 0.7.4 — Rework completo de 18 itens e simplificação visual do boss
+
+- Removidos os **olhos vermelhos da fase 3** e os **espinhos de gelo que cresciam nas costas**, incluindo os antigos VBOs, renderização e estado client-side de crescimento. A terceira fase de combate continua funcionando normalmente; a criatura conserva os olhos glaciares originais.
+- **18 itens não-bloco receberam texturas PNG próprias de 256×256**, cada qual com seu arquivo `assets/wendigosfrost/textures/item/rework/<id>.png`, paleta e detalhes rúnicos específicos. Os materiais não são mais todos retirados de um mesmo atlas.
+- Modelos 3D específicos foram refeitos para Machado do Degelo, Lança Rúnica, Espada do Coração Partido, Tocha Rúnica, Sinalizador Térmico, Sementes Frostbloom, Cristal Frostbloom, Fragmento do Sussurro, Guia e Página Perdida.
+- **Machado do Degelo**: cabo reforçado vertical, cabeça metálica com volume, lâmina crescente larga orientada lateralmente (face esquerda bem definida), lâmina congelada afiada e contrapeso.
+- Mantidos e retintados com atlas exclusivo o Coração Congelado (405 peças), Chifre do Wendigo (286), Amuleto, Selo do Inverno e os modelos tridimensionais dos quatro equipamentos de armadura.
+- Vida padrão do Wendigo **500 HP**; coração da fase 2, dano, rituais, loot e comandos /locate não foram alterados.
+- O Gradle gera os PNGs individuais na compilação (`scripts/rework-items.gradle`), e o CI verifica dimensões, unicidade por hash, caminho de cada atlas e geometria válida.
+
+A atualização foi preparada sobre um branch separado; faça backup do mundo e teste a aparência no Minecraft antes de substituir uma instalação importante. A compilação e validação estática não substituem um teste visual e de FPS.
+
 ## Guia de sobrevivência — versão 0.7.2
 
 ### Correção das estruturas
@@ -15,7 +27,7 @@ Se o comando não autocompletar, verifique se o 0.7.2 está realmente carregado,
 ### Luta e equipamento da Vigília
 
 - **Fase 2** (até 65% da vida do chefe): o Coração Congelado fica exposto e pulsa no tórax. A **Lança Rúnica** causa dano adicional enquanto ele estiver exposto.
-- **Fase 3** (até 30% da vida): olhos vermelhos e espinhos de gelo crescentes nas costas.
+- **Fase 3** (até 30% da vida): mantém os olhos azuis naturais e o corpo sem espinhos extras; as habilidades de combate da fase seguem ativas.
 - **Armadura da Vigília** (quatro peças): reduz até 32% do dano causado pelo Wendigo, além da armadura habitual.
 - **Machado do Degelo:** inflige fogo e interrompe ataques de gelo carregados.
 - **Sinalizador Térmico:** explosão térmica a curta distância, consumível; recarga de 24 segundos.

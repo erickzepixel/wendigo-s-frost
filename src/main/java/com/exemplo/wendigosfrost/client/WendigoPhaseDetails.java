@@ -10,11 +10,11 @@ import com.mojang.math.Axis;
 
 /**
  * Phase additions to the ORIGINAL GLB: no original triangle is deleted or
- * remeshed. Three small static GPU buffers add a living icy heart, red eyes,
- * and jagged ice crystals to the articulated body at the proper joints.
+ * remeshed. One additional GPU buffer animates the exposed icy heart in the torso.
+ * The original blue eyes and organic back silhouette remain untouched.
  */
 public final class WendigoPhaseDetails {
-    private static VertexBuffer heart, redEyes, spikes;
+    private static VertexBuffer heart;
     private static boolean loaded;
 
     private WendigoPhaseDetails() {}
@@ -87,26 +87,6 @@ public final class WendigoPhaseDetails {
                      .17f,.10f,.44f,.085f);
         }
         heart=finish(b);
-        // Third phase eyes, in precisely the same head bone as the original
-        // cyan eyes; original GLB geometry remains in the background.
-        b=new BufferBuilder(22000);
-        b.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
-        ellipsoid(b,2.67f,-.63f,3.23f,.24f,.18f,.19f,0xA90A16);
-        ellipsoid(b,2.67f, .63f,3.23f,.24f,.18f,.19f,0xA90A16);
-        ellipsoid(b,2.78f,-.63f,3.23f,.11f,.12f,.12f,0xFF4050);
-        ellipsoid(b,2.78f, .63f,3.23f,.11f,.12f,.12f,0xFF4050);
-        redEyes=finish(b);
-
-        // Nine original faceted spikes grow from the frozen spine in phase 3.
-        b=new BufferBuilder(22000);
-        b.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR);
-        for(int i=0;i<9;i++) {
-            float x=-2.48f+i*.48f;
-            float lateral=(i%2==0?.57f:-.57f);
-            float height=(i%3==0 ? 1.65f : (i%3==1?1.14f:1.40f));
-            iceSpike(b,x,lateral,4.18f,-.42f,lateral*.30f,height,.19f);
-        }
-        spikes=finish(b);
     }
     private static void draw(VertexBuffer buffer,PoseStack pose) {
         if(buffer==null || buffer.isInvalid())return;
@@ -131,27 +111,6 @@ public final class WendigoPhaseDetails {
         pose.scale(s,s,s);
         pose.translate(-1.92f,0,-3.28f);
         draw(heart,pose);
-        pose.popPose();
-    }
-    public static void drawSpines(PoseStack pose,float growth) {
-        initialize();
-        if(growth<=0)return;
-        pose.pushPose();
-        pose.translate(-.8f,0,4.16f);
-        pose.scale(1f,1f,Math.max(.01f,growth));
-        pose.translate(.8f,0,-4.16f);
-        draw(spikes,pose);
-        pose.popPose();
-    }
-    public static void drawRedEyes(PoseStack pose,float pulse) {
-        initialize();
-        // Saturated red vertex colors; no third party shader dependency.
-        pose.pushPose();
-        pose.translate(2.68f,0,3.23f);
-        float s=1f+.06f*(float)Math.sin(pulse*.22f);
-        pose.scale(s,s,s);
-        pose.translate(-2.68f,0,-3.23f);
-        draw(redEyes,pose);
         pose.popPose();
     }
 }

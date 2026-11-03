@@ -1,0 +1,85 @@
+// 0.7.4 unique item surface atlas factory. Every registered non-block artifact,
+// weapon, seed and armor item has its OWN physically separate PNG with an authored
+// palette and engraved motifs, rather than sharing frost_relic_master.png.
+// Atlas: 256 x 256, sixteen textured 64x64 material cells per item (4x4).
+tasks.named('processResources') {
+    doLast {
+        def dir=new File(destinationDir,'assets/wendigosfrost/textures/item/rework')
+        dir.mkdirs()
+        // primary RGB, glacial highlight RGB, bone/metal trim RGB, shadow RGB.
+        // Distinct palettes intentionally avoid recoloring one standard blueprint:
+        // each texture is also engraved with a deterministic item-specific sigil.
+        def schemes=[
+            frostbloom_seeds:[[88,132,109],[150,244,221],[161,128,69],[41,68,55]],
+            frostbloom_crystal:[[39,133,213],[190,248,255],[85,198,249],[12,53,120]],
+            frozen_heart:[[134,38,75],[99,238,253],[205,101,148],[46,25,56]],
+            wendigo_horn:[[199,182,149],[190,230,249],[106,101,93],[59,60,68]],
+            frost_ward:[[74,147,187],[115,238,255],[204,180,108],[26,60,105]],
+            guide_book:[[141,78,61],[232,205,163],[187,148,90],[54,36,49]],
+            whisper_shard:[[51,142,184],[187,247,255],[98,212,229],[21,67,102]],
+            lost_page:[[183,154,113],[232,216,173],[136,94,75],[73,54,47]],
+            winter_sigil:[[44,122,143],[152,252,231],[191,163,89],[30,62,84]],
+            hunter_helmet:[[191,183,164],[186,245,255],[99,137,156],[36,58,79]],
+            hunter_chestplate:[[51,97,142],[171,241,253],[183,181,171],[22,41,73]],
+            hunter_leggings:[[63,99,122],[166,225,236],[145,166,172],[24,45,66]],
+            hunter_boots:[[51,71,97],[116,200,228],[173,179,161],[19,35,54]],
+            rune_spear:[[45,113,168],[178,251,255],[143,164,178],[30,54,81]],
+            thaw_axe:[[103,76,66],[255,183,91],[198,153,118],[50,39,49]],
+            thermal_flare:[[171,77,35],[255,191,83],[223,168,92],[70,38,29]],
+            heartbreaker_blade:[[94,35,80],[255,109,170],[203,133,175],[33,20,53]],
+            runic_torch:[[49,118,139],[135,251,245],[185,166,115],[28,49,65]]
+        ]
+        def clamp={int v -> Math.max(0,Math.min(255,v))}
+        schemes.each { String item,List colors ->
+            def img=new java.awt.image.BufferedImage(256,256,java.awt.image.BufferedImage.TYPE_INT_ARGB)
+            int seed=0
+            for(int p=0;p<item.length();p++)seed=(seed*31+item.charAt(p))&0x7fffffff
+            for(int y=0;y<256;y++) for(int x=0;x<256;x++) {
+                int cell=x.intdiv(64)+4*y.intdiv(64)
+                int px=x%64,py=y%64
+                int material=cell%4
+                def base=colors[material]
+                // Every tile gets a separate brushed-metal, ice vein or bone pattern.
+                int low=(px*17+py*23+cell*31+seed)%43
+                int noise=low-21
+                boolean crystal=(material==1)
+                boolean engraved=(material==2)
+                boolean deep=(material==3)
+                int fissure=((px*11+py*7+cell*3+seed)%71<3) ? (crystal?44:-28):0
+                int grain=(int)(Math.sin(px*0.29+py*0.18+seed%13)*9
+                                +Math.cos(py*0.33+cell*0.57)*6)
+                int border=(px<3||py<3||px>60||py>60)?-22:4
+                int rib=(Math.abs((px*3+py*5+cell*7+seed)%47-23)<2) ? (engraved?33:8):0
+                int sigil=0
+                int cx=px-32,cy=py-32
+                int d2=cx*cx+cy*cy
+                if(cell==6||cell==10||cell==14) {
+                    // Celtic snowflake, unique radial rune per item.
+                    boolean ring=Math.abs(d2-(280+seed%90))<52
+                    boolean cross=(Math.abs(cx)<2 || Math.abs(cy)<2)
+                    boolean diagonal=(Math.abs(Math.abs(cx)-Math.abs(cy))<2)
+                    sigil=(ring||(d2<560&&(cross||diagonal)))?46:0
+                    if((px+py+seed)%19<2) sigil-=14
+                }
+                if(item=='thaw_axe' && crystal) {
+                    // Hot orange inner blade and cold cyan outer steel.
+                    sigil+=((px+py)%13<3)?26:0
+                }
+                if(item=='frozen_heart' && px%11<2) {fissure-=23;sigil+=18}
+                if(item=='wendigo_horn' && py%13<2) {grain+=16}
+                if(item=='frostbloom_seeds' && d2<320 && cell%3==0) sigil+=20
+                int r=clamp(base[0]+noise.intdiv(3)+grain+border+fissure+rib+sigil)
+                int g=clamp(base[1]+noise.intdiv(3)+grain+border+fissure+rib+sigil)
+                int b=clamp(base[2]+noise.intdiv(3)+grain+border+fissure+rib+sigil)
+                if(deep && ((px+py+seed)%41)<3) {r=clamp(r+13);g=clamp(g+20);b=clamp(b+27)}
+                img.setRGB(x,y,(0xff<<24)|(r<<16)|(g<<8)|b)
+            }
+            File out=new File(dir,item+'.png')
+            if(!javax.imageio.ImageIO.write(img,'png',out))
+                throw new GradleException('Could not encode original rework texture: '+item)
+            if(out.length()<6000)
+                throw new GradleException('Unexpectedly empty original texture: '+item)
+            println "Original 256px texture created: "+item+' ('+out.length()+' bytes)'
+        }
+    }
+}
