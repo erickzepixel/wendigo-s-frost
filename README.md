@@ -21,6 +21,8 @@ As estruturas nascem em chunks **ainda não gerados**; o Santuário Congelado ap
 - Lança Rúnica do Caçador: +55% de dano corpo a corpo contra o Wendigo enquanto seu coração estiver exposto; +15% na forma quadrúpede.
 - Machado do Degelo: +27% de dano contra o chefe e fogo breve que interrompe habilidades geladas.
 - Sinalizador Térmico: item consumível que incendeia Wendigos próximos por 6 segundos, com recarga de 24 segundos.
+- Espada do Coração Partido: fabricada com o coração dropado pelo chefe, recebe bônus maior na terceira fase para caçadas futuras.
+- Tocha Rúnica da Vigília: utilitário reutilizável, enfraquece e desacelera o Wendigo por 5 segundos, com recarga de 45 segundos.
 
 As imagens dos itens e as texturas da armadura são criadas pelo próprio Gradle, e as receitas usam materiais acessíveis antes da primeira vitória. O combate continua server-side; preserva singleplayer e servidores dedicados.
 
