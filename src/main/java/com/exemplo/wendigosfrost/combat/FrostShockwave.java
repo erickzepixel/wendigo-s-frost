@@ -40,7 +40,9 @@ public final class FrostShockwave {
                 caster.getBoundingBox().inflate(radius),
                 e -> e != caster && e.isAlive() && (affectPlayers ? e instanceof Player : e instanceof Monster))) {
             if (victim.distanceToSqr(caster) > radius * radius) continue;
-            if (damage > 0) victim.hurt(caster.damageSources().mobAttack(caster), damage);
+            if (damage > 0) victim.hurt(caster instanceof net.minecraft.world.entity.Mob mob
+                ? caster.damageSources().mobAttack(mob)
+                : caster.damageSources().playerAttack((Player) caster), damage);
             victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 65, 0));
             victim.knockback(1.05, caster.getX() - victim.getX(),
                 caster.getZ() - victim.getZ());
