@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "C C"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:packed_ice"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:hunter_boots",
+    "count": 1
+  }
+}
