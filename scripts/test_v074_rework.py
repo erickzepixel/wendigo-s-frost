@@ -32,7 +32,7 @@ for id in ids:
     assert obj["model"]=="wendigosfrost:models/item/bb/"+id+".obj",id
     source=Path("src/main/resources/assets/wendigosfrost/models/item/bb")/(id+".obj")
     assert source.exists() and source.stat().st_size>500,id
-    assert source.read_text().count("\\nf ")>=24,id
+    assert source.read_text().count("f ")>=24,id
     references.append(obj["model"])
 assert len(set(references))==len(ids)
 # The newly provided original axe features a recognizable complete blade.
