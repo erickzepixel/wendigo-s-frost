@@ -198,3 +198,6 @@ apply from: 'scripts/hunter-gear-textures.gradle'
 // Original high-resolution material atlas and complex Wendigo armor textures.
 apply from: 'scripts/frost-relic-master.gradle'
 apply from: 'scripts/wendigo-armor-textures.gradle'
+
+// Per-item atlas textures for the complete artifact, plant and weapon redesign.
+apply from: 'scripts/rework-items.gradle'
