@@ -39,6 +39,8 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.RUNE_SPEAR.get());
                 output.accept(ModItems.THAW_AXE.get());
                 output.accept(ModItems.THERMAL_FLARE.get());
+                output.accept(ModItems.HEARTBREAKER_BLADE.get());
+                output.accept(ModItems.RUNIC_TORCH.get());
                 output.accept(ModItems.WENDIGO_SPAWN_EGG.get());
             })
             .build());
