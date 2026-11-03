@@ -27,7 +27,7 @@ counts={}
 for id in ids:
     file=asset/"models/item"/f"{id}.json"
     model=json.loads(file.read_text(encoding="utf-8"))
-    assert model["textures"]["atlas"]=="wendigosfrost:item/frost_relic_master", id
+    assert model["textures"]["atlas"]=="wendigosfrost:item/rework/"+id, id
     parts=model["elements"]
     minimum=250 if id in ("frozen_heart","wendigo_horn") else 50
     assert len(parts)>=minimum, (id,len(parts))
@@ -46,5 +46,7 @@ assert "scripts/frost-relic-master.gradle" in build
 assert "scripts/wendigo-armor-textures.gradle" in build
 textures=Path("scripts/frost-relic-master.gradle").read_text()
 assert "frost_relic_master.png" in textures
+assert "scripts/rework-items.gradle" in build
+assert "frozen_heart" in Path("scripts/rework-items.gradle").read_text()
 print("PASS: 500 HP migration, correctly placed chest heart, humanoid antler/rib armor")
 print("Complex 3D model elements:",counts)
