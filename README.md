@@ -1,3 +1,18 @@
+## 0.7.0 — Vigília do Inverno: expansão de lore
+
+Esta atualização mantém o Wendigo articulado e o combate da 0.6.1, e adiciona uma linha de exploração:
+
+- **Introdução de primeira entrada:** tela em duas páginas, com história do Wendigo, explicação da maldição e dicas. A confirmação é registrada no personagem daquele mundo. Reabra a tela com `/wendigofrost historia` (sem cheats).
+- **Duas ruínas procedurais:** Santuário de Gelo Ancestral (taigas/grove/snowy plains) e Memorial dos Caçadores (florestas/taigas), com baús e artefatos. Os novos locais aparecem em **chunks novos**.
+- **Quatro blocos originais:** Tijolos de Gelo Ancestral, Pedra dos Sussurros, Lanterna de Almas Gélidas e Totem dos Caçadores Perdidos.
+- **Três itens originais:** Fragmento do Sussurro, Página do Caçador Desaparecido e Selo do Inverno. A página revela lore; o selo oferece visão noturna e proteção temporária.
+- **Oito texturas PNG autorais 32×32** geradas pelo Gradle durante o build, com desenhos próprios e sem baixar assets de terceiros.
+- **Cinco receitas de fabricação** e drops dos blocos; o Fragmento do Sussurro é encontrado nas ruínas.
+- O Santuário Congelado subterrâneo existente foi melhorado com novos blocos e páginas perdidas.
+- Manual do Sobrevivente ampliado; todos os recursos estão na aba criativa Wendigo's Frost.
+
+**Validação:** testes estáticos, build Forge e integridade do `.jar` via GitHub Actions. A aparência, o equilíbrio das recompensas e a geração de mundo exigem testes dentro do Minecraft. Faça backup antes de atualizar.
+
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
 Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.6.0**.

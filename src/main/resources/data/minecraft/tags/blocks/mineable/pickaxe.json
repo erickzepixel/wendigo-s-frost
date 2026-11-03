@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "wendigosfrost:deep_glacier_pedestal"
+    "wendigosfrost:deep_glacier_pedestal",
+    "wendigosfrost:ancient_frost_bricks",
+    "wendigosfrost:whispering_runestone",
+    "wendigosfrost:soul_frost_lantern",
+    "wendigosfrost:pale_bone_totem"
   ]
 }

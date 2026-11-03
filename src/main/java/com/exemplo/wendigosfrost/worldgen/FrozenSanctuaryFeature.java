@@ -31,7 +31,8 @@ public final class FrozenSanctuaryFeature extends Feature<NoneFeatureConfigurati
             boolean wall = x==-3 || x==3 || z==-3 || z==3;
             boolean floor = y==-1, roof = y==4;
             BlockState toPlace = floor || roof || wall
-                    ? (random.nextInt(5)==0 ? Blocks.BLUE_ICE : Blocks.PACKED_ICE).defaultBlockState()
+                    ? (random.nextInt(4)==0 ? ModBlocks.ANCIENT_FROST_BRICKS.get().defaultBlockState()
+                        : (random.nextInt(5)==0 ? Blocks.BLUE_ICE : Blocks.PACKED_ICE).defaultBlockState())
                     : Blocks.AIR.defaultBlockState();
             world.setBlock(p,toPlace,2);
         }
@@ -40,9 +41,14 @@ public final class FrozenSanctuaryFeature extends Feature<NoneFeatureConfigurati
         if (world.getBlockEntity(center.offset(2,0,1)) instanceof ChestBlockEntity chest) {
             chest.setItem(0, new ItemStack(ModItems.FROSTBLOOM_SEEDS.get(), 2 + random.nextInt(3)));
             if(random.nextBoolean()) chest.setItem(4, new ItemStack(ModItems.FROSTBLOOM_CRYSTAL.get()));
+            chest.setItem(6, new ItemStack(ModItems.WHISPER_SHARD.get(), 1 + random.nextInt(2)));
+            chest.setItem(8, new ItemStack(ModItems.LOST_PAGE.get()));
         }
         for (int dx : new int[]{-2, 2}) for (int dz : new int[]{-2, 2})
-            world.setBlock(center.offset(dx,0,dz), Blocks.SOUL_LANTERN.defaultBlockState(), 2);
+            world.setBlock(center.offset(dx,0,dz),
+                ModBlocks.SOUL_FROST_LANTERN.get().defaultBlockState(), 2);
+        world.setBlock(center.offset(0,0,-2), ModBlocks.WHISPERING_RUNESTONE.get().defaultBlockState(), 2);
+        world.setBlock(center.offset(-1,0,2), ModBlocks.PALE_BONE_TOTEM.get().defaultBlockState(), 2);
         return true;
     }
 }

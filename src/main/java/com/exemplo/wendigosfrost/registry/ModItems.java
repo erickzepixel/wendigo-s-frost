@@ -34,5 +34,24 @@ public final class ModItems {
         () -> new net.minecraftforge.common.ForgeSpawnEggItem(
             ModEntities.WENDIGO, 0x1A2532, 0x91E6FF, new Item.Properties()));
 
+
+    public static final RegistryObject<Item> ANCIENT_FROST_BRICKS_ITEM = ITEMS.register(
+            "ancient_frost_bricks", () -> new BlockItem(ModBlocks.ANCIENT_FROST_BRICKS.get(),new Item.Properties()));
+    public static final RegistryObject<Item> WHISPERING_RUNESTONE_ITEM = ITEMS.register(
+            "whispering_runestone", () -> new BlockItem(ModBlocks.WHISPERING_RUNESTONE.get(),new Item.Properties()));
+    public static final RegistryObject<Item> SOUL_FROST_LANTERN_ITEM = ITEMS.register(
+            "soul_frost_lantern", () -> new BlockItem(ModBlocks.SOUL_FROST_LANTERN.get(),new Item.Properties()));
+    public static final RegistryObject<Item> PALE_BONE_TOTEM_ITEM = ITEMS.register(
+            "pale_bone_totem", () -> new BlockItem(ModBlocks.PALE_BONE_TOTEM.get(),new Item.Properties()));
+
+    public static final RegistryObject<Item> WHISPER_SHARD = ITEMS.register(
+            "whisper_shard", () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> LOST_PAGE = ITEMS.register(
+            "lost_page", () -> new com.exemplo.wendigosfrost.item.LostPageItem(
+                new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> WINTER_SIGIL = ITEMS.register(
+            "winter_sigil", () -> new com.exemplo.wendigosfrost.item.WinterSigilItem(
+                new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
+
     private ModItems() {}
 }

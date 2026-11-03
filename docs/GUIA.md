@@ -85,6 +85,40 @@ F . P . F
 
 O pedestal tem **2 minutos de recarga** após uma invocação e impede a criação de outro Wendigo se já existir um em um raio de 64 blocos. Nenhum cristal é consumido se a estrutura estiver incompleta, não houver espaço ou o surgimento falhar. Este ritual não aplica nem remove a marca; o ritual de libertação permanece separado (clique normal para inserir os três ingredientes e mão vazia para iniciar a purificação).
 
+## Vigília do Inverno — novidades 0.7.0
+
+### Uma história ao entrar no mundo
+
+Na primeira entrada com o mod, surge uma tela em duas páginas com a origem da maldição e a história dos antigos caçadores. Clique em **Continuar** e **Entrar no mundo**. O mod registra a conclusão para não exibir novamente ao voltar ao mesmo mundo. Use `/wendigofrost historia` para revisitar a história quando quiser.
+
+### Estruturas naturais
+
+O **Santuário de Gelo Ancestral** é encontrado em taigas e regiões nevadas; seus pilares, runas, totens e baús revelam o legado dos caçadores. O **Memorial dos Caçadores** aparece entre árvores de florestas e taigas. O Santuário Congelado subterrâneo existente também foi enriquecido. As estruturas só podem aparecer em **terreno ainda não gerado**.
+
+### Novos blocos e itens
+
+| Nome | Uso |
+|---|---|
+| Tijolos de Gelo Ancestral | Construção e fabricação de monumentos |
+| Pedra dos Sussurros | Clique para ouvir uma das pistas do ritual |
+| Lanterna de Almas Gélidas | Iluminação azulada para refúgios e santuários |
+| Totem dos Caçadores Perdidos | Bloco decorativo ósseo de ruínas |
+| Fragmento do Sussurro | Encontrado em baús das ruínas; ingrediente do Selo |
+| Página do Caçador Desaparecido | Clique para ler um trecho da história |
+| Selo do Inverno | Visão noturna por 30 s e resistência por 8 s; recarga de 90 s |
+
+O **Selo do Inverno** é fabricado na bancada com dois Fragmentos do Sussurro, um Coração do Mar, uma Ametista e um Gelo Azul:
+
+```text
+. A .
+F C F
+. G .
+```
+
+F = Fragmento do Sussurro; C = Coração do Mar; A = Fragmento de Ametista; G = Gelo Azul.
+
+O mod também permite fabricar blocos decorativos com gelo, deepslate, ossos e materiais espirituais.
+
 ## Como sobreviver
 
 1. Procure sementes em vegetação de florestas e taigas e cultive a Flor-Gelo.

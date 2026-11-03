@@ -25,6 +25,13 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.FROST_WARD.get());
                 output.accept(ModItems.PEDESTAL_ITEM.get());
                 output.accept(ModItems.GUIDE_BOOK.get());
+                output.accept(ModItems.ANCIENT_FROST_BRICKS_ITEM.get());
+                output.accept(ModItems.WHISPERING_RUNESTONE_ITEM.get());
+                output.accept(ModItems.SOUL_FROST_LANTERN_ITEM.get());
+                output.accept(ModItems.PALE_BONE_TOTEM_ITEM.get());
+                output.accept(ModItems.WHISPER_SHARD.get());
+                output.accept(ModItems.LOST_PAGE.get());
+                output.accept(ModItems.WINTER_SIGIL.get());
                 output.accept(ModItems.WENDIGO_SPAWN_EGG.get());
             })
             .build());

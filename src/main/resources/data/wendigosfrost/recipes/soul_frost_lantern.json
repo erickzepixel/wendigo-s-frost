@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    " D "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:blue_ice"
+    },
+    "B": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "C": {
+      "item": "minecraft:soul_lantern"
+    },
+    "D": {
+      "item": "wendigosfrost:ancient_frost_bricks"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:soul_frost_lantern",
+    "count": 1
+  }
+}

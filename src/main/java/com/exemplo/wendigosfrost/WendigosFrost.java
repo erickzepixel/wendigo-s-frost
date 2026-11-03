@@ -29,6 +29,7 @@ public class WendigosFrost {
         ModBlockEntities.TYPES.register(bus);
         ModEffects.EFFECTS.register(bus);
         MarkEvents.registerAttributes(bus);
+        com.exemplo.wendigosfrost.network.ModNetwork.register();
         bus.addListener((net.minecraftforge.event.BuildCreativeModeTabContentsEvent e) -> {
             if (e.getTabKey() == net.minecraft.world.item.CreativeModeTabs.INGREDIENTS) {
                 e.accept(ModItems.FROSTBLOOM_SEEDS);
