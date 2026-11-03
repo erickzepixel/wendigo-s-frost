@@ -9,12 +9,20 @@ Esta versão substitui apenas a **representação visual do Wendigo** por uma ma
 - Arquivo reproduzido no JAR: `assets/wendigosfrost/models/gltf/wendigo_glacial_exact.glb`.
 - SHA-256 esperado: `e40580c2e51d711878745bed9a9601f8ae6be38f80716c7715c099bc44f6f1d1`.
 - Renderer: `src/main/java/com/exemplo/wendigosfrost/client/WendigoRenderer.java`.
+- Stream GPU gerado: `src/main/resources/assets/wendigosfrost/models/mesh/wendigo_glacial.wfmesh` (mesmos 70.020 triângulos).
 
-## Dependência adicional obrigatória
+## Renderização nativa, sem instalar biblioteca adicional
 
-O antigo renderizador GeckoLib não entende GLB de alta densidade. Para renderizar a malha intacta, instale no cliente o **glTF Renderer API 1.0.0-beta.1** para Minecraft Forge 1.20.1, além do Forge, GeckoLib e TerraBlender já exigidos. Download oficial do provedor: https://www.curseforge.com/minecraft/mc-mods/gltf-renderer-api/files/all
+O renderer utiliza diretamente **VertexBuffer e shaders de cor do Minecraft**, com os 70.020 triângulos armazenados em um VBO reutilizável. Não há dependência adicional além de GeckoLib e TerraBlender, já presentes nas versões anteriores.
 
-O projeto compila contra a API pública do próprio desenvolvedor, sem incorporar nem redistribuir o código proprietário dessa biblioteca.
+Para gerar um JAR a partir do código-fonte:
+```sh
+python3 scripts/restore_original_wendigo_glb.py
+python3 scripts/bake_exact_mesh.py
+gradle build
+```
+
+O GLB original continua incluído no JAR. As cores originais dos 15 materiais são reproduzidas por cor de vértice; reflexos PBR, textura normal e iluminação glTF avançada não são reproduzidos.
 
 ## Animação: limitação importante
 
