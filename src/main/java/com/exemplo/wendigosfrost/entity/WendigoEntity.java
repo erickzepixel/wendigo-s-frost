@@ -2,6 +2,7 @@ package com.exemplo.wendigosfrost.entity;
 
 import com.exemplo.wendigosfrost.config.ModConfig;
 import com.exemplo.wendigosfrost.combat.FrostShockwave;
+import com.exemplo.wendigosfrost.combat.WendigoAttackParticles;
 import com.exemplo.wendigosfrost.data.WendigoMark;
 import java.util.UUID;
 import net.minecraft.core.particles.ParticleTypes;
@@ -228,7 +229,11 @@ public class WendigoEntity extends Monster implements GeoEntity {
                 14, 1.2, 1.5, 1.2, .025);
         }
 
-        if (impactTicks > 0 && --impactTicks == 0) entityData.set(CUE, 0);
+        if (impactTicks > 0) {
+            if (getAttackCue() == 4)
+                WendigoAttackParticles.aftershock(server, this, impactTicks);
+            if (--impactTicks == 0) entityData.set(CUE, 0);
+        }
         if (isOnFire()) { // fire remains a deliberate counterplay tool
             if (chargeTicks > 0) cancelSkill();
             return;
@@ -237,19 +242,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
         if (chargeTicks > 0) {
             getNavigation().stop();
             setDeltaMovement(getDeltaMovement().multiply(.38, 1, .38));
-            if (chargeTicks % 4 == 0) {
-                double radius = chargingSkill == 1 ? 7.5 : 5.0;
-                for (int i = 0; i < 40; i++) {
-                    double a = i * Math.PI * 2 / 40;
-                    server.sendParticles(chargingSkill == 1
-                        ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SNOWFLAKE,
-                        getX() + Math.cos(a) * radius, getY() + .20,
-                        getZ() + Math.sin(a) * radius, 2, .08, .12, .08, .01);
-                }
-                server.sendParticles(ParticleTypes.END_ROD,
-                    getX(), getY() + (isQuadruped() ? 1.65 : 3.3), getZ(),
-                    24, 1.15, 1.0, 1.15, .022);
-            }
+            if (chargeTicks % 6 == 0)
+                WendigoAttackParticles.telegraph(server, this, chargingSkill, chargeTicks);
             if (--chargeTicks == 0) {
                 int skill = chargingSkill;
                 if (skill == 1) castRoar(server);
@@ -285,6 +279,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
 
     private void castRoar(ServerLevel server) {
         server.playSound(null, blockPosition(), SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 1.5f, .7f);
+        WendigoAttackParticles.roar(server, this);
         server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(),
             getY() + (isQuadruped() ? 1.5 : 3.25), getZ(),
             155, 2.8, 1.4, 2.8, .12);
@@ -308,9 +303,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
         if (hit) {
             entityData.set(SWIPE_COUNTER, entityData.get(SWIPE_COUNTER) + 1);
             if (level() instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.SNOWFLAKE,
-                    victim.getX(), victim.getY() + victim.getBbHeight() * .65, victim.getZ(),
-                    17, .45, .55, .45, .05);
+                WendigoAttackParticles.claw(server, this, victim);
             }
         }
         if (hit && victim instanceof Player player && getBossPhase() >= 2) {
