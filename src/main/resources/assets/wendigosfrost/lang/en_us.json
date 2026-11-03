@@ -76,5 +76,7 @@
   "item.wendigosfrost.heartbreaker_blade": "Heartbreaker Blade",
   "item.wendigosfrost.runic_torch": "Vigil Runic Torch",
   "tooltip.wendigosfrost.heartbreaker_blade": "Deals extra damage to the enraged Wendigo in phase 3.",
-  "tooltip.wendigosfrost.runic_torch": "Runic light that weakens and slows Wendigos for 5 seconds."
+  "tooltip.wendigosfrost.runic_torch": "Runic light that weakens and slows Wendigos for 5 seconds.",
+  "tooltip.wendigosfrost.guide_open": "Right-click to open the interactive Survivor Manual.",
+  "tooltip.wendigosfrost.guide_chapters": "13 chapters: survival, combat, recipes, rituals and ruins."
 }

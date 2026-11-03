@@ -1,7 +1,7 @@
-name: Publicar Wendigo's Frost 0.7.6 (Calças e Botas Blockbench)
+name: Publicar Wendigo's Frost 0.7.6 (Ovo e Manual Blockbench)
 on:
   push:
-    branches: [v0.7.6-calcas-botas-bbmodel]
+    branches: [v0.7.6-modelos-ovo-manual]
   workflow_dispatch:
 permissions:
   contents: write
@@ -69,6 +69,8 @@ jobs:
           assert len(json.loads((root/'botas_da_vigilia.bbmodel').read_text())['elements'])==8
           print('PASS: revised pants/boots, original helmet/chestplate exact')
           PY
+      - name: Validar ovo e manual Blockbench originais e interface funcional
+        run: python3 scripts/test_v076_egg_manual.py
       - name: Compilar mod Forge
         run: gradle --no-daemon build --stacktrace
       - name: Confirmar JAR principal
@@ -210,6 +212,10 @@ jobs:
                   obj=json.loads(jar.read(model))
                   if item.startswith('hunter_'):
                       assert obj['parent']=='builtin/entity' and 'elements' not in obj
+                  elif item=='guide_book':
+                      assert obj['parent']=='minecraft:block/block'
+                      assert len(obj['elements'])==5
+                      assert len(obj['textures'])==5
                   else:
                       assert obj['textures']['atlas']=='wendigosfrost:item/rework/'+item
                       assert len(obj['elements'])>=50
@@ -246,16 +252,44 @@ jobs:
                   assert data['parent']=='builtin/entity'
               print('PASS: original shared BB geometry and original 512x64 materials in all inventory/worn armor items')
           PY
+      - name: Verificar modelos originais, texturas e interface no JAR sem mudar a versao
+        run: |
+          python3 - <<'PY'
+          import zipfile,base64,json,hashlib,struct
+          with zipfile.ZipFile('build/libs/wendigosfrost-0.7.6.jar') as z:
+              names=set(z.namelist())
+              base='assets/wendigosfrost/'
+              for item,source,ntextures in (
+                  ('wendigo_spawn_egg','ovo_de_invocacao_wendigo',4),
+                  ('guide_book','manual_do_sobrevivente',5)):
+                  bb=json.load(open('assets-source/item-bbmodels/'+source+'.bbmodel'))
+                  p=base+'models/item/'+item+'.json'
+                  assert p in names,p
+                  model=json.loads(z.read(p))
+                  assert len(model['elements'])==len(bb['elements'])==5
+                  assert len(model['textures'])==ntextures
+                  for i,tex in enumerate(bb['textures']):
+                      png=base+'textures/item/blockbench/'+item+'_'+str(i)+'.png'
+                      assert png in names,png
+                      expected=base64.b64decode(tex['source'].split(',',1)[-1])
+                      assert z.read(png)==expected,('PNG source mismatch',png)
+                      assert struct.unpack('>II',expected[16:24])==(64,64)
+                  print('PASS',item,':',len(bb['elements']),'original cubes and',ntextures,'unmodified PNGs')
+              for cls in ('item/GuideBookItem','client/SurvivorManualScreen'):
+                  assert 'com/exemplo/wendigosfrost/'+cls+'.class' in names,cls
+              assert 'assets/wendigosfrost/models/item/wendigo_spawn_egg.json' in names
+              print('PASS: interactive client manual, genuine Forge spawn egg item assets and unchanged 0.7.6 jar')
+          PY
       - name: Publicar ou atualizar release de teste
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v0.7.6-calcas-botas-bbmodel
+          TAG=v0.7.6-ovo-manual
           JAR=build/libs/wendigosfrost-0.7.6.jar
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$JAR" --clobber
           else
             gh release create "$TAG" "$JAR" --target "$GITHUB_SHA" --prerelease \
-              --title "Wendigo's Frost 0.7.6 — Caçadores da Vigília — 500 HP e Rework de Itens (prévia)" \
-              --notes "Wendigo's Frost 0.7.6: novas Calças e Botas da Vigília usando exatamente os dois modelos Blockbench (.bbmodel) enviados pelo criador, com suas texturas, faces e rotacoes originais. Calças reajustadas nos joelhos, coxas e cintura; botas revisadas com camadas de pelo, sola e pontas de gelo. Modelos do Elmo e Peitoral mantidos sem qualquer alteração. Inventario e personagem continuam usando a mesma malha 3D via renderizador BB compartilhado. Mod Forge 1.20.1, 500 HP e restantes recursos mantidos. Build CI compilado e validado; encaixe visual durante o movimento ainda requer teste no jogo."
+              --title "Wendigo's Frost 0.7.6 — Ovo e Manual Interativo (prévia)" \
+              --notes "Wendigo's Frost 0.7.6 (versao inalterada): modelo original Blockbench com 5 cubos e 4 texturas para o Ovo de Invocacao do Wendigo, preservando a invocacao real Forge. Manual do Sobrevivente com modelo original Blockbench de 5 cubos e 5 texturas, e GUI funcional com 13 capitulos (indice, navegacao, rolagem, comandos, rituais, Frostbloom, equipamentos e Wendigo 500 HP), aberta com botao direito. Texturas PNG originais e UVs preservados e conferidos dentro do JAR. Elmo, peitoral, calcas, botas, mundo e demais mecanicas permanecem inalterados. Versao mod_version continua exatamente 0.7.6; release publicada com tag propria para manter o JAR anterior disponivel. Compilacao CI aprovada; teste visual in-game pendente."
           fi

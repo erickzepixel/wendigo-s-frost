@@ -1,63 +1,46 @@
 package com.exemplo.wendigosfrost.item;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import javax.annotation.Nullable;
 
-/** Guia autossuficiente: funciona mesmo sem acesso a internet ou bibliotecas de wiki. */
-public class GuideBookItem extends WrittenBookItem {
-    private static final String[] PAGES = {
-        "WENDIGO'S FROST\n\nGUIA DO SOBREVIVENTE\n\nO frio chama por algo antigo. Cultive a Flor-Gelo e estude seus cristais antes de despertar a criatura.",
-        "1. FLOR-GELO\n\nEncontre sementes em vegetacao de florestas e taigas. Plante-as em terra cultivada. A Flor-Gelo possui seis estagios e demora alguns dias para crescer.",
-        "2. CRISTAL\n\nColha a Flor-Gelo para obter cristais. Comer um Cristal Frostbloom causa Delirio Gelido e marca o jogador. O efeito e a marca nao sao a mesma coisa.",
-        "3. A MALDICAO\n\nA marca e persistente. Apos 3 dias de jogo (72.000 ticks por padrao), um Wendigo pode surgir perto de voce. Ele e hostil e tem uma barra de chefe.",
-        "4. WENDIGO\n\nO Wendigo possui 260 pontos de vida, e perigoso em combate e e vulneravel ao fogo. Fique alerta: ele pode perseguir jogadores proximo de seu esconderijo.",
-        "5. RITUAL\n\nEncontre ou fabrique o Pedestal das Geleiras Profundas. Coloque nele: 1 Coracao Congelado, 1 Chifre de Wendigo e 1 Cristal Frostbloom.",
-        "6. LIBERTACAO\n\nCom os tres ingredientes no pedestal, use a mao vazia para comecar. Permaneça a ate 3 blocos por 15 segundos e evite receber dano. Isso remove a marca.",
-        "INVOCACAO IMEDIATA\\n\\nVoce nao precisa esperar 3 dias: monte um altar ao redor do Pedestal das Geleiras Profundas e ative-o segurando um Cristal Frostbloom.",
-        "ALTAR (VISTA DE CIMA)\\n\\n..F..\\n.G.G.\\nF.P.F\\n.G.G.\\n..F..\\n\\nP=Pedestal, F=fogueira das almas ACESA, G=gelo azul. Todos os blocos na mesma altura.",
-        "COMO ATIVAR\\n\\nAgache e clique com o botao direito no pedestal segurando 1 Cristal Frostbloom. O Wendigo aparecera IMEDIATAMENTE perto do altar. Ele sera hostil!",
-        "REGRAS DO ALTAR\\n\\nDeixe um espaco aberto de 5 blocos de altura nas proximidades. O pedestal precisa esperar 2 minutos para outra invocacao. Se ja existir um Wendigo perto, ele nao cria outro.",
-        "7. COMANDOS\n\n/summon wendigosfrost:wendigo\n\n/wendigofrost status\n/wendigofrost testmark\n/wendigofrost testspawn\n/wendigofrost diagnostico",
-        "8. PROTECAO GELIDA\n\nCrie o Amuleto de Protecao Gelida. Ele concede defesa, remove fraqueza e lentidao e atrasa o Wendigo por alguns segundos. Tem 6 cargas e recarga de 30 segundos.",
-        "9. BATALHA EM 3 FASES\n\nFase 1: perseguicao e rugido. Fase 2: o Wendigo acelera e usa pisada de gelo. Fase 3: furia final. Ao ouvir o grito, fuja da area marcada por particulas.",
-        "10. NUNCA IGNORE O SOM\n\nBatimentos e neve surgem quando o Wendigo esta perto. O fogo ainda e uma fraqueza importante, interrompendo suas habilidades especiais.",
-        "11. COMANDOS\n\n/wendigofrost status\n/wendigofrost testmark\n/wendigofrost testspawn\n/wendigofrost diagnostico\n/summon wendigosfrost:wendigo",
-        "13. RUINAS DA VIGILIA\n\nNa taiga e nas montanhas geladas, procure os Santuarios do Gelo Ancestral. Nas florestas ainda restam os Memoriais dos Cacadores.",
-        "14. PEDRAS DOS SUSSURROS\n\nToque nas pedras com runas para escutar fragmentos da historia. As ruinas guardam Paginas Perdidas e Fragmentos do Sussurro.",
-        "15. O SELO DO INVERNO\n\nCrie o Selo do Inverno com dois Fragmentos do Sussurro, Ametista, Gelo Azul e Coracao do Mar. Ele ilumina o escuro e concede breve protecao.",
-        "17. LOCALIZE AS RUINAS\n\nNo chat: /locate structure wendigosfrost:ancient_ice_shrine ou wendigosfrost:hunter_cairn. Tambem ha o wendigosfrost:frozen_sanctuary subterraneo.",
-        "18. SEMENTES NATURAIS\n\nBaús do Santuário Ancestral: 2 a 5 Sementes Frostbloom; Memorial dos Cacadores: 1 a 3; Santuario subterraneo: 3 a 6. Todas garantidas nos novos baus.",
-        "19. GOLPES DE GELO\n\nObserve as particulas: garras de neve indicam golpe corpo a corpo; almas azuis anunciam rugido; aneis de gelo antecipam a pisada. Aproveite o aviso para escapar.",
-        "16. A VIGILIA FINAL\n\nO Wendigo nao nasceu do frio. Ele nasceu de uma fome que os antigos juraram selar. Seu ritual pode libertar voce da marca, mas nao destruir todas as ruinas.",
-        "12. INFORMACOES\n\nRequer Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4 e TerraBlender. Atualizacoes e instrucao: github.com/erickzepixel/wendigo-s-frost"
-    };
-    public GuideBookItem(Item.Properties props) {
-        super(props);
+import java.util.List;
+
+/**
+ * Offline interactive Manual do Sobrevivente.
+ *
+ * Unlike a WrittenBookItem with pre-generated NBT, this opens directly on
+ * right click even for /give, Creative inventory and older saved items.
+ * The screen is loaded client-only so dedicated Forge servers remain safe.
+ */
+public final class GuideBookItem extends Item {
+    public GuideBookItem(Item.Properties properties) {
+        super(properties);
     }
-    public static void prepare(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("pages", 9) && tag.contains("title", 8)) return;
-        tag.putString("title", "Wendigo's Frost - Guia");
-        tag.putString("author", "Wendigo's Frost");
-        tag.putBoolean("resolved", false);
-        ListTag pages = new ListTag();
-        for (String page : PAGES) {
-            pages.add(StringTag.valueOf(Component.Serializer.toJson(Component.literal(page))));
-        }
-        tag.put("pages", pages);
-    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        prepare(player.getItemInHand(hand));
-        return super.use(level, player, hand);
+        ItemStack stack=player.getItemInHand(hand);
+        if (level.isClientSide()) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> com.exemplo.wendigosfrost.client.SurvivorManualScreen.open());
+        }
+        return InteractionResultHolder.sidedSuccess(stack,level.isClientSide());
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level,
+            List<Component> lines, TooltipFlag flag) {
+        lines.add(Component.translatable("tooltip.wendigosfrost.guide_open"));
+        lines.add(Component.translatable("tooltip.wendigosfrost.guide_chapters"));
+        super.appendHoverText(stack,level,lines,flag);
     }
 }

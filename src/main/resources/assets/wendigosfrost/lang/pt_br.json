@@ -76,5 +76,7 @@
   "item.wendigosfrost.heartbreaker_blade": "Espada do Coração Partido",
   "item.wendigosfrost.runic_torch": "Tocha Rúnica da Vigília",
   "tooltip.wendigosfrost.heartbreaker_blade": "Mais dano contra o Wendigo enfurecido na fase 3.",
-  "tooltip.wendigosfrost.runic_torch": "Luz rúnica que reduz a velocidade e a força do Wendigo por 5 segundos."
+  "tooltip.wendigosfrost.runic_torch": "Luz rúnica que reduz a velocidade e a força do Wendigo por 5 segundos.",
+  "tooltip.wendigosfrost.guide_open": "Clique com o botão direito para abrir o manual interativo.",
+  "tooltip.wendigosfrost.guide_chapters": "13 capítulos: sobrevivência, combate, receitas, rituais e ruínas."
 }

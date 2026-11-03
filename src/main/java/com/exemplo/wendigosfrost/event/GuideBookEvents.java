@@ -1,7 +1,6 @@
 package com.exemplo.wendigosfrost.event;
 
 import com.exemplo.wendigosfrost.WendigosFrost;
-import com.exemplo.wendigosfrost.item.GuideBookItem;
 import com.exemplo.wendigosfrost.registry.ModItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +22,6 @@ public final class GuideBookEvents {
         }
         if (player.getPersistentData().getBoolean(GIVEN_KEY)) return;
         ItemStack guide = new ItemStack(ModItems.GUIDE_BOOK.get());
-        GuideBookItem.prepare(guide);
         if (!player.getInventory().add(guide)) player.drop(guide, false);
         player.getPersistentData().putBoolean(GIVEN_KEY, true);
     }
