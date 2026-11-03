@@ -17,6 +17,10 @@ public final class GuideBookEvents {
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!player.getPersistentData().getBoolean(
+                com.exemplo.wendigosfrost.network.ModNetwork.READ_KEY)) {
+            com.exemplo.wendigosfrost.network.ModNetwork.sendIntroduction(player);
+        }
         if (player.getPersistentData().getBoolean(GIVEN_KEY)) return;
         ItemStack guide = new ItemStack(ModItems.GUIDE_BOOK.get());
         GuideBookItem.prepare(guide);
