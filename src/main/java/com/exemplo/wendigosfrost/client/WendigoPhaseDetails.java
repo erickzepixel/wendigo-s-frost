@@ -118,6 +118,13 @@ public final class WendigoPhaseDetails {
         initialize();
         if(phaseBlend<=0)return;
         pose.pushPose();
+        // Original GLB is a quadruped with its sternum on local -Z.
+        // In phase 2, the torso rotates -86 degrees around the hips:
+        // -Z becomes FRONT, while +X becomes UP. Older versions placed
+        // the heart at x=1.92,z=3.28 (near the throat/back, hidden).
+        // Move its center onto the underside of the mid-ribcage, which
+        // is the visible upper CHEST after the creature rears upright.
+        pose.translate(-1.24f, 0f, -1.20f);
         pose.translate(1.92f,0,3.28f);
         float pulse=1f+.065f*(float)Math.sin(tick*.18f);
         float s=Math.max(.01f,phaseBlend)*pulse;
