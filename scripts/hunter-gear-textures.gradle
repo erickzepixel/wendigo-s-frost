@@ -10,7 +10,8 @@ tasks.named('processResources', ProcessResources).configure {
           hunter_helmet:[84,162,195],hunter_chestplate:[62,135,183],
           hunter_leggings:[67,115,155],hunter_boots:[52,103,145],
           rune_spear:[128,229,244],thaw_axe:[226,149,83],
-          thermal_flare:[255,117,40]
+          thermal_flare:[255,117,40],
+          heartbreaker_blade:[204,56,119],runic_torch:[80,216,224]
         ]
         def clamp={ int v -> Math.max(0,Math.min(255,v)) }
         palettes.each { name,col ->
@@ -19,12 +20,18 @@ tasks.named('processResources', ProcessResources).configure {
                 int grain=((x*13+y*29+name.length()*17)%17)-8
                 int alpha=0,red=col[0]+grain,green=col[1]+grain,blue=col[2]+grain
                 boolean metal=false,glow=false
-                if(name=='rune_spear') {
+                if(name=='rune_spear' || name=='heartbreaker_blade') {
                     boolean shaft=(Math.abs((x+y)-30)<=2 && x>5 && x<26 && y>5 && y<28)
-                    boolean tip=(Math.abs(x-y+2)<5 && x>17 && x<30 && y<13)
+                    boolean tip=(Math.abs(x-y+2)<(name=='heartbreaker_blade'?6:5) && x>17 && x<30 && y<14)
                     alpha=(shaft||tip) ? 255 : 0
                     metal=shaft
                     glow=tip
+                } else if(name=='runic_torch') {
+                    boolean shaft=(x>=14&&x<=18&&y>=11&&y<=28)
+                    boolean head=(x>=10&&x<=21&&y>=6&&y<=14)
+                    boolean flame=Math.abs(x-16)<(y<6?2:4)&&y>=2&&y<10
+                    alpha=(shaft||head||flame)?255:0
+                    metal=shaft||head;glow=flame
                 } else if(name=='thaw_axe') {
                     boolean haft=(Math.abs(x+y-32)<=2 && x>5&&x<27)
                     boolean blade=(x>15&&x<29&&y>3&&y<15 && Math.abs(x-y-15)<12)
