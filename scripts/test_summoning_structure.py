@@ -17,7 +17,8 @@ required={
     "2 minute cooldown saved": 'tag.putLong("SummonCooldownUntil"' in block_entity and 'tag.getLong("SummonCooldownUntil")' in block_entity and "2400L" in block_entity,
     "separate cleansing ritual": "be.start(sp)" in block and "be.insert(stack)" in block,
     "sneak right click event": "event.getEntity().isShiftKeyDown()" in event and "event.setCanceled(true)" in event,
-    "survival guide ritual diagram": "Fogueiras" in book and "GELO AZUL" in book and "pedestal no centro" in book,
+    "survival guide ritual diagram": all(term in book.lower() for term in
+        ("fogueiras", "gelo azul", "pedestal no centro")),
     "no link to marked player": "boss.setOwnerId" not in ritual,
     "summoning advancement": Path("src/main/resources/data/wendigosfrost/advancements/summon_ritual.json").exists()
 }
