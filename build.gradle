@@ -143,3 +143,45 @@ tasks.named('processResources', ProcessResources).configure {
         javax.imageio.ImageIO.write(atlas, 'png', new File(folder,'relic_atlas.png'))
     }
 }
+
+
+// Frost Ward's dedicated 256px rune / icy-metal atlas. Original relics keep theirs.
+// Pixel-authored on build: sharp etched silver, aged gold, glowing cyan ice.
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        def folder = new File(destinationDir, 'assets/wendigosfrost/textures/item')
+        folder.mkdirs()
+        def image = new java.awt.image.BufferedImage(256, 256, java.awt.image.BufferedImage.TYPE_INT_ARGB)
+        def materials = [
+            [171,197,218],[69,87,111],[234,242,255],[46,78,101],
+            [76,177,230],[19,72,146],[179,241,255],[26,109,171],
+            [67,135,172],[104,224,247],[25,63,97],[45,170,194],
+            [195,210,225],[67,76,104],[194,158,87],[106,246,252]
+        ]
+        def rng = new java.util.Random(202611061L)
+        for (int y=0; y<256; ++y) {
+            for (int x=0; x<256; ++x) {
+                int index = ((int)(y/64))*4+(int)(x/64)
+                int u=x%64, v=y%64
+                def p=materials[index]
+                double a=Math.atan2(v-31.5,u-31.5)
+                double radius=Math.hypot(u-31.5,v-31.5)
+                int veins = ((u*7 + v*11 + index*17)%79 < 3) ? 19 : 0
+                int rim = u<5||u>58||v<5||v>58 ? -22 : 4
+                int bevel = (u<11||v<11) ? 12 : ((u>52||v>52) ? -13 : 0)
+                // Tiny engraved snowflake geometry (six spokes) on icy and rune cells.
+                double spoke = Math.abs(Math.sin(a*3))
+                int engraving = (index==3 || index==11 || index==15) &&
+                    radius>10 && radius<28 && spoke<.13 ? 63 : 0
+                int radial = (index>=4 && index<=7 && radius<26) ?
+                    (int)(24*(1-radius/26)) : 0
+                int spark = rng.nextInt(17)-8
+                int r=Math.max(0,Math.min(255,p[0]+rim+bevel+veins+engraving+radial+spark))
+                int g=Math.max(0,Math.min(255,p[1]+rim+bevel+veins+engraving+radial+spark))
+                int b=Math.max(0,Math.min(255,p[2]+rim+bevel+veins+engraving+radial+spark))
+                image.setRGB(x,y,(0xff<<24)|(r<<16)|(g<<8)|b)
+            }
+        }
+        javax.imageio.ImageIO.write(image,'png',new File(folder,'frost_ward_atlas.png'))
+    }
+}
