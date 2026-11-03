@@ -36,7 +36,7 @@ for id in ids:
     assert model["model"]=="wendigosfrost:models/item/bb/"+id+".obj",id
     obj=asset/"models/item/bb"/(id+".obj")
     assert obj.exists(),obj
-    assert obj.read_text().count("\\nf ")>=24,id
+    assert obj.read_text().count("f ")>=24,id
     counts[id]="original Blockbench OBJ"
 build=Path("build.gradle").read_text()
 assert "scripts/frost-relic-master.gradle" in build
