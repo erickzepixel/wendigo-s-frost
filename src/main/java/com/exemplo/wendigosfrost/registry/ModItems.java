@@ -76,5 +76,13 @@ public final class ModItems {
         () -> new com.exemplo.wendigosfrost.item.ThermalFlareItem(
             new Item.Properties().stacksTo(16).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
 
+    public static final RegistryObject<Item> HEARTBREAKER_BLADE = ITEMS.register("heartbreaker_blade",
+        () -> new com.exemplo.wendigosfrost.item.HeartbreakerBladeItem(
+            new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE)));
+    public static final RegistryObject<Item> RUNIC_TORCH = ITEMS.register("runic_torch",
+        () -> new com.exemplo.wendigosfrost.item.RunicTorchItem(
+            new Item.Properties().stacksTo(1).durability(180)
+                .rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+
     private ModItems() {}
 }
