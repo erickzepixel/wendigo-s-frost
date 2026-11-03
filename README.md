@@ -1,3 +1,15 @@
+## 0.7.4 — Rework completo de 18 itens e simplificação visual do boss
+
+- Removidos os **olhos vermelhos da fase 3** e os **espinhos de gelo que cresciam nas costas**, incluindo os antigos VBOs, renderização e estado client-side de crescimento. A terceira fase de combate continua funcionando normalmente; a criatura conserva os olhos glaciares originais.
+- **18 itens não-bloco receberam texturas PNG próprias de 256×256**, cada qual com seu arquivo `assets/wendigosfrost/textures/item/rework/<id>.png`, paleta e detalhes rúnicos específicos. Os materiais não são mais todos retirados de um mesmo atlas.
+- Modelos 3D específicos foram refeitos para Machado do Degelo, Lança Rúnica, Espada do Coração Partido, Tocha Rúnica, Sinalizador Térmico, Sementes Frostbloom, Cristal Frostbloom, Fragmento do Sussurro, Guia e Página Perdida.
+- **Machado do Degelo**: cabo reforçado vertical, cabeça metálica com volume, lâmina crescente larga orientada lateralmente (face esquerda bem definida), lâmina congelada afiada e contrapeso.
+- Mantidos e retintados com atlas exclusivo o Coração Congelado (405 peças), Chifre do Wendigo (286), Amuleto, Selo do Inverno e os modelos tridimensionais dos quatro equipamentos de armadura.
+- Vida padrão do Wendigo **500 HP**; coração da fase 2, dano, rituais, loot e comandos /locate não foram alterados.
+- O Gradle gera os PNGs individuais na compilação (`scripts/rework-items.gradle`), e o CI verifica dimensões, unicidade por hash, caminho de cada atlas e geometria válida.
+
+A atualização foi preparada sobre um branch separado; faça backup do mundo e teste a aparência no Minecraft antes de substituir uma instalação importante. A compilação e validação estática não substituem um teste visual e de FPS.
+
 ## 0.7.2 — Caçadores da Vigília: coração exposto, fase final e correção do /locate
 
 **Correção da busca por ruínas:** o JAR 0.7.1 gerava modelos NBT em `data/wendigosfrost/structures/` (plural). O Minecraft Java 1.20.1 procura em **`data/wendigosfrost/structure/` (singular)**. A 0.7.2 corrige isso e testa explicitamente os caminhos dentro do JAR.
@@ -13,7 +25,7 @@ As estruturas nascem em chunks **ainda não gerados**; o Santuário Congelado ap
 **Wendigo (modelo GLB preservado):**
 - 1ª fase: quadrúpede.
 - 2ª fase: coração espectral exposto e pulsante na região do peito, ponto vulnerável à Lança Rúnica.
-- 3ª fase: olhos vermelhos e nove espinhos de gelo que crescem nas costas.
+- 3ª fase: a aparência glacial original é mantida (sem olhos vermelhos ou espinhos nas costas).
 - O Coração Congelado do inventário ganhou um modelo 3D refeito, com 48 partes e atlas de textura próprio.
 
 **Novos equipamentos fabricáveis antes de derrotar o chefe:**
