@@ -12,7 +12,7 @@ reg=(java/"registry/ModItems.java").read_text()
 creative=(java/"registry/ModCreativeTabs.java").read_text()
 for id in ids:
     obj=json.loads((assets/"models/item"/(id+".json")).read_text())
-    assert obj["textures"]["atlas"]=="wendigosfrost:item/frost_relic_master", id
+    assert obj["textures"]["atlas"]=="wendigosfrost:item/rework/"+id, id
     assert len(obj["elements"]) >= 50, id
     rec=json.loads((data/"recipes"/(id+".json")).read_text())
     assert rec["type"]=="minecraft:crafting_shaped", id
@@ -29,16 +29,15 @@ for javafile in ("item/HunterArmorMaterial.java","item/HunterArmorItem.java",
     assert (java/javafile).exists(),javafile
 heart=json.loads((assets/"models/item/frozen_heart.json").read_text())
 assert len(heart["elements"]) >= 40
-assert heart["textures"]["atlas"]=="wendigosfrost:item/frost_relic_master"
+assert heart["textures"]["atlas"]=="wendigosfrost:item/rework/frozen_heart"
 detail=(java/"client/WendigoPhaseDetails.java").read_text()
 renderer=(java/"client/WendigoRenderer.java").read_text()
 entity=(java/"entity/WendigoEntity.java").read_text()
 assert "drawHeart(pose,stand,t)" in renderer
-assert "drawSpines(pose,entity.getThirdPhaseGrowth(partialTick))" in renderer
-assert "drawRedEyes(pose,t)" in renderer
-assert "getThirdPhaseGrowth(float partialTick)" in entity
-assert "redEyes=finish(b)" in detail and "spikes=finish(b)" in detail
-assert "getBossPhase() >= 3" in renderer
+assert "drawRedEyes(" not in renderer
+assert "drawSpines(" not in renderer
+assert "getThirdPhaseGrowth" not in entity
+assert "redEyes=" not in detail and "spikes=" not in detail
 combat=(java/"event/CombatEquipmentEvents.java").read_text()
 assert "boss.getBossPhase() >= 2" in combat
 assert "HunterArmorItem" in combat and "1f - Math.min(.32f,.08f*pieces)" in combat
@@ -56,5 +55,5 @@ for lang in ("pt_br","en_us"):
     loc=json.loads((assets/"lang"/(lang+".json")).read_text())
     for id in ids:
         assert loc.get("item.wendigosfrost."+id), (lang,id)
-print("OK: 9 new items and recipes, armor set, heart weak point, red eyes,")
-print("    growing ice spines, dedicated textures and corrected singular structure path")
+print("OK: 9 new items and recipes, armor set, heart weak point, normal ice eyes,")
+print("    no phase-3 ice spines, unique item textures and locatable structures")
