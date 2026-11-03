@@ -182,6 +182,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
             configuredAttributes = true;
             float hp = getHealth() / Math.max(1, getMaxHealth());
             getAttribute(Attributes.MAX_HEALTH).setBaseValue(ModConfig.WENDIGO_HEALTH.get());
+            getAttribute(Attributes.ARMOR).setBaseValue(4);
             // Limit historical high-damage config files; 0.6.0 used 16 (8 hearts).
             getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                 Math.min(ModConfig.WENDIGO_DAMAGE.get(), 7.0));
