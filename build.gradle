@@ -194,3 +194,7 @@ apply from: 'scripts/structure-templates.gradle'
 
 // Unique 3D frozen-heart material and seven anti-Wendigo equipment textures.
 apply from: 'scripts/hunter-gear-textures.gradle'
+
+// Original high-resolution material atlas and complex Wendigo armor textures.
+apply from: 'scripts/frost-relic-master.gradle'
+apply from: 'scripts/wendigo-armor-textures.gradle'
