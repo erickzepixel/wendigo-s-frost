@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "GFG",
+    " S "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "F": {
+      "item": "minecraft:fire_charge"
+    },
+    "S": {
+      "item": "wendigosfrost:whisper_shard"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:thermal_flare",
+    "count": 2
+  }
+}
