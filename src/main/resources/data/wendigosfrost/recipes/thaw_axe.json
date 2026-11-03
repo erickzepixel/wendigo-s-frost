@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FB ",
+    "FI ",
+    " S "
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "I": {
+      "item": "wendigosfrost:whisper_shard"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "wendigosfrost:thaw_axe",
+    "count": 1
+  }
+}
