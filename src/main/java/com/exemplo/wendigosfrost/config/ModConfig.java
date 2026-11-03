@@ -25,7 +25,10 @@ public final class ModConfig {
         b.push("wendigo");
         DAYS_TO_AWAKEN = b.defineInRange("daysToAwaken", 3, 1, 30);
         PERCEPTION_RANGE = b.defineInRange("perceptionRange", 10, 1, 64);
-        WENDIGO_HEALTH = b.defineInRange("health", 260, 1, 1000);
+        // The v0.7.2 key "health" often remained 100 in world/serverconfig.
+        // Use a fresh key so all old worlds receive 500 HP by default.
+        WENDIGO_HEALTH = b.comment("Wendigo maximum HP (500 default). Replaces legacy health setting.")
+            .defineInRange("bossMaxHealth", 500, 1, 2000);
         WENDIGO_DAMAGE = b.defineInRange("baseMeleeDamage", 5.5, 1.0, 7.0);
         ENABLE_BOSS_SKILLS = b.define("enablePhaseAbilities", true);
         ENABLE_AMBIENT_TERROR = b.define("enableDynamicAtmosphere", true);
