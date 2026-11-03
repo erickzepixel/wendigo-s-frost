@@ -70,6 +70,15 @@ public class WendigoEntity extends Monster implements GeoEntity {
     // The legacy RISE_UNTIL server field is preserved for combat/attack safety.
     private int clientRiseStartTick = -10000;
     private int clientSwipeStartTick = -10000;
+    private int clientFinalPhaseStartTick=-10000;
+    /** Smoothly grow phase-three crystals; clients joining mid-fight see them immediately. */
+    public float getThirdPhaseGrowth(float partialTick) {
+        if(getBossPhase() < 3) return 0f;
+        if(clientFinalPhaseStartTick < 0) return 1f;
+        float t=Math.max(0f,Math.min(1f,
+            (tickCount+partialTick-clientFinalPhaseStartTick)/32f));
+        return t*t*(3f-2f*t);
+    }
     /** 14-tick attack arc independent of GeckoLib's unused cuboid animations. */
     public float getSwipeBlend(float partialTick) {
         float progress = (tickCount + partialTick - clientSwipeStartTick) / 14.0f;
@@ -111,6 +120,9 @@ public class WendigoEntity extends Monster implements GeoEntity {
             clientSwipeStartTick = tickCount;
         if (PHASE.equals(key)) {
             refreshDimensions();
+            if (level().isClientSide && getBossPhase() >= 3
+                    && clientFinalPhaseStartTick < 0)
+                clientFinalPhaseStartTick = tickCount;
             if (level().isClientSide && getBossPhase() >= 2 && clientRiseStartTick < 0)
                 clientRiseStartTick = tickCount;
         }
