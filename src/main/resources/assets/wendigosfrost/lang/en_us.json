@@ -30,5 +30,7 @@
   "message.wendigosfrost.summon_success": "The ice shatters... THE WENDIGO HAS BEEN SUMMONED!",
   "message.wendigosfrost.summon_busy": "The altar is already performing a cleansing ritual.",
   "itemGroup.wendigosfrost": "Wendigo's Frost",
-  "item.wendigosfrost.wendigo_spawn_egg": "Wendigo Spawn Egg"
+  "item.wendigosfrost.wendigo_spawn_egg": "Wendigo Spawn Egg",
+  "message.wendigosfrost.ward_wave": "The Frost Ward released a Frost Shockwave! Enemies hit: %s",
+  "tooltip.wendigosfrost.frost_ward": "Right click: Frost Shockwave. 6 charges; 30-second cooldown."
 }
