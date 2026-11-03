@@ -12,8 +12,11 @@ reg=(java/"registry/ModItems.java").read_text()
 creative=(java/"registry/ModCreativeTabs.java").read_text()
 for id in ids:
     obj=json.loads((assets/"models/item"/(id+".json")).read_text())
-    assert obj["textures"]["atlas"]=="wendigosfrost:item/rework/"+id, id
-    assert len(obj["elements"]) >= 50, id
+    if id.startswith("hunter_"):
+        assert obj["parent"]=="builtin/entity" and "elements" not in obj,id
+    else:
+        assert obj["textures"]["atlas"]=="wendigosfrost:item/rework/"+id,id
+        assert len(obj["elements"])>=50,id
     rec=json.loads((data/"recipes"/(id+".json")).read_text())
     assert rec["type"]=="minecraft:crafting_shaped", id
     assert rec["result"]["item"]=="wendigosfrost:"+id, id

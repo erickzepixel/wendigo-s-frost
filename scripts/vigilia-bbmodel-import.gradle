@@ -1,0 +1,74 @@
+// Original Blockbench armor integration. The four .bbmodel files under
+// assets-source/vigilia-bbmodels are kept byte-for-byte, including embedded PNGs.
+// No redraw: exact original cubes, per-face UVs, arbitrary cube rotations and
+// texture layers are shared between the inventory and player renderers.
+// Gradle only repacks the original materials into 512x64 atlases.
+tasks.named('processResources') {
+    doLast {
+        def sourceDir = file('assets-source/vigilia-bbmodels')
+        def texDir = new File(destinationDir, 'assets/wendigosfrost/textures/models/armor')
+        def meshDir = new File(destinationDir, 'assets/wendigosfrost/armor_bb')
+        texDir.mkdirs()
+        meshDir.mkdirs()
+        def names = [
+            elmo: 'elmo_da_vigilia.bbmodel',
+            peitoral: 'peitoral_da_vigilia.bbmodel',
+            calcas: 'calcas_da_vigilia.bbmodel',
+            botas: 'botas_da_vigilia.bbmodel'
+        ]
+        names.each { id,filename ->
+            File file = new File(sourceDir, filename)
+            if (!file.isFile()) throw new GradleException("Missing uploaded Blockbench model: "+file)
+            def source = new groovy.json.JsonSlurper().parse(file)
+            def elems = source.elements.findAll { it.type == 'cube' && it.export != false }
+            def textures = source.textures
+            if (elems.size() < 8 || textures.size() < 3)
+                throw new GradleException("Incomplete source model "+id)
+            int width = 512, height = 64
+            def atlas = new java.awt.image.BufferedImage(width,height,
+                java.awt.image.BufferedImage.TYPE_INT_ARGB)
+            def g = atlas.createGraphics()
+            try {
+                textures.eachWithIndex { texture,index ->
+                    if (index >= 8) throw new GradleException("Too many BB textures for "+id)
+                    String uri = texture.source.toString()
+                    String base64 = uri.substring(uri.indexOf(',')+1)
+                    byte[] png = java.util.Base64.getDecoder().decode(base64)
+                    def image = javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(png))
+                    if (image==null || image.width!=64 || image.height!=64)
+                        throw new GradleException("Bad embedded 64x64 Blockbench texture "+id+"/"+index)
+                    g.drawImage(image,index*64,0,null)
+                }
+            } finally { g.dispose() }
+            File imageOut = new File(texDir, 'vigilia_bb_'+id+'.png')
+            if (!javax.imageio.ImageIO.write(atlas,'png',imageOut))
+                throw new GradleException("Could not bake exact Blockbench atlas for "+id)
+            def mesh = [
+                source: filename,
+                texture: 'wendigosfrost:textures/models/armor/vigilia_bb_'+id+'.png',
+                textureWidth: width,
+                textureHeight: height,
+                resolution: source.resolution,
+                elements: elems.collect { cube ->
+                    [
+                        name: cube.name,
+                        from: cube.from,
+                        to: cube.to,
+                        origin: cube.origin ?: [0,0,0],
+                        rotation: cube.rotation ?: [0,0,0],
+                        faces: cube.faces.collectEntries { direction,face ->
+                            [(direction):[
+                                uv: face.uv ?: [0,0,64,64],
+                                texture: face.texture
+                            ]]
+                        }
+                    ]
+                }
+            ]
+            new File(meshDir,id+'.json').setText(
+                groovy.json.JsonOutput.toJson(mesh),'UTF-8')
+            println "Vigilia BB import: "+id+" => "+elems.size()+" exact cubes, "+
+                textures.size()+" original 64px textures, "+imageOut.length()+" PNG bytes"
+        }
+    }
+}

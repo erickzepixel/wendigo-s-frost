@@ -15,6 +15,13 @@ assert len(set(ids))==18
 references=[]
 for id in ids:
     obj=json.loads((base/(id+".json")).read_text())
+    if id.startswith("hunter_"):
+        assert obj["parent"]=="builtin/entity" and "elements" not in obj,id
+        references.append("wendigosfrost:textures/models/armor/vigilia_bb_"+{
+            "hunter_helmet":"elmo","hunter_chestplate":"peitoral",
+            "hunter_leggings":"calcas","hunter_boots":"botas"
+        }[id]+".png")
+        continue
     assert obj.get("parent")=="minecraft:block/block",id
     path=obj["textures"]["atlas"]
     assert path=="wendigosfrost:item/rework/"+id,(id,path)

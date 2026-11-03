@@ -1,3 +1,15 @@
+## 0.7.5 — Armadura da Vigília: modelos originais Blockbench no inventário e no player
+
+O elmo, peitoral, calças e botas usam os quatro modelos `.bbmodel` enviados pelo autor **sem redesenhar cubos nem texturas**. Os originais permanecem em `assets-source/vigilia-bbmodels/`, e suas impressões SHA-256 são conferidas no CI.
+
+- O Gradle abre os `.bbmodel`, extrai as texturas PNG embutidas (metal, gelo, pelo e runas), preserva todos os UVs de cada face e os ângulos de rotação, e cria quatro atlas `vigilia_bb_<peça>.png` em **512×64**.
+- A geometria é exportada para `assets/wendigosfrost/armor_bb/<peça>.json`.
+- O inventário e a mão renderizam a **mesma malha 3D** que a armadura equipada por meio do Forge `BlockEntityWithoutLevelRenderer`, em vez de criar outro modelo aproximado.
+- No player, o `HumanoidModel` tem ossos vazios com geometria real fornecida pelos `.bbmodel`: elmo na cabeça, ombreiras nos braços, peitoral e cinto no tronco, calças e botas nas pernas correspondentes. As pernas recebem uma adaptação de largura e espessura para a silhueta normal do Minecraft.
+- Nenhum ID de item, receita, bônus defensivo ou vida do Wendigo foi alterado. A configuração mantém **500 HP**.
+
+**Instalação:** remova o 0.7.4 da pasta `mods`, coloque `wendigosfrost-0.7.5.jar`, mantenha as dependências anteriores e faça backup do mundo. A compilação e os testes de recursos passaram, mas o encaixe final durante caminhada, corrida e agachamento ainda deve ser testado visualmente no cliente Minecraft.
+
 ## 0.7.4 — Rework completo de 18 itens e simplificação visual do boss
 
 - Removidos os **olhos vermelhos da fase 3** e os **espinhos de gelo que cresciam nas costas**, incluindo os antigos VBOs, renderização e estado client-side de crescimento. A terceira fase de combate continua funcionando normalmente; a criatura conserva os olhos glaciares originais.
