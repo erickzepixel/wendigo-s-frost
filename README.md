@@ -1,20 +1,20 @@
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
-Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.5.0**.
+Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.6.0**.
 
 ## Guia e página do mod
 
 - **Guia dentro do jogo:** item `wendigofrost:guide_book` em português, concedido no primeiro login. Clique com o botão direito para abrir o manual com páginas sobre a Flor-Gelo, o cristal, a maldição, o ritual e comandos.
 - **Site do projeto:** [Página do Wendigo's Frost](docs/index.html). Quando GitHub Pages estiver ativado, o endereço previsto é `https://erickzepixel.github.io/wendigo-s-frost/`.
 - **Download das versões:** https://github.com/erickzepixel/wendigo-s-frost/releases
-- **Correções 0.5.0:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
-- **Versão de teste:** as atualizações são publicadas pela branch `evolucao-glacial-v0.5.0`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
+- **Correções 0.6.0:** geometria 3D do Wendigo reconstruída, atlas 128x128 gerado no build; modelos 3D revisados dos itens, Frost Bloom e pedestal.
+- **Versão de teste:** as atualizações são publicadas pela branch `rig-organico-v0.6.0`, sem sobrescrever `main`. Ainda é preciso testar as mudanças no jogo.
 
-## Relíquias tridimensionais — 0.5.0
+## Relíquias tridimensionais — 0.6.0
 
 O Chifre do Wendigo foi reconstruído com 42 cubos e UVs dedicadas, evitando a distorção da textura vanilla. O Coração Congelado agora tem 37 elementos 3D e o Amuleto de Proteção Gélida, 56. Todos usam o atlas próprio `relic_atlas.png` de 128px, gerado via Gradle no `processResources`. O CI valida todas as geometrias, os UVs e os arquivos incorporados ao JAR. Ainda são necessários testes in-game.
 
-## Ritual de invocação instantânea (0.5.0)
+## Ritual de invocação instantânea (0.6.0)
 
 - Um pedestal com **4 fogueiras das almas acesas** a 2 blocos nas direções cardeais e **4 gelos azuis** nas diagonais de 1 bloco.
 - Agache e clique no pedestal com 1 **Cristal Frostbloom**: o Wendigo é invocado na hora, sem aguardar os três dias.
@@ -23,7 +23,17 @@ O Chifre do Wendigo foi reconstruído com 42 cubos e UVs dedicadas, evitando a d
 - O procedimento de purificação antigo continua funcionando normalmente.
 - Guia e site atualizados, sem mod externo adicional.
 
-## Evolução Glacial 0.5.0
+## Rig orgânico do modelo original 0.6.0
+
+- Malha do GLB original preservada byte por byte; **70.020 triângulos sem perda**.
+- Dez partes articuladas (tronco, cabeça e dois segmentos por pata), com VBOs cacheados na GPU.
+- Ciclos de caminhada quadrúpede, corrida, flexão de joelhos e cotovelos, ataques e rugidos.
+- Transição de 1,8 segundo ao passar de 65% de vida para a segunda fase bípede.
+- Nenhum mod extra além de GeckoLib e TerraBlender.
+- Compilação CI e validação de triângulos aprovadas; **testes de renderização no Minecraft ainda pendentes**.
+- Limite do rig rígido: podem aparecer pequenas frestas nas junções, pois ainda não há pesos suaves de skinning. Ver [detalhes técnicos](docs/GLB_ORIGINAL.md).
+
+## Evolução Glacial 0.6.0
 
 - Wendigo com geometria remodelada, crânio de cervo, olhos azuis e menos cubos.
 - Fase 1 em quatro patas, com animações exclusivas; segunda fase erguida, com transição; terceira fase bípede enfurecida.
@@ -33,7 +43,7 @@ O Chifre do Wendigo foi reconstruído com 42 cubos e UVs dedicadas, evitando a d
 - Coração Congelado dropado **sempre** na morte, sem `random_chance` (com `doMobLoot` habilitado).
 - Testes de regressão no CI e `jar` publicado em prévia do GitHub.
 
-## Nightfall 0.5.0 — atualização de combate e atmosfera
+## Nightfall 0.6.0 — atualização de combate e atmosfera
 
 - Wendigo em **três fases** e animações especiais para **rugido** e **pisada glacial**, com aviso visual e tempo de reação.
 - HUD gelado contextual, partículas e paisagem sonora; implementação leve e sem shaders externos.
