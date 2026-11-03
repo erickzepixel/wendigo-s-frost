@@ -22,6 +22,12 @@ for id in ids:
             "hunter_leggings":"calcas","hunter_boots":"botas"
         }[id]+".png")
         continue
+    if id == "guide_book":
+        assert obj["parent"]=="minecraft:block/block"
+        assert len(obj["elements"])==5
+        assert set(obj["textures"])=={"t0","t1","t2","t3","t4"}
+        references.append(obj["textures"]["t0"])
+        continue
     assert obj.get("parent")=="minecraft:block/block",id
     path=obj["textures"]["atlas"]
     assert path=="wendigosfrost:item/rework/"+id,(id,path)
