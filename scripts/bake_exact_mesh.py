@@ -17,7 +17,7 @@ assert ctype==b"JSON"
 gltf=json.loads(data[20:20+length].decode("utf-8"))
 bin_start=20+length
 bin_len,bin_type=struct.unpack_from("<I4s",data,bin_start)
-assert bin_type==b"BIN\\x00"
+assert bin_type == b"BIN" + bytes([0])
 payload=data[bin_start+8:bin_start+8+bin_len]
 views=gltf["bufferViews"]
 accessors=gltf["accessors"]
