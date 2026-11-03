@@ -57,7 +57,9 @@ renderer=(src/"client/VigilArmorItemRenderer.java").read_text()
 assert "getCustomRenderer()" in item
 assert "VigilArmorItemRenderer.instance()" in item
 assert "getHumanoidArmorModel" in item
-assert "original.copyPropertiesTo(detailedModel)" in item
+assert "detailedModel.head.copyFrom(original.head)" in item
+assert "detailedModel.leftArm.copyFrom(original.leftArm)" in item
+assert "detailedModel.rightLeg.copyFrom(original.rightLeg)" in item
 assert 'vigilia_bb_'+chr(34) in item
 assert "VigilArmorMesh.of(armor.getType())" in renderer
 assert "mesh.drawInventory(" in renderer
