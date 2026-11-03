@@ -1,4 +1,29 @@
-## Novidade 0.7.1 — Encontre as ruínas e cultive Frostbloom
+## Guia de sobrevivência — versão 0.7.2
+
+### Correção das estruturas
+
+A versão anterior salvava os modelos de ruínas na pasta incorreta. A 0.7.2 os instala em `data/wendigosfrost/structure/`, conforme Minecraft 1.20.1. Explore **chunks novos** e execute:
+
+```mcfunction
+/locate structure wendigosfrost:ancient_ice_shrine
+/locate structure wendigosfrost:hunter_cairn
+/locate structure wendigosfrost:frozen_sanctuary
+```
+
+Se o comando não autocompletar, verifique se o 0.7.2 está realmente carregado, remova JARs duplicados e examine o arquivo `logs/latest.log` procurando erros de registries ou structure templates. As ruínas não aparecem retroativamente no terreno já explorado.
+
+### Luta e equipamento da Vigília
+
+- **Fase 2** (até 65% da vida do chefe): o Coração Congelado fica exposto e pulsa no tórax. A **Lança Rúnica** causa dano adicional enquanto ele estiver exposto.
+- **Fase 3** (até 30% da vida): olhos vermelhos e espinhos de gelo crescentes nas costas.
+- **Armadura da Vigília** (quatro peças): reduz até 32% do dano causado pelo Wendigo, além da armadura habitual.
+- **Machado do Degelo:** inflige fogo e interrompe ataques de gelo carregados.
+- **Sinalizador Térmico:** explosão térmica a curta distância, consumível; recarga de 24 segundos.
+- **Coração Congelado 3D:** modelo remodelado e textura própria. O drop garantido após derrotar o Wendigo continua.
+
+Todos os itens estão na aba criativa `Wendigo's Frost`, com receitas nas pastas `data/wendigosfrost/recipes/`. Não exigem o coração do Wendigo para fabricação, permitindo a preparação pré-chefe.
+
+## Novidade 0.7.2 — Encontre as ruínas e cultive Frostbloom
 
 Agora você pode usar **três comandos vanilla** para encontrar ruínas em regiões ainda não exploradas:
 
@@ -106,7 +131,7 @@ F . P . F
 
 O pedestal tem **2 minutos de recarga** após uma invocação e impede a criação de outro Wendigo se já existir um em um raio de 64 blocos. Nenhum cristal é consumido se a estrutura estiver incompleta, não houver espaço ou o surgimento falhar. Este ritual não aplica nem remove a marca; o ritual de libertação permanece separado (clique normal para inserir os três ingredientes e mão vazia para iniciar a purificação).
 
-## Vigília do Inverno — novidades 0.7.1
+## Vigília do Inverno — novidades 0.7.2
 
 ### Uma história ao entrar no mundo
 
