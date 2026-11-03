@@ -201,3 +201,6 @@ apply from: 'scripts/wendigo-armor-textures.gradle'
 
 // Per-item atlas textures for the complete artifact, plant and weapon redesign.
 apply from: 'scripts/rework-items.gradle'
+
+// Load the 4 supplied Blockbench armor sources and bake EXACT PNG/UV mesh data.
+apply from: 'scripts/vigilia-bbmodel-import.gradle'
