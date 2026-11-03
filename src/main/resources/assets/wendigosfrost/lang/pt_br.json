@@ -72,5 +72,9 @@
   "tooltip.wendigosfrost.rune_spear": "Dano adicional contra o coração exposto do Wendigo.",
   "tooltip.wendigosfrost.thaw_axe": "Enfraquece o gelo do Wendigo e interrompe habilidades.",
   "tooltip.wendigosfrost.hunter_armor": "Cada peça reduz 8% do dano do Wendigo (até 32%).",
-  "tooltip.wendigosfrost.thermal_flare": "Emite uma onda térmica que incendeia o Wendigo próximo."
+  "tooltip.wendigosfrost.thermal_flare": "Emite uma onda térmica que incendeia o Wendigo próximo.",
+  "item.wendigosfrost.heartbreaker_blade": "Espada do Coração Partido",
+  "item.wendigosfrost.runic_torch": "Tocha Rúnica da Vigília",
+  "tooltip.wendigosfrost.heartbreaker_blade": "Mais dano contra o Wendigo enfurecido na fase 3.",
+  "tooltip.wendigosfrost.runic_torch": "Luz rúnica que reduz a velocidade e a força do Wendigo por 5 segundos."
 }
