@@ -31,6 +31,10 @@ public class GuideBookItem extends WrittenBookItem {
         "9. BATALHA EM 3 FASES\n\nFase 1: perseguicao e rugido. Fase 2: o Wendigo acelera e usa pisada de gelo. Fase 3: furia final. Ao ouvir o grito, fuja da area marcada por particulas.",
         "10. NUNCA IGNORE O SOM\n\nBatimentos e neve surgem quando o Wendigo esta perto. O fogo ainda e uma fraqueza importante, interrompendo suas habilidades especiais.",
         "11. COMANDOS\n\n/wendigofrost status\n/wendigofrost testmark\n/wendigofrost testspawn\n/wendigofrost diagnostico\n/summon wendigosfrost:wendigo",
+        "13. RUINAS DA VIGILIA\n\nNa taiga e nas montanhas geladas, procure os Santuarios do Gelo Ancestral. Nas florestas ainda restam os Memoriais dos Cacadores.",
+        "14. PEDRAS DOS SUSSURROS\n\nToque nas pedras com runas para escutar fragmentos da historia. As ruinas guardam Paginas Perdidas e Fragmentos do Sussurro.",
+        "15. O SELO DO INVERNO\n\nCrie o Selo do Inverno com dois Fragmentos do Sussurro, Ametista, Gelo Azul e Coracao do Mar. Ele ilumina o escuro e concede breve protecao.",
+        "16. A VIGILIA FINAL\n\nO Wendigo nao nasceu do frio. Ele nasceu de uma fome que os antigos juraram selar. Seu ritual pode libertar voce da marca, mas nao destruir todas as ruinas.",
         "12. INFORMACOES\n\nRequer Minecraft Java 1.20.1, Forge 47.x, GeckoLib 4 e TerraBlender. Atualizacoes e instrucao: github.com/erickzepixel/wendigo-s-frost"
     };
     public GuideBookItem(Item.Properties props) {
