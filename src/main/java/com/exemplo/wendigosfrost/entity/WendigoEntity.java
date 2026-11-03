@@ -1,6 +1,7 @@
 package com.exemplo.wendigosfrost.entity;
 
 import com.exemplo.wendigosfrost.config.ModConfig;
+import com.exemplo.wendigosfrost.combat.FrostShockwave;
 import com.exemplo.wendigosfrost.data.WendigoMark;
 import java.util.UUID;
 import net.minecraft.core.particles.ParticleTypes;
@@ -49,6 +50,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
         SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CUE =
         SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> SWIPE_COUNTER =
+        SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> RISE_UNTIL =
         SynchedEntityData.defineId(WendigoEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
@@ -59,11 +62,19 @@ public class WendigoEntity extends Monster implements GeoEntity {
     private int skillCooldown = 100;
     private int chargeTicks = 0;
     private int chargingSkill = 0;
+    private int impactTicks = 0;
     private int ambientCooldown = 0;
     private boolean configuredAttributes = false;
     // Client-only render phase interpolation, measured in the entity's own tick time.
     // The legacy RISE_UNTIL server field is preserved for combat/attack safety.
     private int clientRiseStartTick = -10000;
+    private int clientSwipeStartTick = -10000;
+    /** 14-tick attack arc independent of GeckoLib's unused cuboid animations. */
+    public float getSwipeBlend(float partialTick) {
+        float progress = (tickCount + partialTick - clientSwipeStartTick) / 14.0f;
+        if (progress < 0 || progress >= 1) return 0;
+        return (float)Math.sin(progress * Math.PI);
+    }
     public float getStandBlend(float partialTick) {
         if (getBossPhase() <= 1) return 0f;
         if (clientRiseStartTick < 0) return 1f; // Loaded mid-fight.
@@ -85,6 +96,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
         entityData.define(PHASE, 1);
         entityData.define(CUE, 0);
         entityData.define(RISE_UNTIL, 0);
+        entityData.define(SWIPE_COUNTER, 0);
     }
     public int getBossPhase() { return entityData.get(PHASE); }
     public boolean isQuadruped() { return getBossPhase() == 1; }
@@ -94,6 +106,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
     }
     @Override public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
+        if (SWIPE_COUNTER.equals(key) && level().isClientSide)
+            clientSwipeStartTick = tickCount;
         if (PHASE.equals(key)) {
             refreshDimensions();
             if (level().isClientSide && getBossPhase() >= 2 && clientRiseStartTick < 0)
@@ -106,8 +120,8 @@ public class WendigoEntity extends Monster implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
             .add(Attributes.MAX_HEALTH, 260)
-            .add(Attributes.ATTACK_DAMAGE, 16)
-            .add(Attributes.ARMOR, 8)
+            .add(Attributes.ATTACK_DAMAGE, 5.5)
+            .add(Attributes.ARMOR, 4)
             .add(Attributes.MOVEMENT_SPEED, 0.34)
             .add(Attributes.FOLLOW_RANGE, 48)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.88);
@@ -168,7 +182,9 @@ public class WendigoEntity extends Monster implements GeoEntity {
             configuredAttributes = true;
             float hp = getHealth() / Math.max(1, getMaxHealth());
             getAttribute(Attributes.MAX_HEALTH).setBaseValue(ModConfig.WENDIGO_HEALTH.get());
-            getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(ModConfig.WENDIGO_DAMAGE.get());
+            // Limit historical high-damage config files; 0.6.0 used 16 (8 hearts).
+            getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                Math.min(ModConfig.WENDIGO_DAMAGE.get(), 7.0));
             setHealth(Math.max(1f, Math.min(getMaxHealth(), hp * getMaxHealth())));
         }
         if (ownerId != null) {
@@ -211,6 +227,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
                 14, 1.2, 1.5, 1.2, .025);
         }
 
+        if (impactTicks > 0 && --impactTicks == 0) entityData.set(CUE, 0);
         if (isOnFire()) { // fire remains a deliberate counterplay tool
             if (chargeTicks > 0) cancelSkill();
             return;
@@ -219,19 +236,27 @@ public class WendigoEntity extends Monster implements GeoEntity {
         if (chargeTicks > 0) {
             getNavigation().stop();
             setDeltaMovement(getDeltaMovement().multiply(.38, 1, .38));
-            if (chargeTicks % 5 == 0) {
-                double r = chargingSkill == 1 ? 10 : 6;
-                for (int i = 0; i < 20; i++) {
-                    double a = i * Math.PI * 2 / 20;
-                    server.sendParticles(chargingSkill == 1 ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SNOWFLAKE,
-                        getX() + Math.cos(a)*r, getY() + .22, getZ() + Math.sin(a)*r,
-                        1, 0, 0, 0, 0);
+            if (chargeTicks % 4 == 0) {
+                double radius = chargingSkill == 1 ? 7.5 : 5.0;
+                for (int i = 0; i < 40; i++) {
+                    double a = i * Math.PI * 2 / 40;
+                    server.sendParticles(chargingSkill == 1
+                        ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SNOWFLAKE,
+                        getX() + Math.cos(a) * radius, getY() + .20,
+                        getZ() + Math.sin(a) * radius, 2, .08, .12, .08, .01);
                 }
+                server.sendParticles(ParticleTypes.END_ROD,
+                    getX(), getY() + (isQuadruped() ? 1.65 : 3.3), getZ(),
+                    24, 1.15, 1.0, 1.15, .022);
             }
             if (--chargeTicks == 0) {
-                if (chargingSkill == 1) castRoar(server);
+                int skill = chargingSkill;
+                if (skill == 1) castRoar(server);
                 else castStomp(server);
-                cancelSkill();
+                chargingSkill = 0;
+                // Keep the impact pose visible for 12 ticks on every client.
+                entityData.set(CUE, skill + 2);
+                impactTicks = 12;
             }
             return;
         }
@@ -259,8 +284,11 @@ public class WendigoEntity extends Monster implements GeoEntity {
 
     private void castRoar(ServerLevel server) {
         server.playSound(null, blockPosition(), SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 1.5f, .7f);
-        server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(), getY() + 2, getZ(),
-            125, 5, 1.5, 5, .05);
+        server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, getX(),
+            getY() + (isQuadruped() ? 1.5 : 3.25), getZ(),
+            155, 2.8, 1.4, 2.8, .12);
+        server.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 1.15,
+            getZ(), 140, 4, 1.35, 4, .14);
         for (ServerPlayer player : server.getPlayers(p -> p.isAlive() && p.distanceToSqr(this) < 10 * 10)) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, getBossPhase() == 3 ? 1 : 0));
             player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 95, 0));
@@ -268,20 +296,22 @@ public class WendigoEntity extends Monster implements GeoEntity {
     }
 
     private void castStomp(ServerLevel server) {
-        server.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 1.15f, .66f);
-        server.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + .6, getZ(),
-            150, 5.2, .7, 5.2, .08);
-        for (ServerPlayer player : server.getPlayers(p -> p.isAlive() && p.distanceToSqr(this) < 6 * 6)) {
-            player.hurt(damageSources().mobAttack(this), 5 + 2 * getBossPhase());
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 75, 1));
-            player.knockback(1.15, this.getX() - player.getX(), this.getZ() - player.getZ());
-        }
+        FrostShockwave.release(server, this, 5.5,
+            4.0f + getBossPhase(), true);
     }
 
     @Override
     public boolean doHurtTarget(net.minecraft.world.entity.Entity victim) {
         if (isRising()) return false;
         boolean hit = super.doHurtTarget(victim);
+        if (hit) {
+            entityData.set(SWIPE_COUNTER, entityData.get(SWIPE_COUNTER) + 1);
+            if (level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SNOWFLAKE,
+                    victim.getX(), victim.getY() + victim.getBbHeight() * .65, victim.getZ(),
+                    17, .45, .55, .45, .05);
+            }
+        }
         if (hit && victim instanceof Player player && getBossPhase() >= 2) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 42, 0));
         }
@@ -306,6 +336,7 @@ public class WendigoEntity extends Monster implements GeoEntity {
         entityData.set(PHASE, tag.contains("BossPhase") ? tag.getInt("BossPhase") : 1);
         entityData.set(RISE_UNTIL, 0);
         refreshDimensions();
+        impactTicks = 0;
         cancelSkill(); // Never resume a half-finished attack after a server restart.
     }
 }
