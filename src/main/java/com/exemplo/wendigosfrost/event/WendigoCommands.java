@@ -21,6 +21,11 @@ public final class WendigoCommands {
     public static void onCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> d = event.getDispatcher();
         d.register(Commands.literal("wendigofrost")
+            .then(Commands.literal("historia").executes(ctx -> {
+                ServerPlayer player = ctx.getSource().getPlayerOrException();
+                com.exemplo.wendigosfrost.network.ModNetwork.sendIntroduction(player);
+                return 1;
+            }))
             .then(Commands.literal("guia").executes(ctx -> {
                 ServerPlayer p = ctx.getSource().getPlayerOrException();
                 var stack = new net.minecraft.world.item.ItemStack(
