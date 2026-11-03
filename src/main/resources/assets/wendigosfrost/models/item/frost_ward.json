@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "atlas": "wendigosfrost:item/relic_atlas"
+    "atlas": "wendigosfrost:item/frost_ward_atlas"
   },
   "ambientocclusion": true,
   "gui_light": "front",
