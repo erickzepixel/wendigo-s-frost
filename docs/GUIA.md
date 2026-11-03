@@ -19,6 +19,8 @@ Se o comando não autocompletar, verifique se o 0.7.2 está realmente carregado,
 - **Armadura da Vigília** (quatro peças): reduz até 32% do dano causado pelo Wendigo, além da armadura habitual.
 - **Machado do Degelo:** inflige fogo e interrompe ataques de gelo carregados.
 - **Sinalizador Térmico:** explosão térmica a curta distância, consumível; recarga de 24 segundos.
+- **Espada do Coração Partido:** arma pós-chefe que causa dano extra contra o Wendigo na terceira fase; fabricada usando um Coração Congelado.
+- **Tocha Rúnica da Vigília:** uso repetido, lentidão e fraqueza no Wendigo por 5 segundos; recarga de 45 segundos.
 - **Coração Congelado 3D:** modelo remodelado e textura própria. O drop garantido após derrotar o Wendigo continua.
 
 Todos os itens estão na aba criativa `Wendigo's Frost`, com receitas nas pastas `data/wendigosfrost/recipes/`. Não exigem o coração do Wendigo para fabricação, permitindo a preparação pré-chefe.
