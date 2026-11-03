@@ -1,0 +1,41 @@
+// Premium bone-and-glacier 128x128 worn armor atlas, matching the new real
+// humanoid armor geometry (antlers, skull mask, ribs, talons). Register this
+// AFTER the original sprite generator to replace its old flat 64x32 layers.
+tasks.named('processResources', ProcessResources).configure {
+    doLast {
+        def dir=new File(destinationDir,'assets/wendigosfrost/textures/models/armor')
+        dir.mkdirs()
+        def clamp={ int n -> Math.max(0,Math.min(255,n)) }
+        for(int layer=1;layer<=2;layer++) {
+            def png=new java.awt.image.BufferedImage(128,128,
+                java.awt.image.BufferedImage.TYPE_INT_ARGB)
+            for(int y=0;y<128;y++) for(int x=0;x<128;x++) {
+                int u=x%32,v=y%32
+                boolean seam=(u<2||v<2||u>29||v>29)
+                int n=((x*13+y*19+x*y*3+layer*5)%27)-13
+                int r=39,g=55,b=73 // black hide / dark steel
+                if(x<32&&y>=64&&y<96) {r=223;g=217;b=195}       // white antlers
+                else if(x>=96&&y>=64&&y<96){r=241;g=236;b=218} // fangs
+                else if(x>=64&&x<96&&y<64){r=92;g=202;b=232}   // luminous ice
+                else if(x>=32&&x<64&&y<64){r=56;g=76;b=98}     // dark winter hide
+                else if(x>=96&&y<64){r=51;g=122;b=200}          // runic cobalt
+                else if(y>=96){r=185;g=196;b=206}               // bone-silver
+                else if(x<32&&y<64){r=55;g=89;b=115}            // iron mantle
+                else {r=133;g=172;b=192}
+                int cracks=((x*5+y*11)%41<2)?-43:0
+                int veins=((x*7+y*3)%33<2)?24:0
+                if(x>=64&&x<96&&y<64) {cracks=-cracks;veins+=22}
+                if((x>=96&&y<64) && (Math.abs(u-v)<2 || u+v==30))
+                    {r+=44;g+=67;b+=43}
+                if(seam){r-=17;g-=13;b-=10}
+                if((x+y)%59<2){r+=19;g+=20;b+=24}
+                r=clamp(r+n+cracks+veins)
+                g=clamp(g+n+cracks+veins)
+                b=clamp(b+n+cracks+veins)
+                png.setRGB(x,y,(0xff<<24)|(r<<16)|(g<<8)|b)
+            }
+            javax.imageio.ImageIO.write(png,'png',
+                new File(dir,'vigilia_layer_'+layer+'.png'))
+        }
+    }
+}
