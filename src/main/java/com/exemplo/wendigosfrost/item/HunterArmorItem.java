@@ -52,7 +52,17 @@ public final class HunterArmorItem extends ArmorItem {
                     detailedModel=WendigoHunterArmorModel.create(piece);
                 // Preserve vanilla player pose: arm swing, head look, leg
                 // stride, swimming, sneaking and the ArmorLayer adjustments.
-                original.copyPropertiesTo(detailedModel);
+                // Copy animation bone transforms without wildcard generic casts.
+                // Forge also copies model properties when it wraps this model.
+                detailedModel.head.copyFrom(original.head);
+                detailedModel.body.copyFrom(original.body);
+                detailedModel.leftArm.copyFrom(original.leftArm);
+                detailedModel.rightArm.copyFrom(original.rightArm);
+                detailedModel.leftLeg.copyFrom(original.leftLeg);
+                detailedModel.rightLeg.copyFrom(original.rightLeg);
+                detailedModel.crouching=original.crouching;
+                detailedModel.riding=original.riding;
+                detailedModel.young=original.young;
                 return detailedModel;
             }
 
