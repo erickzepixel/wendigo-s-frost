@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:taiga",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:forest",
+    "minecraft:dark_forest",
+    "minecraft:snowy_taiga"
+  ],
+  "features": "wendigosfrost:hunter_cairn",
+  "step": "surface_structures"
+}
