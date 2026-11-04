@@ -1,11 +1,13 @@
 # Wendigo's Frost — como gerar o JAR para mods
 
+**Aviso:** O Gradle agora usa a versão 0.7.7, mas o código Java deste repositório é anterior ao JAR 0.7.7 corrigido e distribuído separadamente. Portanto, o artefato compilado aqui ainda não reproduz todos os recursos da versão 0.7.7. Veja `VERSAO_0.7.7.md`.
+
 ## GitHub (sem instalar Gradle)
-1. Descompacte `WendigosFrost-codigo-fonte-0.2.0.zip`.
+1. Baixe o código-fonte atualizado deste repositório como ZIP (`Code` → `Download ZIP`).
 2. Envie o conteúdo extraído para a raiz do repositório `erickzepixel/wendigo-s-frost` no GitHub.
 3. Acesse https://github.com/erickzepixel/wendigo-s-frost/actions, escolha **Compilar Wendigos Frost** e **Run workflow**.
 4. Veja o resultado. Se **verde**, baixe e descompacte `WendigosFrost-JAR` em **Artifacts**.
-5. Copie **wendigosfrost-0.2.0.jar** para a pasta `.minecraft/mods` do perfil Forge 1.20.1.
+5. Copie **wendigosfrost-0.7.7.jar** para a pasta `.minecraft/mods` do perfil Forge 1.20.1.
 6. Também instale GeckoLib 4.4.9 e TerraBlender 3.0.1.7, ambos para Forge 1.20.1.
 7. Teste em um mundo novo (ou copie seu mundo para backup antes de jogar).
 

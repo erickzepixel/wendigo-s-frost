@@ -1,6 +1,8 @@
 # Wendigo's Frost — Minecraft Forge 1.20.1
 
-Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de desenvolvimento **0.2.0**.
+Código-fonte do mod de terror psicológico **Wendigo's Frost**. O identificador de versão de build está atualizado para **0.7.7**, e os 18 modelos 3D com suas texturas estão integrados aos recursos.
+
+> **Importante:** os arquivos Java deste repositório ainda têm a implementação antiga (iniciada na 0.2.0). O JAR 0.7.7 atualizado nesta conversa foi produzido a partir do JAR compilado 0.7.6, com os recursos visuais e a versão corrigidos. **Compilar este código-fonte no GitHub não reproduz integralmente o JAR 0.7.7**. Veja [VERSAO_0.7.7.md](VERSAO_0.7.7.md).
 
 ## Implementado no código
 
@@ -17,17 +19,17 @@ Código-fonte do mod de terror psicológico **Wendigo's Frost**, versão de dese
 
 **Este é o projeto-fonte atualizado, não um JAR testado.** Neste ambiente a conexão de rede necessária para baixar o ForgeGradle e Gradle está indisponível. O build e um teste no Minecraft/servidor dedicado ainda precisam ser executados para corrigir possíveis incompatibilidades de API e comportamento. Os efeitos de alucinação têm escopo parcial (sons, partículas, overlay), não há fantasma visual independente, jumpscares completos ou bioma Ice Caverns registrado via TerraBlender.
 
-## Compilar com GitHub Actions (recomendado)
+## Compilar com GitHub Actions (código-fonte ainda incompleto)
 
 1. Coloque o **conteúdo do ZIP**, não o arquivo ZIP em si, na raiz do seu repositório GitHub.
 2. Abra **Actions → Compilar Wendigos Frost → Run workflow**.
 3. Aguarde a conclusão. Se falhar, o log de **Compilar** mostra o erro, e o JAR não estará pronto.
 4. Se o build passar, abra o workflow → **Artifacts → WendigosFrost-JAR**. Descompacte o artifact.
-5. Use apenas o JAR principal `wendigosfrost-0.2.0.jar`, nunca o `*-sources.jar`.
+5. Use apenas o JAR principal `wendigosfrost-0.7.7.jar`, nunca o `*-sources.jar`.
 
-## Compilar no Windows
+## Compilar no Windows (código-fonte ainda incompleto)
 
-Instale **JDK 17** e **Gradle 8.1.1**, extraia o projeto e execute `COMPILAR_WINDOWS.bat`. A primeira execução requer internet. Veja `build/libs/wendigosfrost-0.2.0.jar` após sucesso.
+Instale **JDK 17** e **Gradle 8.1.1**, extraia o projeto e execute `COMPILAR_WINDOWS.bat`. A primeira execução requer internet. Veja `build/libs/wendigosfrost-0.7.7.jar` após sucesso.
 
 ## Instalar / testar
 
